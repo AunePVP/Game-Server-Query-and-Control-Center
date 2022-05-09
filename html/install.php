@@ -1,0 +1,286 @@
+<?php
+require_once 'config.php';
+
+if (!$install) {
+    header("Location: /");
+}
+$path = "config.php";
+$title = "Install";
+$configfail = "Writeable";
+$logfail = "Readable";
+$configfailclass = 0;
+if (!is_writable("config.php")) {
+    $configfailclass = "red";
+    $configfail = "Not Writeable";
+}
+if (!is_readable("/var/log")) {
+    $logfailclass = "red";
+    $logfail = "Not Writeable";
+}
+
+//
+//
+
+if(array_key_exists('validate', $_POST)) {
+    $DB_SERVERI = test_input($_POST["DB_SERVERI"]);
+    $DB_USERNAMEI = test_input($_POST["DB_USERNAMEI"]);
+    $DB_PASSWORDI = test_input($_POST["DB_PASSWORDI"]);
+    $DB_NAMEI = test_input($_POST["DB_NAMEI"]);
+    $DB_SERVER = $DB_SERVERI;
+    $DB_USERNAME = $DB_USERNAMEI;
+    $DB_PASSWORD = $DB_PASSWORDI;
+    $DB_NAME = $DB_NAMEI;
+
+    $conn = new mysqli($DB_SERVERI, $DB_USERNAMEI, $DB_PASSWORDI, $DB_NAMEI);
+    // Check connection
+    if ($conn->connect_error) {
+        $sqlvalidatemessage = "Connection Failed!";
+    } else {
+        $sqlvalidatemessage = "Connection verified!";
+    }
+}
+function test_input($data){
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+
+if(array_key_exists('submit', $_POST)) {
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        $authenticationI = test_input($_POST["authenticationI"]);
+        $create_usersI = test_input($_POST["create_usersI"]);
+        $steamwebapi_keyI = test_input($_POST["steamwebapi_keyI"]);
+        $DB_SERVERI = test_input($_POST["DB_SERVERI"]);
+        $DB_USERNAMEI = test_input($_POST["DB_USERNAMEI"]);
+        $DB_PASSWORDI = test_input($_POST["DB_PASSWORDI"]);
+        $DB_NAMEI = test_input($_POST["DB_NAMEI"]);
+        $css_templateI = test_input($_POST["css_templateI"]);
+        $submit = test_input($_POST["submit"]);
+    }
+    if (!empty($DB_SERVERI) && !empty($DB_USERNAMEI) && !empty($DB_PASSWORDI) && !empty($DB_NAMEI) && !empty($steamwebapi_keyI) && !empty($submit)) {
+        // TODO Remove the # when this project is released.
+        #$conn = new mysqli($DB_SERVERI, $DB_USERNAMEI, $DB_PASSWORDI);
+        #if ($conn->connect_error) {
+        #    die("Connection failed: " . $conn->connect_error);
+        #}
+
+        $myfile = fopen($path, "w") or die("Unable to open file!");
+        $write = "<?php" . "\n" .
+            '$install = 1;' . "\n" .
+            '$authentication = ' . $authenticationI . ';' . "\n" .
+            '$create_users = ' . $create_usersI . ';' . "\n" .
+            '$steamwebapi_key = "' . $steamwebapi_keyI . '";' . "\n" . "\n" .
+            '$DB_SERVER = "' . $DB_SERVERI . '";' . "\n" .
+            '$DB_USERNAME = "' . $DB_USERNAMEI . '";' . "\n" .
+            '$DB_PASSWORD = "' . $DB_PASSWORDI . '";' . "\n" .
+            '$DB_NAME = "' . $DB_NAMEI . '";' . "\n" .
+            '$css_template = "' . $css_templateI . '";' . "\n" .
+            '$link = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);' . "\n" .
+            '$steamapi = "https://api.steampowered.com/";' . "\n" .
+            "?>";
+        echo '<script language="javascript">';
+        echo 'alert("Please Delete this file.")';
+        echo '</script>';
+        $create_users = $create_usersI;
+        $authentication = $authenticationI;
+        $css_template = $css_templateI;
+        $DB_SERVER = $DB_SERVERI;
+        $DB_USERNAME = $DB_USERNAMEI;
+        $DB_PASSWORD = $DB_PASSWORDI;
+        $DB_NAME = $DB_NAMEI;
+        fwrite($myfile, $write);
+        fclose($myfile);
+    };
+}
+//
+//
+?>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title><?php echo $title?></title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            width: 70%;
+            margin: auto;
+            height: 100vh;
+        }
+        #top {
+            height: 20%;
+            display: flex;
+            background-color: #dddddd;
+            border-bottom: solid;
+            border-width: 1px;
+        }
+        #left {
+            display: flex;
+            justify-content: center;
+        }
+        #bottom {
+            background-color: #dddddd;
+            padding: 30px;
+        }
+        #bottom {
+            min-height: 80%;
+        }
+        #center {
+            width: 50%;
+        }
+        #title {
+            margin: auto 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            font-size: 27px;
+        }
+        #right-top {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 30px 10px 0;
+            text-align: right;
+            font-size: 16px;
+        }
+        .side {
+            display: flex;
+            font-family: Montserrat;
+        }
+        .green {
+            color: #1cc602;
+        }
+        .red {
+            color: #fa251e!important;
+            font-weight: bold;
+        }
+        .top-text {
+            font-weight: bold;
+            padding: 20px 0 0;
+        }
+        .content-box {
+            display: flex;
+            float: left;
+            justify-content: center;
+        }
+        .slide {
+            margin: 0 15px;
+        }
+        h2 {
+            margin-bottom: 0;
+        }
+        input {
+            margin: 5px 8px;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="top">
+    <div id="left"><div id="title">GAME SERVER QUERY</div></div>
+    <div id="center"></div>
+    <div id="right">
+        <div id="right-top">
+            <div id="current_time"></div>
+            <div><?php echo 'PHP version: ' . phpversion(); ?></div>
+        </div>
+    </div>
+</div>
+<div id="bottom">
+    <div class="section">
+        <div class="side">
+            <div>config/config.php:&nbsp</div>
+            <div class="green <?php if(isset($configfailclass)){echo $configfailclass;}; ?>"><?php echo $configfail ?></div>
+        </div>
+        <div class="side">
+            <div>/var/log:&nbsp</div>
+            <div class="green <?php echo $logfailclass; ?>"><?php echo $logfail ?></div>
+        </div>
+    </div>
+    <div class="content">
+        <form method="post" autocomplete="off" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+            <div class="sub-section">
+                <div class="element">
+                    <div class="top-text">CSS Template</div>
+                    <select name="css_templateI">
+                        <option value="light" <?php if($css_template == "light"){echo "selected='selected'";};?>>Light</option>
+                        <option value="dark"<?php if($css_template == "dark"){echo "selected='selected'";};?>>Dark</option>
+                    </select>
+                </div>
+                <div class="element">
+                    <div class="top-text">User authentication</div>
+                    <select name="authenticationI">
+                        <option value="1" <?php if($authentication == 1){echo "selected='selected'";};?>>On</option>
+                        <option value="0"<?php if($authentication == 0){echo "selected='selected'";};?>>Off</option>
+                    </select>
+                </div>
+                <div class="element">
+                    <div class="top-text">Create new accounts</div>
+                    <select name="create_usersI">
+                        <option value="1" <?php if($create_users == 1){echo "selected='selected'";};?>>On</option>
+                        <option value="0"<?php if($create_users == 0){echo "selected='selected'";};?>>Off</option>
+                    </select>
+                </div>
+            </div>
+            <div class="sub-section">
+                <div class="element">
+                    <div class="top-text">Steam WebAPI Key:</div>
+                    <div class="content-box">
+                        <input type="password" id="steamwebkey" name="steamwebapi_keyI" size="17" value="<?php echo $steamwebapi_key;?>">
+                        <input type="checkbox" onclick="steamwebapikeyFuntion()" style="margin: auto;"><div style="margin: auto;font-family: Arial, sans-serif;font-size:14px;">Show Key</div>
+                    </div>
+                    <br><br>
+                </div>
+            </div><h2>Database</h2>
+            <div class="sub-section" style="display: flex;">
+                <div class="slide">
+                    <div class="element">
+                        <div class="top-text">Ip adress or localhost:</div>
+                        <div class="content-box">
+                            <input type="text" name="DB_SERVERI" value="<?php echo $DB_SERVER;?>" pattern="^(localhost|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))?$" placeholder="localhost" title="IP adress or localhost">
+                        </div>
+                        <br><br>
+                    </div>
+                    <div class="element">
+                        <div class="top-text">Username:</div>
+                        <div class="content-box">
+                            <input type="text" name="DB_USERNAMEI" value="<?php echo $DB_USERNAME;?>">
+                        </div>
+                        <br><br>
+                    </div></div>
+                <div class="slide">
+                    <div class="element">
+                        <div class="top-text">Password:</div>
+                        <div class="content-box" style="display: flex;">
+                            <input type="password" id="password" autocomplete="new-password" name="DB_PASSWORDI" value="<?php echo $DB_PASSWORD;?>">
+                            <input type="checkbox" onclick="passwordFunction()" style="margin: auto;"><div style="font-family: Arial, sans-serif;font-size:14px;">Show password</div>
+                        </div>
+                        <br><br>
+                    </div>
+                    <div class="element">
+                        <div class="top-text">DB Name:</div>
+                        <div class="content-box">
+                            <input type="text" name="DB_NAMEI" value="<?php echo $DB_NAME;?>">
+                        </div></div>
+                    <br><br>
+                </div>
+            </div>
+            <input type="submit" name="submit" value="submit">
+            <input type="submit" name="validate" value="validate">
+            <div id="sqlvme"><?php
+                if (isset($sqlvalidatemessage)) {
+                    echo $sqlvalidatemessage;
+                } ?></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
