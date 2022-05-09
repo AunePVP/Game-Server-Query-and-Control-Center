@@ -116,7 +116,7 @@ if(array_key_exists('submit', $_POST)) {
             height: 100vh;
         }
         #top {
-            height: 20%;
+            min-height: 20%;
             display: flex;
             background-color: #dddddd;
             border-bottom: solid;
@@ -198,6 +198,9 @@ if(array_key_exists('submit', $_POST)) {
         @media only screen and (max-width: 625px) {
             .sub-section {
                 display: block !important;
+            }
+            #title {
+            white-space: normal !important;
             }
         }
     </style>
