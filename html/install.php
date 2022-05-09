@@ -141,6 +141,9 @@ if(array_key_exists('submit', $_POST)) {
             font-size: 27px;
             white-space: nowrap;
         }
+        #right {
+            display: flex;
+        }
         #right-top {
             white-space: nowrap;
             font-size: 16px;
