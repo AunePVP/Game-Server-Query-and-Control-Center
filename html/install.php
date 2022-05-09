@@ -132,21 +132,19 @@ if(array_key_exists('submit', $_POST)) {
             min-height: 80%;
         }
         #center {
-            width: 50%;
+            width: 100%;
         }
         #title {
             margin: auto 20px;
             font-family: 'Montserrat', sans-serif;
             font-weight: bold;
             font-size: 27px;
+            white-space: nowrap;
         }
         #right-top {
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding: 30px 10px 0;
-            text-align: right;
             font-size: 16px;
+            margin: auto 15px;
         }
         .side {
             display: flex;
