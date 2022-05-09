@@ -127,10 +127,8 @@ if(array_key_exists('submit', $_POST)) {
             justify-content: center;
         }
         #bottom {
-            background-color: #dddddd;
+            background-color: #f1f1f1;
             padding: 30px;
-        }
-        #bottom {
             min-height: 80%;
         }
         #center {
@@ -152,7 +150,7 @@ if(array_key_exists('submit', $_POST)) {
         }
         .side {
             display: flex;
-            font-family: Montserrat;
+            font-family: Montserrat, sans-serif;
         }
         .green {
             color: #1cc602;
@@ -162,6 +160,7 @@ if(array_key_exists('submit', $_POST)) {
             font-weight: bold;
         }
         .top-text {
+            font-family: Arial, sans-serif;
             font-weight: bold;
             padding: 20px 0 0;
         }
@@ -179,6 +178,26 @@ if(array_key_exists('submit', $_POST)) {
         input {
             margin: 5px 8px;
             padding: 8px;
+        }
+        @media only screen and (max-width: 900px) {
+            body {
+                width: 80%;
+            }
+        }
+        @media only screen and (max-width: 700px) {
+            body {
+                width: 90%;
+            }
+        }
+        @media only screen and (max-width: 650px) {
+            body {
+                width: 100%;
+            }
+        }
+        @media only screen and (max-width: 625px) {
+            .sub-section {
+                display: block !important;
+            }
         }
     </style>
 </head>
@@ -235,7 +254,7 @@ if(array_key_exists('submit', $_POST)) {
                     <div class="top-text">Steam WebAPI Key:</div>
                     <div class="content-box">
                         <input type="password" id="steamwebkey" name="steamwebapi_keyI" size="17" value="<?php echo $steamwebapi_key;?>">
-                        <input type="checkbox" onclick="steamwebapikeyFuntion()" style="margin: auto;"><div style="margin: auto;font-family: Arial, sans-serif;font-size:14px;">Show Key</div>
+                        <input type="checkbox" onclick="steamwebapikeyFuntion()" style="margin: auto;"><div style="margin: auto 0 auto 10px;font-family: Arial, sans-serif;font-size:14px;">Show Key</div>
                     </div>
                     <br><br>
                 </div>
@@ -261,7 +280,7 @@ if(array_key_exists('submit', $_POST)) {
                         <div class="top-text">Password:</div>
                         <div class="content-box" style="display: flex;">
                             <input type="password" id="password" autocomplete="new-password" name="DB_PASSWORDI" value="<?php echo $DB_PASSWORD;?>">
-                            <input type="checkbox" onclick="passwordFunction()" style="margin: auto;"><div style="font-family: Arial, sans-serif;font-size:14px;">Show password</div>
+                            <input type="checkbox" onclick="passwordFunction()" style="margin: auto;"><div style="font-family: Arial, sans-serif;font-size:14px;margin: auto 0 auto 10px;">Show password</div>
                         </div>
                         <br><br>
                     </div>
@@ -273,9 +292,12 @@ if(array_key_exists('submit', $_POST)) {
                     <br><br>
                 </div>
             </div>
-            <input type="submit" name="submit" value="submit">
-            <input type="submit" name="validate" value="validate">
-            <div id="sqlvme"><?php
+            <div style="float:left;width:100%;"}>
+                <input type="submit" name="submit" value="submit">
+                <input type="submit" name="validate" value="validate">
+            </div>
+            <div id="sqlvme">
+                <?php
                 if (isset($sqlvalidatemessage)) {
                     echo $sqlvalidatemessage;
                 } ?></div>
