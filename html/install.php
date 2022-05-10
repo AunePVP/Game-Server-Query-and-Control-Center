@@ -1,5 +1,5 @@
 <?php
-$addservers = TRUE;
+$addservers = 0;
 require_once 'config.php';
 if (isset($install) && !$install) {
     header("Location: /");
@@ -116,7 +116,11 @@ if(array_key_exists('submit', $_POST)) {
             height: 100vh;
         }
 	#top-section {
-	    <?php if($addservers = TRUE){echo "display: none";}?>
+	    <?php if($addservers) {
+            echo "display: none";
+        } else {
+            echo "height: 100%";
+        }?>
 	}
         #top {
             min-height: 20%;
