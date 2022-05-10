@@ -1,7 +1,7 @@
 <?php
+$addservers = TRUE;
 require_once 'config.php';
-
-if (!$install) {
+if (isset($install) && !$install) {
     header("Location: /");
 }
 $path = "config.php";
@@ -79,7 +79,7 @@ if(array_key_exists('submit', $_POST)) {
             '$link = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);' . "\n" .
             '$steamapi = "https://api.steampowered.com/";' . "\n" .
             "?>";
-        echo '<script language="javascript">';
+        echo '<script>';
         echo 'alert("Please Delete this file.")';
         echo '</script>';
         $create_users = $create_usersI;
@@ -91,7 +91,7 @@ if(array_key_exists('submit', $_POST)) {
         $DB_NAME = $DB_NAMEI;
         fwrite($myfile, $write);
         fclose($myfile);
-    };
+    }
 }
 //
 //
@@ -105,7 +105,7 @@ if(array_key_exists('submit', $_POST)) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title><?php echo $title?></title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+        @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap");
         html, body {
             margin: 0;
             padding: 0;
@@ -115,6 +115,9 @@ if(array_key_exists('submit', $_POST)) {
             margin: auto;
             height: 100vh;
         }
+	#top-section {
+	    <?php if($addservers = TRUE){echo "display: none";}?>
+	}
         #top {
             min-height: 20%;
             display: flex;
@@ -139,15 +142,15 @@ if(array_key_exists('submit', $_POST)) {
             font-family: 'Montserrat', sans-serif;
             font-weight: bold;
             font-size: 27px;
-            white-space: nowrap;
+	    white-space: nowrap;
         }
         #right {
-            display: flex;
-        }
-        #right-top {
+	display: flex;
+	}
+	#right-top {
             white-space: nowrap;
             font-size: 16px;
-            margin: auto 15px;
+	    margin: auto 15px;
         }
         .side {
             display: flex;
@@ -199,14 +202,14 @@ if(array_key_exists('submit', $_POST)) {
             .sub-section {
                 display: block !important;
             }
-            #title {
-            white-space: normal !important;
-            }
+	    #title {
+	    white-space: normal !important;
+	    }
         }
     </style>
 </head>
 <body>
-
+<section id="top-section">
 <div id="top">
     <div id="left"><div id="title">GAME SERVER QUERY</div></div>
     <div id="center"></div>
@@ -221,7 +224,7 @@ if(array_key_exists('submit', $_POST)) {
     <div class="section">
         <div class="side">
             <div>config/config.php:&nbsp</div>
-            <div class="green <?php if(isset($configfailclass)){echo $configfailclass;}; ?>"><?php echo $configfail ?></div>
+            <div class="green <?php if(isset($configfailclass)){echo $configfailclass;} ?>"><?php echo $configfail ?></div>
         </div>
         <div class="side">
             <div>/var/log:&nbsp</div>
@@ -233,32 +236,41 @@ if(array_key_exists('submit', $_POST)) {
             <div class="sub-section">
                 <div class="element">
                     <div class="top-text">CSS Template</div>
-                    <select name="css_templateI">
-                        <option value="light" <?php if($css_template == "light"){echo "selected='selected'";};?>>Light</option>
-                        <option value="dark"<?php if($css_template == "dark"){echo "selected='selected'";};?>>Dark</option>
-                    </select>
+                    <label>
+                        <select name="css_templateI">
+                            <option value="light" <?php if($css_template == "light"){echo "selected='selected'";} ?>>Light</option>
+                            <option value="dark"<?php if($css_template == "dark"){echo "selected='selected'";} ?>>Dark</option>
+                        </select>
+                    </label>
                 </div>
                 <div class="element">
                     <div class="top-text">User authentication</div>
-                    <select name="authenticationI">
-                        <option value="1" <?php if($authentication == 1){echo "selected='selected'";};?>>On</option>
-                        <option value="0"<?php if($authentication == 0){echo "selected='selected'";};?>>Off</option>
-                    </select>
+                    <label>
+                        <select name="authenticationI">
+                            <option value="1" <?php if($authentication == 1){echo "selected='selected'";} ?>>On</option>
+                            <option value="0"<?php if($authentication == 0){echo "selected='selected'";} ?>>Off</option>
+                        </select>
+                    </label>
                 </div>
                 <div class="element">
                     <div class="top-text">Create new accounts</div>
-                    <select name="create_usersI">
-                        <option value="1" <?php if($create_users == 1){echo "selected='selected'";};?>>On</option>
-                        <option value="0"<?php if($create_users == 0){echo "selected='selected'";};?>>Off</option>
-                    </select>
+                    <label>
+                        <select name="create_usersI">
+                            <option value="1" <?php if($create_users == 1){echo "selected='selected'";} ?>>On</option>
+                            <option value="0"<?php if($create_users == 0){echo "selected='selected'";} ?>>Off</option>
+                        </select>
+                    </label>
                 </div>
             </div>
             <div class="sub-section">
                 <div class="element">
                     <div class="top-text">Steam WebAPI Key:</div>
                     <div class="content-box">
-                        <input type="password" id="steamwebkey" name="steamwebapi_keyI" size="17" value="<?php echo $steamwebapi_key;?>">
-                        <input type="checkbox" onclick="steamwebapikeyFuntion()" style="margin: auto;"><div style="margin: auto 0 auto 10px;font-family: Arial, sans-serif;font-size:14px;">Show Key</div>
+                        <label for="steamwebkey"></label><input type="password" id="steamwebkey" name="steamwebapi_keyI" size="17" value="<?php if(isset($steamwebapi_key)){echo $steamwebapi_key;}?>">
+                        <label>
+                            <input type="checkbox" onclick="steamwebapikeyFuntion()" style="margin: auto;">
+                        </label>
+                        <div style="margin: auto 0 auto 10px;font-family: Arial, sans-serif;font-size:14px;">Show Key</div>
                     </div>
                     <br><br>
                 </div>
@@ -275,7 +287,9 @@ if(array_key_exists('submit', $_POST)) {
                     <div class="element">
                         <div class="top-text">Username:</div>
                         <div class="content-box">
-                            <input type="text" name="DB_USERNAMEI" value="<?php echo $DB_USERNAME;?>">
+                            <label>
+                                <input type="text" name="DB_USERNAMEI" value="<?php echo $DB_USERNAME;?>">
+                            </label>
                         </div>
                         <br><br>
                     </div></div>
@@ -283,20 +297,25 @@ if(array_key_exists('submit', $_POST)) {
                     <div class="element">
                         <div class="top-text">Password:</div>
                         <div class="content-box" style="display: flex;">
-                            <input type="password" id="password" autocomplete="new-password" name="DB_PASSWORDI" value="<?php echo $DB_PASSWORD;?>">
-                            <input type="checkbox" onclick="passwordFunction()" style="margin: auto;"><div style="font-family: Arial, sans-serif;font-size:14px;margin: auto 0 auto 10px;">Show password</div>
+                            <label for="password"></label><input type="password" id="password" autocomplete="new-password" name="DB_PASSWORDI" value="<?php echo $DB_PASSWORD;?>">
+                            <label>
+                                <input type="checkbox" onclick="passwordFunction()" style="margin: auto;">
+                            </label>
+                            <div style="font-family: Arial, sans-serif;font-size:14px;margin: auto 0 auto 10px;">Show password</div>
                         </div>
                         <br><br>
                     </div>
                     <div class="element">
                         <div class="top-text">DB Name:</div>
                         <div class="content-box">
-                            <input type="text" name="DB_NAMEI" value="<?php echo $DB_NAME;?>">
+                            <label>
+                                <input type="text" name="DB_NAMEI" value="<?php echo $DB_NAME;?>">
+                            </label>
                         </div></div>
                     <br><br>
                 </div>
             </div>
-            <div style="float:left;width:100%;"}>
+            <div style="float:left;width:100%;">
                 <input type="submit" name="submit" value="submit">
                 <input type="submit" name="validate" value="validate">
             </div>
@@ -309,4 +328,12 @@ if(array_key_exists('submit', $_POST)) {
 </div>
 
 <script src="script.js"></script>
+</section>
+<section id="bottom-section">
+<?php
+if($addservers){
+    include 'addservers.php';
+}
+?>
+</section>
 </body>
