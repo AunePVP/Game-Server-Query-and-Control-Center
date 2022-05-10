@@ -116,7 +116,7 @@ if(array_key_exists('submit', $_POST)) {
             height: 100vh;
         }
         #top {
-            height: 20%;
+            min-height: 20%;
             display: flex;
             background-color: #dddddd;
             border-bottom: solid;
@@ -132,21 +132,22 @@ if(array_key_exists('submit', $_POST)) {
             min-height: 80%;
         }
         #center {
-            width: 50%;
+            width: 100%;
         }
         #title {
             margin: auto 20px;
             font-family: 'Montserrat', sans-serif;
             font-weight: bold;
             font-size: 27px;
+            white-space: nowrap;
+        }
+        #right {
+            display: flex;
         }
         #right-top {
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding: 30px 10px 0;
-            text-align: right;
             font-size: 16px;
+            margin: auto 15px;
         }
         .side {
             display: flex;
@@ -197,6 +198,9 @@ if(array_key_exists('submit', $_POST)) {
         @media only screen and (max-width: 625px) {
             .sub-section {
                 display: block !important;
+            }
+            #title {
+            white-space: normal !important;
             }
         }
     </style>
