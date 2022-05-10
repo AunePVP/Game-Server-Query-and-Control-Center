@@ -1,7 +1,11 @@
 <?php
 require_once ('../html/config.php');
 session_start();
+$backURL = empty($_SESSION['backURI']) ? '/' : $_SESSION['backURI'];
+if (isset($_SESSION['username'])) {
 
+    header('location: /');
+}
 // Declaring and hoisting the variables
 $username = "";
 $email = "";
@@ -61,7 +65,8 @@ if (isset($_POST['reg_user'])) {
 
         // Page on which the user will be
         // redirected after logging in
-        header('location: index.php');
+        unset($_SESSION['backURI']);
+        header("location:".$backURL);
     }
 }
 
@@ -102,7 +107,7 @@ if (isset($_POST['login_user'])) {
 
             // Page on which the user is sent
             // to after logging in
-            header('location: index.php');
+            header("location:".$backURL);
         } else {
 
             // If the username and password doesn't match

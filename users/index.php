@@ -1,9 +1,5 @@
 <?php
-
-// Starting the session, to use and
-// store data in session variable
 session_start();
-
 // If the session variable is empty, this
 // means the user is yet to login
 // User will be sent to 'login.php' page
@@ -12,7 +8,6 @@ if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You have to log in first";
     header('location: login.php');
 }
-
 // Logout button will destroy the session, and
 // will unset the session variables
 // User will be headed to 'login.php'
@@ -22,6 +17,7 @@ if (isset($_GET['logout'])) {
     unset($_SESSION['username']);
     header("location: login.php");
 }
+echo $_SESSION['username'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -41,8 +37,9 @@ if (isset($_GET['logout'])) {
 
     <!-- Accessible only to the users that
             have logged in already -->
-    <?php if (isset($_SESSION['success'])) : ?>
-        <div class="error success" >
+    <?php
+    if (isset($_SESSION['success'])) : ?>
+        <div class="error success">
             <h3>
                 <?php
                 echo $_SESSION['success'];
@@ -50,35 +47,27 @@ if (isset($_GET['logout'])) {
                 ?>
             </h3>
         </div>
-    <?php endif ?>
-
+    <?php
+    endif ?>
     <!-- information of the user logged in -->
     <!-- welcome message for the logged in user -->
-    <?php  if (isset($_SESSION['username'])) : ?>
-
-
-
+    <?php
+    if (isset($_SESSION['username'])) : ?>
         <p>
             Welcome
             <strong>
-                <?php echo $_SESSION['username']; ?>
+                <?php
+                echo $_SESSION['username']; ?>
             </strong>
         </p>
-
-
-
-
-
-
         <p>
             <a href="index.php?logout='1'" style="color: red;">
                 Click here to Logout
             </a>
         </p>
 
-
-
-    <?php endif ?>
+    <?php
+    endif ?>
 </div>
 </body>
 </html>

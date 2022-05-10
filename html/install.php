@@ -1,4 +1,13 @@
 <?php
+// TODO Remove this usercheck before publishing the Website. Why? Because this page is meant for the installation. When people install the Website, they have no Admin account and will create one.
+session_start();
+if (!isset($_SESSION['username'])) {
+    $_SESSION['backURI'] = $_SERVER['REQUEST_URI'];
+    echo $_SESSION['backURI'];
+    header('location: ../users/login.php');
+}
+//
+
 $addservers = 0;
 require_once 'config.php';
 if (isset($install) && !$install) {
