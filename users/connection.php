@@ -1,5 +1,5 @@
 <?php
-require_once '../html/config.php';
+require_once ('../html/config.php');
 session_start();
 
 // Declaring and hoisting the variables
