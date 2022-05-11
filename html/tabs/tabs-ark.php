@@ -1,25 +1,25 @@
 <?php
 $query = $_GET['query'];
 if ($map == "Ragnarok") {
-  $maplink = "KGcJjwL.jpg";
+  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/KGcJjwL.jpg";
 } elseif ($map == "LostIsland") {
-  $maplink = "gCDSBQA.jpg";
+  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/gCDSBQA.jpg";
 } elseif ($map == "Valguero") {
-  $maplink = "og8oSee.jpg";
+  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/og8oSee.jpg";
 } elseif ($map == "TheIsland") {
-  $maplink = "Ark-TheIsland-Map.png";
+  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/Ark-TheIsland-Map.png";
 } elseif ($map == "Aberration") {
-  $maplink = "K8b0ezf.jpg";
+  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/K8b0ezf.jpg";
 } elseif ($map == "Viking_P") {
-  $maplink = "fpGj2Rl.jpg";
+  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/fpGj2Rl.jpg";
 } elseif ($map == "TheCenter") {
-  $maplink = "OtJbTgc.jpg";
+  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/OtJbTgc.jpg";
 } elseif ($map == "CrystalIsles") {
-  $maplink = "mYFoUGU.png";
+  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/mYFoUGU.png";
 } elseif ($map == "ScorchedEarth") {
-  $maplink = "Nxm7tvV.jpg";
+  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/Nxm7tvV.jpg";
 } else {
-  $maplink = "crt9S5y.jpg";
+  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/crt9S5y.jpg";
 }   
 $modlink = '<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=';
 ?>
@@ -58,7 +58,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
         <tbody>
             <tr id="Überblick">
                 <td class="Daten">
-                  <img class="map" src="<?php echo $domain . $path . "/html/img/Maps/" . $maplink ?>"></img>
+                  <img class="map" src="<?php echo $maplink ?>" alt="<?php echo $maplink;?>"></img>
                   <div style="text-align:left">Map: <?php echo $map ?></div>
                   <div style="text-align:left">Ping: <?php echo $ping . "ms" ?></div>
                   <div style="text-align:left">Mods: 
