@@ -1,4 +1,5 @@
 <?php
+include './html/langconf.php';
 $query = $_GET['query'];
 if ($map == "Ragnarok") {
   $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/KGcJjwL.jpg";
@@ -33,7 +34,6 @@ $modlink = '<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=';
 </httpProtocol>
 <?php
 // I query the number that the server has at Battlemetrics. And create the link to the banner with it.
-$banner = $_GET['banner'];
 $rport = $_GET['rport'];
 $linkI = "https://cdn.battlemetrics.com/b/standardVertical/";
 $linkII = ".html?foreground=%23EEEEEE&linkColor=%231185ec&lines=%23333333&background=%23222222&chart=players%3A24H&chartColor=%23FF0700&maxPlayersHeight=300";
