@@ -1,8 +1,7 @@
 <?php
 require_once 'html/config.php' ;
 require_once 'html/serverconf.php';
-?>
-<?php
+include 'html/langconf.php';
 // Checks if authentication is required. If it's required, it will load the Login window except the visitor of the website is already logged in.
  if ($authentication) {
     require 'users/login-snippet.php';
@@ -16,8 +15,16 @@ require_once 'html/serverconf.php';
 <body>
 <?php include('html/nav.php'); ?>
 <div class="container">
+    <table id="server_list_table"><tbody>
+        <tr id="server_list_table_top">
+            <th class="status_cell"><?php echo $Status ?></th>
+            <th class="connectlink_cell"><?php echo $Adresse ?></th>
+            <th class="servername_cell"><?php echo $Name ?></th>
+            <th class="players_cell"><?php echo $Spieler ?></th>
+            <th class="img-cell"><div></div></th>
+        </tr></tbody>
+    </table>
       <?php
-      include('html/elements.php');
       // Get current URL.
       if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
           $url = "https://";
