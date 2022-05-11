@@ -3,7 +3,7 @@
 $countplayers = $battlemetrics_serverstatus->data->attributes->players;
 $maxplayers = $serverstatus->maxplayers;
 $title = $serverstatus->name;
-$img = "html/img/game-logos/ark.png";
+$img = "https://cdn.muehlhaeusler.online/img/tracker/game-logos/ark.png";
 $connectlink = "steam://connect/$ip:$gport";
 $map = $serverstatus->map;
 $ping = $serverstatus->ping;

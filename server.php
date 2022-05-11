@@ -1,23 +1,36 @@
 
 <?php
 require 'html/config.php';
-// Saves the required Information from the URL into variables e.g. 'server/server.php?type=minecraft&ip=ms.vortexnetwork.net&qport=25565'
-$type = $_GET['type'];
-$ip = $_GET['ip'];
-$qport = $_GET['qport'];
-$gport = $_GET['gport'];
-$banner = $_GET['banner'];
-
+$ServerID = $_GET['serverid'];
+// Query DB for Server Data.
+$conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+$sql = "SELECT * FROM serverconfig WHERE ID='$ServerID'";
+$result = mysqli_query($conn, $sql);
+if (mysqli_num_rows($result) > 0) {
+    while($row = mysqli_fetch_assoc($result)) {
+        $ip = $row["IP"];
+        $type = $row["type"];
+        $qport = $row["QueryPort"];
+        $gport = $row["GamePort"];
+        $rport = $row["RconPort"];
+        $banner = $row["BatPort"];
+    }
+} else {
+    echo "0 results";
+}
+$conn->close();
 // It created a link out of the variables. This link is used to query the information.
-$link = $domain . $path . "/html/server.php?type=" . $type . "&ip=" . $ip . "&qport=" . $qport;
 $linkII = "https://api.battlemetrics.com/servers/" . $banner;
 // The compound link is queried and made usable with "json_decode".
-$serverstatus = json_decode(file_get_contents($link));
+include 'html/server.php';
+$serverstatus = json_decode($serverstatus);
 $battlemetrics_serverstatus = json_decode(file_get_contents($linkII));
 // With this I can retrieve the values from the decoded text and store them in a variable.
 // However, this is done in a different file in the next step, because the data of different players are always queried differently.
     # $countplayers = $serverstatus->raw->vanilla->raw->players->online;
-
 // The appropriate file for the query is specified here.
 if ($type == "minecraft") {
   include('html/type/minecraft/index.php');
@@ -30,7 +43,7 @@ if ($type == "minecraft") {
 } elseif ($type == "csgo") {
   include('html/type/csgo/index.php');
 } else {
-  echo "Nichts gefunden";
+  echo "<br>Nichts gefunden";
 }
 // If the server is offline, it will show a red colour on the website. If its red, it will show a green colour.
 if ($status == 1) {
@@ -38,7 +51,6 @@ if ($status == 1) {
 } else {
   $statusfarbe ='background-color: #E20401;';
 }
-
 ?>
 <section>
           <details>
