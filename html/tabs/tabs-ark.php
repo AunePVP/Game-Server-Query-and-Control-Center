@@ -46,9 +46,9 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                 <td valign="top" class="sidebar">
 
 <div class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width:130px">
-<button class="w3-bar-item w3-button tablink w3-red" onclick="openCity(event, 'Überblick<?php echo $query;?>')">Überblick</button>
-  <button class="w3-bar-item w3-button tablink" onclick="openCity(event, 'Control<?php echo $query;?>')">Control</button>
-  <button class="w3-bar-item w3-button tablink" onclick="openCity(event, 'Config<?php echo $query;?>')">Config</button>
+<button class="w3-bar-item w3-button tablink w3-red" onclick="openCity(event, 'Überblick<?php echo $query;?>')"><?php echo $Überblick?></button>
+  <button class="w3-bar-item w3-button tablink" onclick="openCity(event, 'Control<?php echo $query;?>')"><?php echo $Control?></button>
+  <button class="w3-bar-item w3-button tablink" onclick="openCity(event, 'Config<?php echo $query;?>')"><?php echo $Config?></button>
 </div>
 </td>
 <td class="Informationen">
@@ -78,7 +78,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                 </td>
                 <td class="Spieler">
                     <div id="Spieler">
-                        <h1>Spieler</h1>
+                        <h1><?php echo $Spieler?></h1>
                         <?php 
                         foreach ($serverstatus->players as $player) {
                           if(!strlen($player->name))
@@ -87,7 +87,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                           $rawtimeconv = $player->raw->time;
                           $rawtimeconv = round($rawtimeconv);
                           $output = sprintf('%02dh:%02dm:%02ds', ($rawtimeconv/ 3600),($rawtimeconv/ 60 % 60), $rawtimeconv% 60);
-                          echo $player->name . " seit ";
+                          echo $player->name . " $seit ";
                           echo $output;
                           echo "</h5><br>";
                       }
