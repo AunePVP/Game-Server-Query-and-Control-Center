@@ -6,6 +6,8 @@
           if (isset($_SESSION['username'])) {
               $username = $_SESSION['username'];
               echo '<div class="dropdown"><button class="dropbtn">'.$username.'</button><div class="dropdown-content"><a href="users/index.php">HI</a></div></div>';
+          }else {
+              echo '<div class="dropdown"><button class="dropbtn" href="users/index.php">Login</button><div class="dropdown-content"><a href="users/index.php">HI</a></div></div>';
           }
           ?>
       </div>
