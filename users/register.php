@@ -1,4 +1,11 @@
-<?php include('connection.php') ?>
+<?php
+include('connection.php');
+if ($create_users == 0) {
+    echo "Registration is disabled.";
+    echo "<meta http-equiv='refresh' content='5; URL=../'>";
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
