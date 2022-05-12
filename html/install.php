@@ -76,6 +76,7 @@ if(array_key_exists('submit', $_POST)) {
 
         $myfile = fopen($path, "w") or die("Unable to open file!");
         $write = "<?php" . "\n" .
+            'include ("langconf.php");' . "\n" .
             '$install = 1;' . "\n" .
             '$authentication = ' . $authenticationI . ';' . "\n" .
             '$create_users = ' . $create_usersI . ';' . "\n" .
@@ -85,8 +86,8 @@ if(array_key_exists('submit', $_POST)) {
             '$DB_PASSWORD = "' . $DB_PASSWORDI . '";' . "\n" .
             '$DB_NAME = "' . $DB_NAMEI . '";' . "\n" .
             '$css_template = "' . $css_templateI . '";' . "\n" .
-            '$link = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);' . "\n" .
             '$steamapi = "https://api.steampowered.com/";' . "\n" .
+            '$lang = "en";' . "\n" .
             "?>";
         echo '<script>';
         echo 'alert("Please Delete this file.")';
@@ -241,7 +242,7 @@ if(array_key_exists('submit', $_POST)) {
         </div>
         <div class="side">
             <div>/var/log:&nbsp</div>
-            <div class="green <?php echo $logfailclass; ?>"><?php echo $logfail ?></div>
+            <div class="green <?php if(isset($logfailclass)){echo $logfailclass;}?>"><?php echo $logfail ?></div>
         </div>
     </div>
     <div class="content">
