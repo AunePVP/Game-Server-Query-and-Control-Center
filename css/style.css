@@ -184,11 +184,6 @@ td.format-html {
 		width: 43%;
 	}
 }
-@media only screen and (max-width: 1500px){
-	td.Leistung {
-		width: 35%;
-	}
-}
 @media (max-width:1140px) {
 	.Leistung {
 		display:none;
