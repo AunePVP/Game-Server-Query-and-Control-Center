@@ -23,7 +23,7 @@ You can see the status of your game server and control it from a webpage written
 
 There are many more games that are supported. If your game is missing, please just write in a pull request.
 
-## Screenshot<img width="1434" alt="Screen Shot 2022-05-11 at 19 19 24" src="https://user-images.githubusercontent.com/67545895/167979208-fe84766b-a35d-4208-9d56-d6eead7b4da9.png">
+## Screenshot<img width="1434" alt="Screen Shot 2022-05-11 at 19 30 27" src="https://user-images.githubusercontent.com/67545895/167980185-545f097c-3ad2-4380-b55a-6ebba7af6063.png">
 
 
 <h2>How to use?</h2>
