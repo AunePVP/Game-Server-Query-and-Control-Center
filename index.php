@@ -1,7 +1,7 @@
 <?php
 require_once 'html/config.php' ;
 require_once 'html/serverconf.php';
-include 'html/langconf.php';
+#include 'html/langconf.php';
 // Checks if authentication is required. If it's required, it will load the Login window except the visitor of the website is already logged in.
  if ($authentication) {
     require 'users/login-snippet.php';
@@ -9,14 +9,12 @@ include 'html/langconf.php';
 ?>
 <!doctype html>
 <html>
-<head>
 <?php include('html/head.php') ?>
-</head>
 <body>
 <?php include('html/nav.php'); ?>
 <div class="container">
-    <table id="server_list_table"><tbody>
-        <tr id="server_list_table_top">
+    <table class="server_list_table"><tbody>
+        <tr class="server_list_table_top">
             <th class="status_cell"><?php echo $Status ?></th>
             <th class="connectlink_cell"><?php echo $Adresse ?></th>
             <th class="servername_cell"><?php echo $Name ?></th>
@@ -37,7 +35,8 @@ include 'html/langconf.php';
       if (!$conn) {
           die("Connection failed: " . mysqli_connect_error());
       }
-      $sql = "SELECT ID, owner FROM serverowner WHERE owner='$username'";
+      if (!isset($username)) {$username = "public";};
+      $sql = "SELECT ID FROM serverconfig WHERE owner='$username'";
       $result = mysqli_query($conn, $sql);
       if (mysqli_num_rows($result) > 0) {
           $serverhelper = '{"serverowner":[';
