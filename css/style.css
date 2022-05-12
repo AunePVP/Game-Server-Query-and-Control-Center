@@ -168,17 +168,6 @@ td.format-html {
 ::-webkit-scrollbar-corner {
 	display: none;
 }
-/*.w3-sidebar.w3-bar-block.w3-light-grey.w3-card {
-    width: 130px;
-    float: left;
-    position: relative;
-    height: 100%;
-}
-.w3-bar-item.w3-button.tablink {
-    width: 100%;
-}
-.w3-red,.w3-hover-red:hover{color:rgb(0, 0, 0)!important;background-color:#bebebe!important}/*
-/* Popup box BEGIN */
 @media only screen and (max-width: 1500px){
 	td.Leistung {
 		width: 43%;
