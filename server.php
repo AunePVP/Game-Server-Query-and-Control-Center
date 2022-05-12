@@ -55,7 +55,7 @@ if ($status == 1) {
 <section>
           <details>
             <summary>
-            <table id="server_list_table">
+            <table class="server_list_table">
                 <tbody>
                     <tr class="server_onl">
                     <td class="status_cell">
