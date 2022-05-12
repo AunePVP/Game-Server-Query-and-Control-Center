@@ -42,21 +42,21 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
 ?>
 <table>
         <tbody>
-            <tr id="sidebar">
+            <tr>
                 <td valign="top" class="sidebar">
 
-<div class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width:130px">
-<button class="w3-bar-item w3-button tablink w3-red" onclick="openCity(event, 'Überblick<?php echo $query;?>')"><?php echo $Überblick?></button>
-  <button class="w3-bar-item w3-button tablink" onclick="openCity(event, 'Control<?php echo $query;?>')"><?php echo $Control?></button>
-  <button class="w3-bar-item w3-button tablink" onclick="openCity(event, 'Config<?php echo $query;?>')"><?php echo $Config?></button>
+<div style="width:130px">
+<button class="sidebar-button tablink" onclick="openCity(event, 'Überblick<?php echo $query;?>')"><?php echo $Überblick?></button>
+  <button class="sidebar-button tablink" onclick="openCity(event, 'Control<?php echo $query;?>')"><?php echo $Control?></button>
+  <button class="sidebar-button tablink" onclick="openCity(event, 'Config<?php echo $query;?>')"><?php echo $Config?></button>
 </div>
 </td>
 <td class="Informationen">
 <div>
-  <div id="Überblick<?php echo $query?>" class="w3-container city">
+  <div class="Überblick<?php echo $query?>" class="w3-container city">
     <table>
         <tbody>
-            <tr id="Überblick">
+            <tr class="Überblick">
                 <td class="Daten">
                   <img class="map" src="<?php echo $maplink ?>" alt="<?php echo $maplink;?>"></img>
                   <div style="text-align:left">Map: <?php echo $map ?></div>
@@ -77,21 +77,23 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                   <iframe src=http://85.215.90.221:3000></iframe>
                 </td>
                 <td class="Spieler">
-                    <div id="Spieler">
+                    <div class="Spieler">
                         <h1><?php echo $Spieler?></h1>
-                        <?php 
-                        foreach ($serverstatus->players as $player) {
-                          if(!strlen($player->name))
-                          continue;
-                          echo('<h5 class="dark">');
-                          $rawtimeconv = $player->raw->time;
-                          $rawtimeconv = round($rawtimeconv);
-                          $output = sprintf('%02dh:%02dm:%02ds', ($rawtimeconv/ 3600),($rawtimeconv/ 60 % 60), $rawtimeconv% 60);
-                          echo $player->name . " $seit ";
-                          echo $output;
-                          echo "</h5><br>";
-                      }
-                        ?> 
+                        <div class="player-scroll">
+                            <?php
+                            foreach ($serverstatus->players as $player) {
+                              if(!strlen($player->name))
+                              continue;
+                              echo('<h5 class="dark">');
+                              $rawtimeconv = $player->raw->time;
+                              $rawtimeconv = round($rawtimeconv);
+                              $output = sprintf('%02dh:%02dm:%02ds', ($rawtimeconv/ 3600),($rawtimeconv/ 60 % 60), $rawtimeconv% 60);
+                              echo $player->name . " $seit ";
+                              echo $output;
+                              echo "</h5><br>";
+                            }
+                            ?>
+                        </div>
                     </div>
                 </td>
                 <td class="format-html">
@@ -102,17 +104,17 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
     </table>
   </div>
 
-  <div id="Control<?php echo $query?>" class="w3-container city" style="display:none">
-<button id="stopp" type="submit">Stopp</button>
-<div id="div1"><h2>das ergebnis ist...</h2></div>
-<button id="Start" type="submit">Start</button>
-<div id="div2"><h2>das ergebnis ist...</h2></div>
+  <div class="Control<?php echo $query?>" class="w3-container city" style="display:none">
+<button class="stopp" type="submit">Stopp</button>
+<div class="div1"><h2>das ergebnis ist...</h2></div>
+<button class="Start" type="submit">Start</button>
+<div class="div2"><h2>das ergebnis ist...</h2></div>
 
   </div>
 
-  <div id="Config<?php echo $query?>" class="w3-container city" style="display:none">
+  <div class="Config w3-container city <?php echo $query?>" style="display:none">
     <h2>Config</h2>
-<iframe src="<?php echo $linkI . $banner . $linkII ?>" frameborder=0 style="border: 0px; width: 200px!important; height: 273px!important;" name="fcbyn"></iframe>
+<iframe src="<?php echo $linkI . $banner . $linkII ?>" frameborder=0 style="border: 0; width: 200px!important; height: 273px!important;" name="fcbyn"></iframe>
   </div>
 
 </div>
