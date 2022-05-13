@@ -1,6 +1,40 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Lato:400,900|IBM+Plex+Mono');
 @import url('https://fonts.cdnfonts.com/css/helvetica-neue-9');
+/* link hover start */
+a.white-hover {
+	color: white;
+	text-decoration: none;
+	position: relative
+}
+a.black-hover {
+	color: black;
+	text-decoration: none;
+	position: relative
+}
+a.white-hover:after{
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 0;
+	border-bottom: 2px solid white;
+	transition: .6s
+}
+a.black-hover:after{
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 0;
+	border-bottom: 2px solid #000;
+	transition: .6s
+}
+a:hover:after{
+	width: 100%
+}
+/* link hover end */
+
 ::marker{ display:none; } summary{ list-style: none }
 ::-webkit-scrollbar {
 	width: 0;
@@ -17,7 +51,7 @@ details summary::-webkit-details-marker {
 	padding: 0;
 }
 html, body {
-	min-height: 100vh;
+	min-height: 90vh;
 	background-color: #1D1D1F;
 	text-align: center;
 	font-family: Montserrat, sans-serif;
@@ -36,12 +70,15 @@ details table {
 	position: sticky;
 	top: 0;
 	overflow: auto;
+	height:58px;
 }
 #nav ul {
 	background-color: #1D1D1F !important;
 	list-style-type: none;
 	text-align: left;
 	background-color: #171c24ff;
+	display: flex;
+	height: 58px;
 }
 #nav ul li {
 	display: inline;
@@ -52,6 +89,21 @@ ul li a {
 	text-decoration: none;
 	font-family: Montserrat, sans-serif;
 	color: white;
+}
+#nav .login {
+	display: flex;
+	justify-content: center;
+}
+.login .button {
+	margin: auto 13px;
+	display: inline-block;
+	text-decoration: none;
+	font-family: Montserrat, sans-serif;
+	color: white;
+}
+.user-avater {
+	border: 5px solid #F5F5F5;
+	height: calc(100% - 10px);
 }
 section {
 	color: black;
