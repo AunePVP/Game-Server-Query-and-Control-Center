@@ -73,7 +73,7 @@ if(array_key_exists('submit', $_POST)) {
         #if ($conn->connect_error) {
         #    die("Connection failed: " . $conn->connect_error);
         #}
-
+        $addservers = TRUE;
         $myfile = fopen($path, "w") or die("Unable to open file!");
         $write = "<?php" . "\n" .
             'include ("langconf.php");' . "\n" .
@@ -126,11 +126,7 @@ if(array_key_exists('submit', $_POST)) {
             height: 100vh;
         }
 	#top-section {
-	    <?php if($addservers) {
-            echo "display: none";
-        } else {
-            echo "height: 100%";
-        }?>
+        height: 100%;
 	}
         #top {
             min-height: 20%;
@@ -345,9 +341,15 @@ if(array_key_exists('submit', $_POST)) {
 </section>
 <section id="bottom-section">
 <?php
-if($addservers){
-    include 'addservers.php';
-}
+if($addservers):
+?>
+    <div class="server-box">
+        <div class="inner">
+
+        </div>
+    </div>
+<?php
+endif;
 ?>
 </section>
 </body>
