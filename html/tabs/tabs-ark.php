@@ -74,7 +74,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                 </td>
                 <td class="Leistung">
                   <!-- <iframe src="<?php echo $domain . ":3000"; ?>"></iframe> -->
-                  <iframe src=http://85.215.90.221:3000></iframe>
+                  <!-- <iframe src=http://85.215.90.221:3000></iframe> -->
                 </td>
                 <td class="Spieler">
                     <div class="Spieler">
