@@ -8,7 +8,7 @@ if ($map == "Ragnarok") {
 } elseif ($map == "Valguero") {
   $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/og8oSee.jpg";
 } elseif ($map == "TheIsland") {
-  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/Ark-TheIsland-Map.png";
+  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/Ark-TheIsland-Map.jpg";
 } elseif ($map == "Aberration") {
   $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/K8b0ezf.jpg";
 } elseif ($map == "Viking_P") {
@@ -16,7 +16,7 @@ if ($map == "Ragnarok") {
 } elseif ($map == "TheCenter") {
   $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/OtJbTgc.jpg";
 } elseif ($map == "CrystalIsles") {
-  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/mYFoUGU.png";
+  $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/mYFoUGU.jpg";
 } elseif ($map == "ScorchedEarth") {
   $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/Nxm7tvV.jpg";
 } else {
