@@ -105,6 +105,10 @@ ul li a {
 	border: 5px solid #F5F5F5;
 	height: calc(100% - 10px);
 }
+.white-inftext {
+	color: white;
+	font-size: x-large;
+}
 section {
 	color: black;
 	background-color: #F5F5F5;
