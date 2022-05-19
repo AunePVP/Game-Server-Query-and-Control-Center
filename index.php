@@ -55,6 +55,9 @@ require_once 'html/config.php' ;
               readfile("$url?serverid=$ServerID");
           }
       }
+      if ($username == "public") {
+          echo "<div class='white-inftext'>".$mustlogin."</div>";
+      }
       #echo "https://tracker.iguaserver.de/v3/html/server.php?type=arkse&ip=85.190.148.87&qport=27015";
       #readfile("$url?query=1&type=$typeI&ip=$ipI&qport=$qportI&gport=$gportI&rport=$rportI&banner=$bannerI");
       #readfile("server.php?query=2&type=$typeII&ip=$ipII&qport=$qportII&gport=$gportII&rport=$rportII&banner=$bannerII");
