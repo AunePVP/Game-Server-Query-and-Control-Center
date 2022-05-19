@@ -5,10 +5,10 @@ You can see the status of your game server and control it from a webpage written
 |  Game |  Query Protocol |  Verified |
 | ------------ | ------------ | :------------: |
 | ARK: Survival Evolved  | Valve Protocol  | ✅ |
-| Counter-Strike: Global Offensive  |  Valve Protocol |  ✅ |
-|  Minecraft |   | ✅  |
+| Counter-Strike: Global Offensive  |  Valve Protocol |  ❌(Coming Soon)  |
+|  Minecraft |   | ❌(Coming Soon) |
 |  Valheim | Valve Protocol  | ✅  |
-| 7 Days to Die  | Valve Protocol  | ❌ (Coming Soon)  |
+| 7 Days to Die  | Valve Protocol  | ❌  |
 | Age of Chivalry  |  Valve Protocol |  ❌ |
 | Mordhau (2019)  | Valve Protocol  | ❌  |
 |  Atlas | Valve Protocol  | ❌  |

@@ -1,6 +1,5 @@
 <?php
 require_once 'html/config.php' ;
-require_once 'html/serverconf.php';
 #include 'html/langconf.php';
 // Checks if authentication is required. If it's required, it will load the Login window except the visitor of the website is already logged in.
  if ($authentication) {
@@ -36,7 +35,7 @@ require_once 'html/serverconf.php';
           die("Connection failed: " . mysqli_connect_error());
       }
       if (!isset($username)) {$username = "public";};
-      $sql = "SELECT ID FROM serverconfig WHERE owner='$username'";
+      $sql = "SELECT ID FROM serverconfig WHERE owner='$username' AND enabled='1'";
       $result = mysqli_query($conn, $sql);
       if (mysqli_num_rows($result) > 0) {
           $serverhelper = '{"serverowner":[';
