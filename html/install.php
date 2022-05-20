@@ -395,9 +395,27 @@ function test_input($data)
                 </td>
             </tr>
     </table>
-    <input type="submit" name="submitserver" value="submitserver">
-    <?php
-    endif;
-    ?>
+    <div style="display: flex">
+        <input style="margin:auto 40px auto auto;" type="submit" name="submitserver" value="submitserver">
+    </div>
+        <?php
+        endif;
+        ?>
 </section>
+<section id="register">
+
+</section>
+<?php
+if (array_key_exists('finish', $_POST)) {
+
+    $file = __FILE__;
+    if(file_exists($file)) {
+        unlink($file);
+    }
+    header("Location: ../users/login.php");
+}?>
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <div style="display: flex">
+        <input id="destroy" type="submit" name="finish" value="Finish">
+    </div>
 </body>
