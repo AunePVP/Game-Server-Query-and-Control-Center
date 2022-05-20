@@ -397,18 +397,19 @@ function test_input($data)
     </table>
     <input type="submit" name="submitserver" value="submitserver">
     <?php
-    if (array_key_exists('deletefile', $_POST)) {
-        $file_pointer = "install.php";
-        if (!unlink($file_pointer)) {
-            echo ("$file_pointer cannot be deleted due to an error");
+    if (array_key_exists('finish', $_POST)) {
+        class DeleteOnExit
+        {
+            function __destruct()
+            {
+                unlink(__FILE__);
+            }
         }
-        else {
-            echo ("$file_pointer has been deleted");
-        }
+        $g_delete_on_exit = new DeleteOnExit();
     }
     ?>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <input type="submit" name="deletefile" value="submitserver">
+        <input type="submit" name="finish" value="finish">
 
         <?php
         endif;
