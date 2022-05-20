@@ -1,4 +1,14 @@
 <?php
+if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+    $lang = (substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2));
+    if ($lang == "de") {
+        $lang = "de";
+    } else {
+        $lang = "en";
+    }
+} else {
+    $lang = "en";
+}
 if ($lang == "en") {
     $Überblick = "General";
     $Control = "Control";
