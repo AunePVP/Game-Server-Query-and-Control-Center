@@ -69,6 +69,18 @@ tr:nth-child(even) {
 tbody select {
     font-size: 16px;
 }
+#destroy {
+    margin: 40px auto 15px;
+    color: white;
+    background-color: red;
+    border-radius: 6px;
+    border: solid black;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration-line: underline;
+    cursor: pointer;
+}
 @media only screen and (min-width: 850px) {
     .conf {
         display: flex;
