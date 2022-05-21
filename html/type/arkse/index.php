@@ -7,7 +7,7 @@ $img = "https://cdn.muehlhaeusler.online/img/tracker/game-logos/ark.png";
 $connectlink = "steam://connect/$ip:$gport";
 $map = $serverstatus->map;
 $ping = $serverstatus->ping;
-// If the server is offline, the variable will be empty. That' how I check if the server is online.
+// If the server is offline, the variable will be empty. That's how I check if the server is online.
 $status = $serverstatus->raw->numplayers;
 if (isset($status)) {
     $status = 1;
