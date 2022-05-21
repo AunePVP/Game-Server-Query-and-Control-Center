@@ -206,11 +206,11 @@ function test_input($data)
                                                                             if (isset($steamwebapi_key)) {
                                                                                 echo $steamwebapi_key;
                                                                             } ?>">
-                                    <label>
+                                    <label class="marginauto0">
                                         <input type="checkbox" onclick="steamwebapikeyFuntion()">
                                     </label>
-                                    <div>Show
-                                        Key
+                                    <div class="marginauto0">
+                                        Show Key
                                     </div>
                                 </div>
                                 <br><br>
@@ -272,8 +272,8 @@ function test_input($data)
                         </div>
                     </div>
                     <div>
-                        <input type="submit" name="submit" value="submit">
-                        <input type="submit" name="validate" value="validate">
+                        <input type="submit" name="submit" value="Submit">
+                        <input type="submit" name="validate" value="Validate">
                     </div>
                     <div id="sqlvme">
                         <?php
@@ -397,7 +397,7 @@ function test_input($data)
             </tr>
     </table>
     <div style="display: flex">
-        <input style="margin:auto 40px auto auto;" type="submit" name="submitserver" value="submitserver">
+        <input style="margin: 5px 40px auto auto;" type="submit" name="submitserver" value="Submit">
     </div>
         <?php
         endif;
@@ -445,27 +445,29 @@ if ($register):
     }
 ?>
 <section id="register">
-    <form method="post" action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>>
-        <div class="input-group">
-            <label>Enter Username</label>
-            <input type="text" name="username"
-                   value="<?php if(isset($username)) {echo $username;} ?>">
-        </div>
-        <div class="input-group">
-            <label>Enter Password</label>
-            <input type="password" name="password_1">
-        </div>
-        <div class="input-group">
-            <label>Confirm password</label>
-            <input type="password" name="password_2">
-        </div>
-        <div class="input-group">
-            <button type="submit" class="btn"
-                    name="reg_user">
-                Register
-            </button>
-        </div>
-    </form>
+    <div style="margin: auto;">
+        <form method="post" action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>>
+            <div class="input-group">
+                <label>Enter Username</label>
+                <input type="text" name="username"
+                       value="<?php if(isset($username)) {echo $username;} ?>">
+            </div>
+            <div class="input-group">
+                <label>Enter Password</label>
+                <input type="password" name="password_1">
+            </div>
+            <div class="input-group">
+                <label>Confirm password</label>
+                <input type="password" name="password_2">
+            </div>
+            <div class="input-group">
+                <button type="submit" class="btn"
+                        name="reg_user">
+                    Register
+                </button>
+            </div>
+        </form>
+    </div>
 </section>
 <?php
 endif;
