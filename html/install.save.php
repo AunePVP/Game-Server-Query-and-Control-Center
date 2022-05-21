@@ -1,13 +1,12 @@
 <?php
 // TODO Remove this usercheck before publishing the Website. Why? Because this page is meant for the installation. When people install the Website, they have no Admin account and will create one.
-session_start();
-if (!isset($_SESSION['username'])) {
-    $_SESSION['backURI'] = $_SERVER['REQUEST_URI'];
-    echo $_SESSION['backURI'];
-    header('location: ../users/login.php');
-}
+//session_start();
+//if (!isset($_SESSION['username'])) {
+//    $_SESSION['backURI'] = $_SERVER['REQUEST_URI'];
+//    echo $_SESSION['backURI'];
+//    header('location: ../users/login.php');
+//}
 //
-
 $addservers = 0;
 require_once 'config.php';
 if (isset($install) && !$install) {
@@ -207,11 +206,11 @@ function test_input($data)
                                                                             if (isset($steamwebapi_key)) {
                                                                                 echo $steamwebapi_key;
                                                                             } ?>">
-                                    <label>
+                                    <label class="marginauto0">
                                         <input type="checkbox" onclick="steamwebapikeyFuntion()">
                                     </label>
-                                    <div>Show
-                                        Key
+                                    <div class="marginauto0">
+                                        Show Key
                                     </div>
                                 </div>
                                 <br><br>
@@ -273,8 +272,8 @@ function test_input($data)
                         </div>
                     </div>
                     <div>
-                        <input type="submit" name="submit" value="submit">
-                        <input type="submit" name="validate" value="validate">
+                        <input type="submit" name="submit" value="Submit">
+                        <input type="submit" name="validate" value="Validate">
                     </div>
                     <div id="sqlvme">
                         <?php
@@ -320,6 +319,7 @@ function test_input($data)
         }
         $sql = "SELECT * FROM serverconfig ORDER BY ID DESC LIMIT 1";
         $result = $conn->query($sql);
+        $newid = "1";
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
@@ -331,6 +331,7 @@ function test_input($data)
         $sql = "SELECT * FROM serverconfig";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
+            $register = TRUE;
             echo "<tr>";
             echo "<th scope='col'>ID</th>";
             echo "<th>Owner</th>";
@@ -395,24 +396,93 @@ function test_input($data)
                 </td>
             </tr>
     </table>
-    <input type="submit" name="submitserver" value="submitserver">
+    <div style="display: flex">
+        <input style="margin: 5px 40px auto auto;" type="submit" name="submitserver" value="Submit">
+    </div>
     <?php
-    if (array_key_exists('finish', $_POST)) {
-        class DeleteOnExit
-        {
-            function __destruct()
-            {
-                unlink(__FILE__);
-            }
+    endif;
+    ?>
+</section>
+<?php
+if ($register):
+    $username = "";
+    $errors = array();
+    $_SESSION['success'] = "";
+    $db = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+    if (isset($_POST['reg_user'])) {
+        $username = mysqli_real_escape_string($db, $_POST['username']);
+        $password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
+        $password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
+        if (empty($username)) {
+            array_push($errors, "Username is required");
         }
-        $g_delete_on_exit = new DeleteOnExit();
+        if (empty($password_1)) {
+            array_push($errors, "Password is required");
+        }
+        if ($password_1 != $password_2) {
+            array_push($errors, "The two passwords do not match");
+            // Checking if the passwords match
+        }
+        // If the form is error free, then register the user
+        if (count($errors) == 0) {
+            // Password encryption to increase data security
+            $password = md5($password_1);
+            // Inserting data into table
+            $query = "INSERT INTO users (username, password) VALUES('$username', '$password')";
+            mysqli_query($db, $query);
+            // Storing username of the logged in user,
+            // in the session variable
+            $_SESSION['username'] = $username;
+
+            // Welcome message
+            $_SESSION['success'] = "You have logged in";
+            // Page on which the user will be
+            // redirected after logging in
+            unset($_SESSION['backURI']);
+            //header("location:".$backURL);
+            echo "You created the user ".$username."!";
+        }
     }
     ?>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <input type="submit" name="finish" value="finish">
+    <section id="register">
+        <div style="margin: auto;">
+            <form method="post" action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>>
+                <div class="input-group">
+                    <label>Enter Username</label>
+                    <input type="text" name="username"
+                           value="<?php if(isset($username)) {echo $username;} ?>">
+                </div>
+                <div class="input-group">
+                    <label>Enter Password</label>
+                    <input type="password" name="password_1">
+                </div>
+                <div class="input-group">
+                    <label>Confirm password</label>
+                    <input type="password" name="password_2">
+                </div>
+                <div class="input-group">
+                    <button type="submit" class="btn"
+                            name="reg_user">
+                        Register
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+<?php
+endif;
+?>
+<?php
+if (array_key_exists('finish', $_POST)) {
 
-        <?php
-        endif;
-        ?>
-</section>
+    $file = __FILE__;
+    if(file_exists($file)) {
+        unlink($file);
+    }
+    header("Location: ../users/login.php");
+}?>
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <div style="display: flex">
+        <input id="destroy" type="submit" name="finish" value="Finish">
+    </div>
 </body>
