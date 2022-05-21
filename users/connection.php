@@ -28,6 +28,17 @@ if (isset($_POST['reg_user'])) {
 
     // Ensuring that the user has not left any input field blank
     // error messages will be displayed for every blank input
+    // Check if user exists
+    $sql = "SELECT * FROM users WHERE username='$username'";
+    $result = mysqli_query($db, $sql);
+    if ($result->num_rows > 0) {
+        $usernameexists = TRUE;
+    } else {
+        $usernameexists = "";
+    }
+    if ($usernameexists) {
+        array_push($errors, "User exists.");
+    }
     if (empty($username)) {
         array_push($errors, "Username is required");
     }
