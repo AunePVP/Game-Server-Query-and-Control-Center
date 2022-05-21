@@ -8,7 +8,6 @@ if (isset($_SESSION['username'])) {
 }
 // Declaring and hoisting the variables
 $username = "";
-$email = "";
 $errors = array();
 $_SESSION['success'] = "";
 
@@ -24,7 +23,6 @@ if (isset($_POST['reg_user'])) {
     // Data sanitization is done to prevent
     // SQL injections
     $username = mysqli_real_escape_string($db, $_POST['username']);
-    $email = mysqli_real_escape_string($db, $_POST['email']);
     $password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
     $password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
 
@@ -32,9 +30,6 @@ if (isset($_POST['reg_user'])) {
     // error messages will be displayed for every blank input
     if (empty($username)) {
         array_push($errors, "Username is required");
-    }
-    if (empty($email)) {
-        array_push($errors, "Email is required");
     }
     if (empty($password_1)) {
         array_push($errors, "Password is required");
@@ -52,7 +47,7 @@ if (isset($_POST['reg_user'])) {
         $password = md5($password_1);
 
         // Inserting data into table
-        $query = "INSERT INTO users (username, email, password) VALUES('$username', '$email', '$password')";
+        $query = "INSERT INTO users (username, password) VALUES('$username', '$password')";
 
         mysqli_query($db, $query);
 
