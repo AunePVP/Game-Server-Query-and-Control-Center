@@ -24,6 +24,7 @@ main {
     border: none;
     background-color: #161A24;
     padding: 0;
+    font-weight: 300;
 }
 #sidebar button.selected {
     background-color: #2B2F43;
@@ -33,6 +34,7 @@ main {
     left: 0 !important;
     bottom: 0 !important;
     width: 225px;
+    font-weight: 200;
 }
 #sidebar button:hover {
     cursor: pointer;
