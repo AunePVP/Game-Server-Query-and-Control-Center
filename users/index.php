@@ -18,6 +18,9 @@ if (isset($_GET['logout'])) {
     header("location: login.php");
 }
 echo $_SESSION['username'];
+if ($_SESSION['username'] === "admin") {
+    header("location: admin/index.php");
+}
 ?>
 <!DOCTYPE html>
 <html>
