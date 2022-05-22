@@ -34,7 +34,7 @@ main {
     left: 0 !important;
     bottom: 0 !important;
     width: 225px;
-    font-weight: 200;
+    font-weight: 200 !important;
 }
 #sidebar button:hover {
     cursor: pointer;
