@@ -33,6 +33,7 @@ main {
     left: 0 !important;
     bottom: 0 !important;
     width: 225px;
+    font-weight: 300;
 }
 #sidebar button:hover {
     cursor: pointer;
