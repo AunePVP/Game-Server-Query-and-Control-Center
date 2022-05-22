@@ -3,19 +3,23 @@ html, body {
     padding: 0;
 }
 main {
-    display: flex;
-    height: 100vh;
+    min-height: 100vh;
+    background-color: #151f34;
+    padding-left: 225px;
+}
+#topbar {
+    display: none;
 }
 #sidebar {
     height: 100%;
     width: 225px;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     background-color: #161A24;
 }
 
-#sidebar button {
+#sidebar button, .overlay-content button {
     color: white;
     font-family: Helvetica Neue, sans-serif;
     font-size: 28px;
@@ -26,7 +30,7 @@ main {
     padding: 0;
     font-weight: 300;
 }
-#sidebar button.selected {
+#sidebar button.selected, .overlay-content button.selected {
     background-color: #2B2F43;
 }
 #sidebar button.bottom {
@@ -36,11 +40,116 @@ main {
     width: 225px;
     font-weight: 200 !important;
 }
-#sidebar button:hover {
+#sidebar button:hover{
     cursor: pointer;
     background-color: #2B2F43;
 }
+.overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0, 0.9);
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+.overlay-content {
+    position: relative;
+    top: 25%;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.overlay a:hover, .overlay a:focus {
+    color: #f1f1f1;
+}
+
+.overlay .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 60px;
+}
+.server {
+    padding-top: 15px
+}
+.serversnippet {
+    width: 260px;
+    height: 156px;
+    background-color: #383B4F;
+    border-radius: 6px;
+    margin: 15px auto;
+}
+#open-span {
+    color: white;
+    font-size: 55px;
+    position: fixed;
+    right: 2px;
+    cursor: pointer;
+}
+
 
 .flex {
     display: flex;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+    width: 100%;
+}
+.inlineflex {
+    display: inline-flex;
+}
+@media only screen and (max-width: 775px) {
+    #sidebar, #sidebar button.bottom {
+        width: 200px;
+    }
+    main {
+        padding-left: 200px;
+    }
+}
+@media only screen and (max-width: 550px) {
+    #sidebar, #sidebar button.bottom {
+        width: 170px;
+    }
+    main {
+        padding-left: 170px;
+    }
+}
+@media only screen and (max-width: 500px) {
+    #sidebar, #sidebar button.bottom {
+        width: 140px;
+    }
+    main {
+        padding-left: 140px;
+    }
+}
+@media only screen and (max-width: 420px) {
+    #sidebar, #sidebar button.bottom {
+        display: none;
+    }
+    main {
+        padding-left: 0;
+    }
+    #topbar {
+        display: block;
+    }
+    .serversnippet {
+        width: 320px;
+    }
+    .server {
+        padding-top: 45px
+    }
 }
