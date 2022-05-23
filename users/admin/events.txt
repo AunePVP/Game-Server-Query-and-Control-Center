@@ -1,5 +1,5 @@
-19:36 Server restart
-18:31 Server backup
-17:12 Server stop
+08:00 Server start
 11:53 Server update
-08:00 server start
+17:12 Server stop
+18:31 Server backup
+19:36 Server restart
