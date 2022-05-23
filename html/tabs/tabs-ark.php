@@ -47,8 +47,6 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
 
 <div style="width:130px">
 <button class="sidebar-button tablink" onclick="openCity(event, 'Überblick<?php echo $query;?>')"><?php echo $Überblick?></button>
-  <button class="sidebar-button tablink" onclick="openCity(event, 'Control<?php echo $query;?>')"><?php echo $Control?></button>
-  <button class="sidebar-button tablink" onclick="openCity(event, 'Config<?php echo $query;?>')"><?php echo $Config?></button>
 </div>
 </td>
 <td class="Informationen">
