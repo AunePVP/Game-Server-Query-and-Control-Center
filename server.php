@@ -1,4 +1,3 @@
-
 <?php
 require 'html/config.php';
 $ServerID = $_GET['serverid'];
@@ -25,8 +24,37 @@ $conn->close();
 // It created a link out of the variables. This link is used to query the information.
 $linkII = "https://api.battlemetrics.com/servers/" . $banner;
 // The compound link is queried and made usable with "json_decode".
-include 'html/server.php';
-$serverstatus = json_decode($serverstatus);
+//Get Source Query DATA
+if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+    $url = "https://";
+else
+    $url = "http://";
+
+$url.= $_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
+$url.= "/query/index.php";
+if ($type == "arkse") {
+    $postdata = http_build_query(
+        array(
+            'ip' => $ip,
+            'port' => $qport,
+        )
+    );
+    $opts = array('http' =>
+        array(
+            'method' => 'POST',
+            'header' => 'Content-Type: application/x-www-form-urlencoded',
+            'content' => $postdata
+        )
+    );
+    $context = stream_context_create($opts);
+    $queryresult = file_get_contents($url, false, $context);
+}
+if ($type == "minecraft") {
+    $link = "https://api.mcsrvstat.us/2/".$ip.":".$qport;
+    $queryresult = file_get_contents($link);
+}
+//include 'html/server.php';
+$serverstatus = json_decode($queryresult);
 $battlemetrics_serverstatus = json_decode(file_get_contents($linkII));
 // With this I can retrieve the values from the decoded text and store them in a variable.
 // However, this is done in a different file in the next step, because the data of different players are always queried differently.
@@ -72,7 +100,7 @@ if ($status == 1) {
                     </td>
                     <td title="GAME LINK" class="connectlink_cell"><a href="<?php echo $connectlink ?>"><?php echo $ip . ":" . $gport ?></a></td>
                     <td title="<?php echo $title; ?>" class="servername_cell">
-                    <div class="servername_nolink"><?php echo $title; ?></div></td>
+                    <div class="servername_nolink"><?php echo $titlename; ?></div></td>
                     <td class="players_cell"><div class="outer_bar"><div class="inner_bar"><span class="players_numeric"><?php echo $countplayers . '/' . $maxplayers;?></span></div></div></td>
                     <td class="img-cell"><img src="<?php echo $img; ?>" width="80px" height="80px" style="float:right;margin-right: 8px;"></img></td>
                 </tr>
