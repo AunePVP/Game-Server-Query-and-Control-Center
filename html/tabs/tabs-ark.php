@@ -82,13 +82,13 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                         <div class="player-scroll">
                             <?php
                             foreach ($serverstatus->players as $player) {
-                              if(!strlen($player->name))
+                              if(!strlen($player->Name))
                               continue;
                               echo('<h5 class="dark">');
-                              $rawtimeconv = $player->raw->time;
+                              $rawtimeconv = $player->Time;
                               $rawtimeconv = round($rawtimeconv);
                               $output = sprintf('%02dh:%02dm:%02ds', ($rawtimeconv/ 3600),($rawtimeconv/ 60 % 60), $rawtimeconv% 60);
-                              echo $player->name . " $seit ";
+                              echo $player->Name . " $seit ";
                               echo $output;
                               echo "</h5><br>";
                             }
