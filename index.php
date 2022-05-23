@@ -63,7 +63,9 @@ require_once 'html/config.php' ;
       #readfile("server.php?query=2&type=$typeII&ip=$ipII&qport=$qportII&gport=$gportII&rport=$rportII&banner=$bannerII");
       ?>
       </div>
-      <?php #include 'html/footer.php';?>
+      <?php
+      #include 'html/footer.php';
+      ?>
 
 </body>
 <footer>
