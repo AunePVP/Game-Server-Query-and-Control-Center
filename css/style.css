@@ -71,6 +71,7 @@ details table {
 	top: 0;
 	overflow: auto;
 	height:58px;
+	z-index: 10;
 }
 #nav ul {
 	background-color: #1D1D1F !important;
