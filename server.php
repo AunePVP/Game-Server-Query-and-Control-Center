@@ -58,69 +58,69 @@ $serverstatus = json_decode($queryresult);
 $battlemetrics_serverstatus = json_decode(file_get_contents($linkII));
 // With this I can retrieve the values from the decoded text and store them in a variable.
 // However, this is done in a different file in the next step, because the data of different players are always queried differently.
-    # $countplayers = $serverstatus->raw->vanilla->raw->players->online;
+# $countplayers = $serverstatus->raw->vanilla->raw->players->online;
 // The appropriate file for the query is specified here.
 if ($type == "minecraft") {
-  include('html/type/minecraft/index.php');
+    include('html/type/minecraft/index.php');
 } elseif ($type == "arkse") {
-  include('html/type/arkse/index.php');
+    include('html/type/arkse/index.php');
 } elseif ($type == "protocol-valve") {
-  include('html/type/protocol-valve/index.php');
+    include('html/type/protocol-valve/index.php');
 } elseif ($type == "valheim") {
-  include('html/type/valheim/index.php');
+    include('html/type/valheim/index.php');
 } elseif ($type == "csgo") {
-  include('html/type/csgo/index.php');
+    include('html/type/csgo/index.php');
 } else {
-  echo "<br>Nichts gefunden";
+    echo "<br>Nichts gefunden";
 }
 // If the server is offline, it will show a red colour on the website. If its red, it will show a green colour.
 if ($status == 1) {
-  $statusfarbe ='background-color: #00FF17;';
+    $statusfarbe ='background-color: #00FF17;';
 } else {
-  $statusfarbe ='background-color: #E20401;';
+    $statusfarbe ='background-color: #E20401;';
 }
 ?>
 <section>
-          <details>
-            <summary>
+    <details>
+        <summary>
             <table class="server_list_table">
                 <tbody>
-                    <tr class="server_onl">
+                <tr class="server_onl">
                     <td class="status_cell">
                         <span class="status_icon_onl" style="<?php echo $statusfarbe ?>"></span>
                         <div class="status-letter-online"><?php
-                        if ($status == "1") {
-                                  echo "ONLINE";
-                                  }
-                                else {
-                                 echo "OFFLINE";
-                                }?>
-                            </div>
+                            if ($status == "1") {
+                                echo "ONLINE";
+                            }
+                            else {
+                                echo "OFFLINE";
+                            }?>
+                        </div>
                         <div class="status-letter-offline">OFFLINE</div>
                     </td>
                     <td title="GAME LINK" class="connectlink_cell"><a href="<?php echo $connectlink ?>"><?php echo $ip . ":" . $gport ?></a></td>
                     <td title="<?php echo $title; ?>" class="servername_cell">
-                    <div class="servername_nolink"><?php echo $titlename; ?></div></td>
+                        <div class="servername_nolink"><?php echo $titlename; ?></div></td>
                     <td class="players_cell"><div class="outer_bar"><div class="inner_bar"><span class="players_numeric"><?php echo $countplayers . '/' . $maxplayers;?></span></div></div></td>
                     <td class="img-cell"><img src="<?php echo $img; ?>" width="80px" height="80px" style="float:right;margin-right: 8px;"></img></td>
                 </tr>
-              </tbody></table>
-            </summary>
-            <?php
-// The correct menue for every game is specified here.
-if ($type == "minecraft") {
-  include('html/tabs/tabs-minecraft.php');
-} elseif ($type == "arkse") {
-  include('html/tabs/tabs-ark.php');
-} elseif ($type == "protocol-valve") {
-  include('html/tabs/tabs-valve.php');
-} elseif ($type == "valheim") {
-  include('html/tabs/tabs-valheim.php');
-} elseif ($type == "csgo") {
-  include('html/tabs/tabs-csgo.php');
-} else {
-  echo "Nichts gefunden";
-}
-?>
-          </details>
-        </section>
+                </tbody></table>
+        </summary>
+        <?php
+        // The correct menue for every game is specified here.
+        if ($type == "minecraft") {
+            include('html/tabs/tabs-minecraft.php');
+        } elseif ($type == "arkse") {
+            include('html/tabs/tabs-ark.php');
+        } elseif ($type == "protocol-valve") {
+            include('html/tabs/tabs-valve.php');
+        } elseif ($type == "valheim") {
+            include('html/tabs/tabs-valheim.php');
+        } elseif ($type == "csgo") {
+            include('html/tabs/tabs-csgo.php');
+        } else {
+            echo "Nichts gefunden";
+        }
+        ?>
+    </details>
+</section>
