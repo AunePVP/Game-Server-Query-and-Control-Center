@@ -1,9 +1,11 @@
 html, body {
     margin: 0;
     padding: 0;
+    background-color: #151f34;
+    color: white;
 }
 main {
-    min-height: 100vh;
+    min-height: calc(100vh - 30px);
     background-color: #151f34;
     padding-left: 225px;
 }
@@ -83,12 +85,9 @@ main {
     right: 45px;
     font-size: 60px;
 }
-.server {
-    padding-top: 15px
-}
 .serversnippet {
     width: 260px;
-    height: 156px;
+    height: 180px;
     background-color: #383B4F;
     border-radius: 6px;
     margin: 15px auto;
@@ -100,8 +99,6 @@ main {
     right: 2px;
     cursor: pointer;
 }
-
-
 .flex {
     display: flex;
 }
@@ -112,6 +109,84 @@ main {
 .inlineflex {
     display: inline-flex;
 }
+.status {
+    height: 100%;
+    width: 10px;
+    border-radius: 6px 0 0 6px;
+}
+.online {
+    background-color: #00FF17;
+}
+.offline {
+    background-color: #E20401;
+}
+.serversnippet .content {
+    width: 100%;
+    height: 100%;
+}
+.serversnippet .content .name{
+    text-align: center;
+    font-family: Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    padding: 12px 0 2px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    min-height: 42px;
+}
+.serversnippet .content .logo img{
+    margin: auto;
+}
+.serversnippet .content .player{
+    font-weight: 500;
+    text-align: center;
+    font-size: 25px;
+    font-family: Helvetica Neue, sans-serif;
+    letter-spacing: 0.5px;
+    color: #E20401;
+}
+.margin15 {
+    margin: 15px;
+}
+.width40 {
+    width: 40%;
+}
+.marginauto {
+    margin: auto;
+}
+.itemdiv {
+    margin: 10px auto;
+}
+.extra {
+    padding-top: 15px;
+    border-radius: 6px;
+}
+.extra .item {
+    width: 210px;
+    min-height: 300px;
+    border-radius: 6px;
+    background-color: #383B4F;
+    margin: auto;
+}
+.itemtitle {
+    width: 210px;
+    text-align: center;
+    margin: auto;
+    font-family: Helvetica Neue, sans-serif;
+    font-size: 26px;
+    padding: 5px 0;
+}
+.item p {
+    text-align: center;
+    font-family: Helvetica Neue, sans-serif;
+    font-size: 22px;
+    margin: 0;
+    padding: 10px 0 0;
+    font-weight: 300;
+}
 @media only screen and (max-width: 775px) {
     #sidebar, #sidebar button.bottom {
         width: 200px;
@@ -119,6 +194,20 @@ main {
     main {
         padding-left: 200px;
     }
+    .width40 {
+        width: 250px;
+    }
+    .extra .item {
+        width: 250px;
+    }
+}
+.events p {
+    text-align: center;
+    font-family: Helvetica Neue, sans-serif;
+    font-size: 18px;
+    margin: 0;
+    padding: 10px 0 0;
+    font-weight: 300;
 }
 @media only screen and (max-width: 550px) {
     #sidebar, #sidebar button.bottom {
