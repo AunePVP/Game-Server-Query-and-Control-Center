@@ -21,58 +21,42 @@ if (mysqli_num_rows($result) > 0) {
     echo "0 results";
 }
 $conn->close();
-// It created a link out of the variables. This link is used to query the information.
+// Create Link for Battle Metrics API
 $linkII = "https://api.battlemetrics.com/servers/" . $banner;
-// The compound link is queried and made usable with "json_decode".
-//Get Source Query DATA
-if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
-    $url = "https://";
-else
-    $url = "http://";
 
-$url.= $_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
-$url.= "/query/index.php";
-if ($type == "arkse") {
-    $postdata = http_build_query(
-        array(
-            'ip' => $ip,
-            'port' => $qport,
-        )
-    );
-    $opts = array('http' =>
-        array(
-            'method' => 'POST',
-            'header' => 'Content-Type: application/x-www-form-urlencoded',
-            'content' => $postdata
-        )
-    );
-    $context = stream_context_create($opts);
-    $queryresult = file_get_contents($url, false, $context);
+// Query data -> decode data -> include correct file for reading data from array
+switch ($type) {
+    case "arkse":
+        include 'query/sourcequery.php';
+        $serverstatus = json_decode($queryresult);
+        $arr = json_decode($queryresult, true);
+        include('html/type/arkse/index.php');
+        break;
+    case "minecraft":
+        include 'query/minecraftquery.php';
+        $serverstatus = json_decode($queryresult);
+        //$link = "https://api.mcsrvstat.us/2/".$ip.":".$qport;
+        //$queryresult = file_get_contents($link);
+        //$serverstatus = json_decode($queryresult);
+        include('html/type/minecraft/index.php');
+        break;
+    case "valheim":
+        include 'query/sourcequery.php';
+        $serverstatus = json_decode($queryresult);
+        include('html/type/valheim/index.php');
+        break;
+    case "protocol-valve":
+        include 'query/sourcequery.php';
+        $serverstatus = json_decode($queryresult);
+        include('html/type/protocol-valve/index.php');
+        break;
+    case "csgo":
+        include 'query/sourcequery.php';
+        $serverstatus = json_decode($queryresult);
+        include('html/type/csgo/index.php');
+        break;
 }
-if ($type == "minecraft") {
-    $link = "https://api.mcsrvstat.us/2/".$ip.":".$qport;
-    $queryresult = file_get_contents($link);
-}
-//include 'html/server.php';
-$serverstatus = json_decode($queryresult);
-$battlemetrics_serverstatus = json_decode(file_get_contents($linkII));
-// With this I can retrieve the values from the decoded text and store them in a variable.
-// However, this is done in a different file in the next step, because the data of different players are always queried differently.
-# $countplayers = $serverstatus->raw->vanilla->raw->players->online;
-// The appropriate file for the query is specified here.
-if ($type == "minecraft") {
-    include('html/type/minecraft/index.php');
-} elseif ($type == "arkse") {
-    include('html/type/arkse/index.php');
-} elseif ($type == "protocol-valve") {
-    include('html/type/protocol-valve/index.php');
-} elseif ($type == "valheim") {
-    include('html/type/valheim/index.php');
-} elseif ($type == "csgo") {
-    include('html/type/csgo/index.php');
-} else {
-    echo "<br>Nichts gefunden";
-}
+
 // If the server is offline, it will show a red colour on the website. If its red, it will show a green colour.
 if ($status == 1) {
     $statusfarbe ='background-color: #00FF17;';
@@ -107,19 +91,23 @@ if ($status == 1) {
                 </tbody></table>
         </summary>
         <?php
-        // The correct menue for every game is specified here.
-        if ($type == "minecraft") {
-            include('html/tabs/tabs-minecraft.php');
-        } elseif ($type == "arkse") {
-            include('html/tabs/tabs-ark.php');
-        } elseif ($type == "protocol-valve") {
-            include('html/tabs/tabs-valve.php');
-        } elseif ($type == "valheim") {
-            include('html/tabs/tabs-valheim.php');
-        } elseif ($type == "csgo") {
-            include('html/tabs/tabs-csgo.php');
-        } else {
-            echo "Nichts gefunden";
+        // Include the tab for the game
+        switch ($type) {
+            case "arkse":
+                include('html/tabs/tabs-ark.php');
+                break;
+            case "minecraft":
+                include('html/tabs/tabs-minecraft.php');
+                break;
+            case "valheim":
+                include('html/tabs/tabs-valheim.php');
+                break;
+            case "protocol-valve":
+                include('html/tabs/tabs-valve.php');
+                break;
+            case "csgo":
+                include('html/tabs/tabs-csgo.php');
+                break;
         }
         ?>
     </details>
