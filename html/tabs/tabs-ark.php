@@ -68,6 +68,16 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
 
                 </td>
                 <td class="Leistung">
+                    <div style="text-align:left">System:
+                        <?php
+                        if (isset($Os)) {echo $Os;}
+                        ?>
+                    </div>
+                    <div style="text-align:left">Cluster ID:
+                        <?php
+                        if (isset($clusterid)) {echo $clusterid;}
+                        ?>
+                    </div>
                     <div style="text-align:left">Password:
                         <?php
                             if ($password == "true" ) {
@@ -84,6 +94,11 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                         } else {
                             echo "False";
                         }
+                        ?>
+                    </div>
+                    <div style="text-align:left">Day length:
+                        <?php
+                        echo $daytime;
                         ?>
                     </div>
                     <?php
