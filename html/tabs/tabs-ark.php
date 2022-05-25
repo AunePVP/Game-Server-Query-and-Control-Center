@@ -22,6 +22,12 @@ if ($map == "Ragnarok") {
   $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/crt9S5y.jpg";
 }   
 $modlink = '<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=';
+function convertmodlistark($mod)
+{
+    $data = file_get_contents('https://cdn.muehlhaeusler.online/arkmodlist.json');
+    $data = json_decode($data);
+    return $data->ArkModName->{$mod};
+}
 ?>
 <!DOCTYPE html>
 
@@ -60,7 +66,14 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                   <div style="text-align:left">Mods: 
                   <?php 
                   foreach ($mods as $mod) {
-                    echo $modlink . $mod . '" target="_blank">' . $mod . "</a><br>";
+                    echo $modlink . $mod . '" target="_blank">';
+                    $convertedmod = convertmodlistark($mod);
+                    if (!empty($convertedmod)) {
+                        echo $convertedmod;
+                    } else {
+                        echo $mod;
+                    }
+                    echo "</a><br>";
                   }
                   ?>
                   <div>
@@ -69,8 +82,29 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
 
                 </td>
                 <td class="Leistung">
-                  <!-- <iframe src="<?php echo $domain . ":3000"; ?>"></iframe> -->
-                  <!-- <iframe src=http://85.215.90.221:3000></iframe> -->
+                    <div style="text-align:left">Mods:
+                        <?php
+                            if ($password == 0 ) {
+                                echo "False";
+                            } else {
+                                echo "True";
+                            }
+                        ?>
+                    </div>
+                    <div style="text-align:left">Mods:<br>
+                        <?php
+                        foreach ($mods as $mod) {
+                            echo $modlink . $mod . '" target="_blank">';
+                            $convertedmod = convertmodlistark($mod);
+                            if (!empty($convertedmod)) {
+                                echo $convertedmod;
+                            } else {
+                                echo $mod;
+                            }
+                            echo "</a><br>";
+                        }
+                        ?>
+                        <div>
                 </td>
                 <td class="Spieler">
                     <div class="Spieler">
