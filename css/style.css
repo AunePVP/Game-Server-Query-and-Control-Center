@@ -264,6 +264,7 @@ td.format-html {
 	}
 	.servername_cell {
 		width: auto;
+		max-width: 180px;
 	}
 }
 
@@ -279,21 +280,25 @@ td.format-html {
 }
 @media (max-width:530px) {
 	.servername_nolink {
-	-webkit-line-clamp: 2;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 3; /* number of lines to show */
+		-webkit-box-orient: vertical;
 	}
 	.status-letter-online {
-	display: none
+		display: none
 	}
 	.status-letter-offline {
-	display: none
+		display: none
 	}
 	.server_list_table_top {
-	display: none
+		display: none
 	}
 	ul {
-	display: none
+		display: none
 	}
 	.Daten {
-	display: none
+		display: none
 	}
 }
