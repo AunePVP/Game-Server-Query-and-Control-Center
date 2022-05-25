@@ -1,6 +1,5 @@
 <?php
 include './html/langconf.php';
-$query = $_GET['query'];
 if ($map == "Ragnarok") {
   $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/KGcJjwL.jpg";
 } elseif ($map == "LostIsland") {
@@ -34,7 +33,6 @@ $modlink = '<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=';
 </httpProtocol>
 <?php
 // I query the number that the server has at Battlemetrics. And create the link to the banner with it.
-$rport = $_GET['rport'];
 $linkI = "https://cdn.battlemetrics.com/b/standardVertical/";
 $linkII = ".html?foreground=%23EEEEEE&linkColor=%231185ec&lines=%23333333&background=%23222222&chart=players%3A24H&chartColor=%23FF0700&maxPlayersHeight=300";
 // Url to Rcon control Website.
@@ -46,22 +44,22 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                 <td valign="top" class="sidebar">
 
 <div style="width:130px">
-<button class="sidebar-button tablink" onclick="openCity(event, 'Überblick<?php echo $query;?>')"><?php echo $Überblick?></button>
+<button class="sidebar-button tablink" onclick="openCity(event, 'Überblick')"><?php echo $Überblick?></button>
 </div>
 </td>
 <td class="Informationen">
 <div>
-  <div class="Überblick<?php echo $query?>" class="w3-container city">
+  <div class="Überblick" class="w3-container city">
     <table>
         <tbody>
             <tr class="Überblick">
                 <td class="Daten">
                   <img class="map" src="<?php echo $maplink ?>" alt="<?php echo $maplink;?>"></img>
                   <div style="text-align:left">Map: <?php echo $map ?></div>
-                  <div style="text-align:left">Ping: <?php echo $ping . "ms" ?></div>
+                  <div style="text-align:left">Ping: <?php if (isset($ping)) {echo $ping . "ms"; }?></div>
                   <div style="text-align:left">Mods: 
                   <?php 
-                  foreach ($battlemetrics_serverstatus->data->attributes->details->modIds as $mod) {
+                  foreach ($mods as $mod) {
                     echo $modlink . $mod . '" target="_blank">' . $mod . "</a><br>";
                   }
                   ?>
@@ -102,7 +100,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
     </table>
   </div>
 
-  <div class="Control<?php echo $query?>" class="w3-container city" style="display:none">
+  <div class="Control" class="w3-container city" style="display:none">
 <button class="stopp" type="submit">Stopp</button>
 <div class="div1"><h2>das ergebnis ist...</h2></div>
 <button class="Start" type="submit">Start</button>
@@ -110,7 +108,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
 
   </div>
 
-  <div class="Config w3-container city <?php echo $query?>" style="display:none">
+  <div class="Config w3-container city" style="display:none">
     <h2>Config</h2>
 <iframe src="<?php echo $linkI . $banner . $linkII ?>" frameborder=0 style="border: 0; width: 200px!important; height: 273px!important;" name="fcbyn"></iframe>
   </div>
