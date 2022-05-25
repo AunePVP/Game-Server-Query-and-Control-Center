@@ -222,6 +222,7 @@ section {
 	width: 46%;
 	vertical-align: top;
 	padding: 6px;
+	line-height: 21px;
 }
 td.Spieler {
 	border-style: solid;
