@@ -63,26 +63,12 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                   <img class="map" src="<?php echo $maplink ?>" alt="<?php echo $maplink;?>"></img>
                   <div style="text-align:left">Map: <?php echo $map ?></div>
                   <div style="text-align:left">Ping: <?php if (isset($ping)) {echo $ping . "ms"; }?></div>
-                  <div style="text-align:left">Mods: 
-                  <?php 
-                  foreach ($mods as $mod) {
-                    echo $modlink . $mod . '" target="_blank">';
-                    $convertedmod = convertmodlistark($mod);
-                    if (!empty($convertedmod)) {
-                        echo $convertedmod;
-                    } else {
-                        echo $mod;
-                    }
-                    echo "</a><br>";
-                  }
-                  ?>
-                  <div>
     </div>
 </div>
 
                 </td>
                 <td class="Leistung">
-                    <div style="text-align:left">Mods:
+                    <div style="text-align:left">Password:
                         <?php
                             if ($password == 0 ) {
                                 echo "False";
@@ -91,6 +77,9 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                             }
                         ?>
                     </div>
+                    <?php
+                    if ($hasmods):
+                    ?>
                     <div style="text-align:left">Mods:<br>
                         <?php
                         foreach ($mods as $mod) {
@@ -104,7 +93,10 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                             echo "</a><br>";
                         }
                         ?>
-                        <div>
+                    </div>
+                    <?php
+                    endif;
+                    ?>
                 </td>
                 <td class="Spieler">
                     <div class="Spieler">
