@@ -22,7 +22,7 @@ foreach ($matched as $modkey) {
     } else {
         $value = $value + 1;
     }
-    $modcontent = substr($modcontent, 0, 10);
+    $modcontent = strstr($modcontent, ':', true);
     $mods[$value] = $modcontent;
 }
 // If the server is offline, the variable will be empty. That' how I check if the server is online.
