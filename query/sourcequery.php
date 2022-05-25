@@ -15,14 +15,18 @@ $Query = new SourceQuery( );
 try
 {
     $Query->Connect( $ip, $qport, SQ_TIMEOUT, SQ_ENGINE );
-
     $queryresult["info"] = $Query->GetInfo();
     $queryresult["info"]["Game"] = $type;
     $queryresult["info"]["IP"] = $ip;
     $queryresult["info"]["Port"] = $qport;
-    $queryresult["players"] = $Query->GetPlayers();
-    $queryresult["rules"] = $Query->GetRules();
-
+    switch ($type) {
+        case "arkse":
+            $queryresult["players"] = $Query->GetPlayers();
+            $queryresult["rules"] = $Query->GetRules();
+            break;
+        case "valheim":
+            break;
+    }
     $queryresult = json_encode($queryresult);
 }
 catch( Exception $e )
