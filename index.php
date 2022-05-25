@@ -46,13 +46,15 @@ require_once 'html/config.php' ;
       } else {
           echo "0 results";
       }
-      $serverhelper = $serverhelper.'{"zero":"zero"}]}';
-      mysqli_close($conn);
-      $serverhelper = json_decode($serverhelper);
-      foreach ($serverhelper->serverowner as $value) {
-          $ServerID = $value->sID;
-          if (isset($ServerID)){
-              readfile("$url?serverid=$ServerID");
+      if (isset($serverhelper)) {
+          $serverhelper = $serverhelper.'{"zero":"zero"}]}';
+          mysqli_close($conn);
+          $serverhelper = json_decode($serverhelper);
+          foreach ($serverhelper->serverowner as $value) {
+              $ServerID = $value->sID;
+              if (isset($ServerID)){
+                  readfile("$url?serverid=$ServerID");
+              }
           }
       }
       if ($username == "public") {
