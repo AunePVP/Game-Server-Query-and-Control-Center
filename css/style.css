@@ -153,6 +153,9 @@ section {
 	text-decoration: none;
 	position: relative;
 }
+.Leistung a {
+	color: black;
+}
 .servername_cell {
 	width: 56%;
 	letter-spacing: 1px;
@@ -217,6 +220,8 @@ section {
 }
 .Leistung {
 	width: 46%;
+	vertical-align: top;
+	padding: 6px;
 }
 td.Spieler {
 	border-style: solid;
