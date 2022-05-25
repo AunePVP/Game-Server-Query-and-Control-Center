@@ -70,11 +70,20 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                 <td class="Leistung">
                     <div style="text-align:left">Password:
                         <?php
-                            if ($password == 0 ) {
-                                echo "False";
-                            } else {
+                            if ($password == "true" ) {
                                 echo "True";
+                            } else {
+                                echo "False";
                             }
+                        ?>
+                    </div>
+                    <div style="text-align:left">Battleye:
+                        <?php
+                        if ($battleye == "true") {
+                            echo "True";
+                        } else {
+                            echo "False";
+                        }
                         ?>
                     </div>
                     <?php
