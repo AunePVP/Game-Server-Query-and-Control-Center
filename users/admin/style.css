@@ -46,6 +46,9 @@ main {
     cursor: pointer;
     background-color: #2B2F43;
 }
+textarea.plain {
+    display: none;
+}
 .overlay {
     height: 100%;
     width: 0;
@@ -91,6 +94,7 @@ main {
     background-color: #383B4F;
     border-radius: 6px;
     margin: 15px auto;
+    cursor: pointer;
 }
 #open-span {
     color: white;
@@ -148,8 +152,11 @@ main {
     letter-spacing: 0.5px;
     color: #E20401;
 }
-.margin15 {
-    margin: 15px;
+.padding15 {
+    padding: 15px;
+}
+.padding30 {
+    padding: 12px 30px 30px;
 }
 .width40 {
     width: 40%;
@@ -186,6 +193,19 @@ main {
     margin: 0;
     padding: 10px 0 0;
     font-weight: 300;
+}
+#Hostname {
+    font-family: Helvetica Neue, sans-serif;
+    font-size: 31px;
+}
+.ctrlsett {
+    display: flex;
+}
+.ctrlsett .control, .ctrlsett .settings {
+    font-family: Helvetica Neue, monospace;
+    font-weight: 300;
+    padding: 8px 8px 5px;
+    font-size: 25px;
 }
 @media only screen and (max-width: 775px) {
     #sidebar, #sidebar button.bottom {
