@@ -1,4 +1,5 @@
 <?php
+// include conifg and get serverid from url
 require 'html/config.php';
 $ServerID = $_GET['serverid'];
 // Query DB for Server Data.
