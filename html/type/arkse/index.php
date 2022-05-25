@@ -6,7 +6,18 @@ foreach ($serverstatus->players as $player) {
         continue;
     $countplayers = $countplayers + 1;
 }
-//$countplayers = $battlemetrics_serverstatus->data->attributes->players;
+$Os = $serverstatus->info->Os;
+switch ($Os) {
+    case 'l':
+        $Os = "Linux";
+        break;
+    case 'w':
+        $Os = "Windows";
+        break;
+    case 'm':
+        $Os = "mac";
+        break;
+}
 $maxplayers = $serverstatus->info->MaxPlayers;
 $title = $serverstatus->info->HostName;
 $titlename = $serverstatus->info->HostName;
@@ -14,6 +25,7 @@ $img = "https://cdn.muehlhaeusler.online/img/tracker/game-logos/ark.png";
 $connectlink = "steam://connect/$ip:$gport";
 $map = $serverstatus->info->Map;
 $password = $serverstatus->rules->ServerPassword_b;
+$battleye = $serverstatus->rules->SERVERUSESBATTLEYE_b;
 $hasmods = $serverstatus->rules->HASACTIVEMODS_i;
 if ($hasmods) {
     $keys = (array) $serverstatus->rules;
