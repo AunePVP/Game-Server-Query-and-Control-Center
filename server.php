@@ -35,9 +35,6 @@ switch ($type) {
     case "minecraft":
         include 'query/minecraftquery.php';
         $serverstatus = json_decode($queryresult);
-        //$link = "https://api.mcsrvstat.us/2/".$ip.":".$qport;
-        //$queryresult = file_get_contents($link);
-        //$serverstatus = json_decode($queryresult);
         include('html/type/minecraft/index.php');
         break;
     case "valheim":
