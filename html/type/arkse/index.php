@@ -13,6 +13,7 @@ $titlename = $serverstatus->info->HostName;
 $img = "https://cdn.muehlhaeusler.online/img/tracker/game-logos/ark.png";
 $connectlink = "steam://connect/$ip:$gport";
 $map = $serverstatus->info->Map;
+$password = $serverstatus->rules->ServerPassword_b;
 $keys = (array) $serverstatus->rules;
 $matched = preg_grep('/MOD\d+_s/', array_keys($keys));
 foreach ($matched as $modkey) {
