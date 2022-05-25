@@ -14,17 +14,20 @@ $img = "https://cdn.muehlhaeusler.online/img/tracker/game-logos/ark.png";
 $connectlink = "steam://connect/$ip:$gport";
 $map = $serverstatus->info->Map;
 $password = $serverstatus->rules->ServerPassword_b;
-$keys = (array) $serverstatus->rules;
-$matched = preg_grep('/MOD\d+_s/', array_keys($keys));
-foreach ($matched as $modkey) {
-    $modcontent = $serverstatus->rules->{$modkey};
-    if (!isset($value)) {
-        $value = 0;
-    } else {
-        $value = $value + 1;
+$hasmods = $serverstatus->rules->HASACTIVEMODS_i;
+if ($hasmods) {
+    $keys = (array) $serverstatus->rules;
+    $matched = preg_grep('/MOD\d+_s/', array_keys($keys));
+    foreach ($matched as $modkey) {
+        $modcontent = $serverstatus->rules->{$modkey};
+        if (!isset($value)) {
+            $value = 0;
+        } else {
+            $value = $value + 1;
+        }
+        $modcontent = strstr($modcontent, ':', true);
+        $mods[$value] = $modcontent;
     }
-    $modcontent = strstr($modcontent, ':', true);
-    $mods[$value] = $modcontent;
 }
 // If the server is offline, the variable will be empty. That' how I check if the server is online.
 $status = $serverstatus->info->Players;
