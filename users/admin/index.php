@@ -36,7 +36,7 @@ if ($_SESSION['username'] != "admin") {
     </div>
 </nav>
 <main>
-    <div class="margin15">
+    <div class="padding15">
         <div id="myNav" class="overlay" style="width: 0;">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
             <div class="overlay-content">
