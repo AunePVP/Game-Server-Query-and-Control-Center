@@ -1,4 +1,6 @@
-# Game-Server-Query-and-Control-Center  [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/eexa.svg)](https://statuspage.muehlhaeusler.online)
+
+# Game-Server-Query-and-Control-Center [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/eexa.svg)](https://statuspage.muehlhaeusler.online)
+## Still in development!
 You can see the status of your game server and control it from a webpage written in PHP
 
 ## Supported Gameserver
