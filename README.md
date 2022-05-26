@@ -25,6 +25,7 @@ There are many more games that are supported. If your game is missing, please ju
 
 ## Screenshot<img width="1434" alt="Screen Shot 2022-05-11 at 19 30 27" src="https://user-images.githubusercontent.com/67545895/167980185-545f097c-3ad2-4380-b55a-6ebba7af6063.png">
 
+<img width="1440" alt="Screen Shot 2022-05-25 at 20 22 32" src="https://user-images.githubusercontent.com/67545895/170409558-513d8a6a-89e6-43c7-a424-13332d78d883.png">
 
 <h2>How to use?</h2>
 Follow the Wiki to use it on your own Server.<br>
