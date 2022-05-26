@@ -18,6 +18,9 @@ switch ($Os) {
         $Os = "mac";
         break;
 }
+$daytime = $serverstatus->rules->DayTime_s;
+$daytime .= "s";
+$clusterid = $serverstatus->rules->ClusterId_s;
 $maxplayers = $serverstatus->info->MaxPlayers;
 $title = $serverstatus->info->HostName;
 $titlename = $serverstatus->info->HostName;
