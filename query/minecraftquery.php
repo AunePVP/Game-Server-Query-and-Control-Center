@@ -7,7 +7,7 @@ use xPaw\MinecraftPingException;
 
 try
 {
-    $Query = new MinecraftPing( $ip, $qport );
+    $Query = new MinecraftPing( $ip, $gport );
 
     $queryresult = $Query->Query();
     $queryresult = json_encode($queryresult);
