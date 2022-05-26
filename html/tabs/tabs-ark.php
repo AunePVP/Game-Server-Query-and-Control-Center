@@ -60,9 +60,10 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
         <tbody>
             <tr class="Überblick">
                 <td class="Daten">
-                  <img class="map" src="<?php echo $maplink ?>" alt="<?php echo $maplink;?>"></img>
-                  <div style="text-align:left">Map: <?php echo $map ?></div>
-                  <div style="text-align:left">Ping: <?php if (isset($ping)) {echo $ping . "ms"; }?></div>
+                    <img class="map" src="<?php echo $maplink ?>" alt="<?php echo $maplink;?>"></img>
+                    <div style="text-align:left">Map: <?php echo $map ?></div>
+                    <div style="text-align:left">In-game Day: <?php echo $ingameday; ?></div>
+                    <div style="text-align:left"><?php if ($pve == "true") {echo "PVE: True";} else {echo "PVP: True";} ?></div>
     </div>
 </div>
 
@@ -94,11 +95,6 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                         } else {
                             echo "False";
                         }
-                        ?>
-                    </div>
-                    <div style="text-align:left">Day length:
-                        <?php
-                        echo $daytime;
                         ?>
                     </div>
                     <?php

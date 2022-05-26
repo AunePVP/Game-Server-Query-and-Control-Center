@@ -18,8 +18,7 @@ switch ($Os) {
         $Os = "mac";
         break;
 }
-$daytime = $serverstatus->rules->DayTime_s;
-$daytime .= "s";
+$ingameday = $serverstatus->rules->DayTime_s;
 $clusterid = $serverstatus->rules->ClusterId_s;
 $maxplayers = $serverstatus->info->MaxPlayers;
 $title = $serverstatus->info->HostName;
@@ -29,6 +28,7 @@ $connectlink = "steam://connect/$ip:$gport";
 $map = $serverstatus->info->Map;
 $password = $serverstatus->rules->ServerPassword_b;
 $battleye = $serverstatus->rules->SERVERUSESBATTLEYE_b;
+$pve = $serverstatus->rules->SESSIONISPVE_i;
 $hasmods = $serverstatus->rules->HASACTIVEMODS_i;
 if ($hasmods) {
     $keys = (array) $serverstatus->rules;
