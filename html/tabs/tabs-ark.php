@@ -24,9 +24,8 @@ if ($map == "Ragnarok") {
 $modlink = '<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=';
 function convertmodlistark($mod)
 {
-    $data = file_get_contents('https://cdn.muehlhaeusler.online/arkmodlist.json');
-    $data = json_decode($data);
-    return $data->ArkModName->{$mod};
+    include ('html/type/arkse/modlist.php');
+    return $modlist['ArkModName'][$mod];
 }
 ?>
 <!DOCTYPE html>
