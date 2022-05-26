@@ -2,15 +2,11 @@
 // This is where I'm querying all the data I need and storing it in variables.
 $countplayers = $serverstatus->players->online;
 $maxplayers = $serverstatus->players->max;
-$titlename = "";
-foreach ($serverstatus->description->extra as $extra) {
-    $titlename.= $extra->text;
+if (isset($serverstatus->favicon)) {
+    $img = $serverstatus->favicon;
+} else {
+    $img = "https://cdn.muehlhaeusler.online/img/tracker/game-logos/minecraft.webp";
 }
-if (empty($titlename)) {
-    $titlename = $serverstatus->description;
-}
-$title = $titlename;
-$img = $serverstatus->favicon;
 $connectlink = $ip . ":" . $gport;
 $version = $serverstatus->version;
 
@@ -21,4 +17,17 @@ if (isset($status)) {
 } else {
     $status = 0;
 }
+
+# Get MOTD / Server Name
+$titlename = "";
+foreach ($serverstatus->description->extra as $extra) {
+    $titlename.= $extra->text;
+}
+if (empty($titlename)) {
+    $titlename = $serverstatus->description;
+}
+if (is_object($titlename)) {
+    $titlename = $serverstatus->description->text;
+}
+$title = $titlename;
 ?>
