@@ -8,10 +8,10 @@ include './html/langconf.php';
         <td class="width35 mcquery">
             <?php
             if ($qport == 0):
-            echo "Query is disabled on this server.";
+                echo "Query is disabled on this server.";
             else:
-            ?>
-            <div>Query is enabled</div>
+                ?>
+                <div>Query is enabled</div>
             <?php
             endif;
             ?>

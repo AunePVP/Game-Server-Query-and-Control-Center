@@ -92,19 +92,19 @@ if ($status == 1) {
         // Include the tab for the game
         switch ($type) {
             case "arkse":
-                include('html/tabs/tabs-ark.php');
+                include('html/type/arkse/tabs.php');
                 break;
             case "minecraft":
-                include('html/tabs/tabs-minecraft.php');
+                include('html/type/minecraft/tabs.php');
                 break;
             case "valheim":
-                include('html/tabs/tabs-valheim.php');
+                include('html/type/valheim/tabs.php');
                 break;
             case "protocol-valve":
-                include('html/tabs/tabs-valve.php');
+                include('html/type/valve/tabs.php');
                 break;
             case "csgo":
-                include('html/tabs/tabs-csgo.php');
+                include('html/type/csgo/tabs.php');
                 break;
         }
         ?>
