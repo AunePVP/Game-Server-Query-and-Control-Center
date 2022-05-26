@@ -81,8 +81,8 @@ if ($status == 1) {
                         <div class="status-letter-offline">OFFLINE</div>
                     </td>
                     <td title="GAME LINK" class="connectlink_cell"><a href="<?php echo $connectlink ?>"><?php echo $ip . ":" . $gport ?></a></td>
-                    <td title="<?php echo $title; ?>" class="servername_cell">
-                        <div class="servername_nolink"><?php echo $titlename; ?></div></td>
+                    <td title="<?php if (isset($title)) {echo $title;} ?>" class="servername_cell">
+                        <div class="servername_nolink"><?php if (isset($titlename)) {echo $titlename;} ?></div></td>
                     <td class="players_cell"><div class="outer_bar"><div class="inner_bar"><span class="players_numeric"><?php echo $countplayers . '/' . $maxplayers;?></span></div></div></td>
                     <td class="img-cell"><img src="<?php echo $img; ?>" width="80px" height="80px" style="float:right;margin-right: 8px;"></img></td>
                 </tr>
