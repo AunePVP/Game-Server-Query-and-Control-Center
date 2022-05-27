@@ -14,10 +14,10 @@ require_once 'html/config.php' ;
 <div class="container">
     <table class="server_list_table"><tbody>
         <tr class="server_list_table_top">
-            <th class="status_cell"><?php echo $Status ?></th>
-            <th class="connectlink_cell"><?php echo $Adresse ?></th>
-            <th class="servername_cell"><?php echo $Name ?></th>
-            <th class="players_cell"><?php echo $Spieler ?></th>
+            <th class="status_cell"><?php echo $language[$lang][6] ?></th>
+            <th class="connectlink_cell"><?php echo $language[$lang][7] ?></th>
+            <th class="servername_cell"><?php echo $language[$lang][8] ?></th>
+            <th class="players_cell"><?php echo $language[$lang][4] ?></th>
             <th class="img-cell"><div></div></th>
         </tr></tbody>
     </table>
@@ -58,7 +58,7 @@ require_once 'html/config.php' ;
           }
       }
       if ($username == "public") {
-          echo "<div class='white-inftext'>".$mustlogin."</div>";
+          echo "<div class='white-inftext'>".$language[$lang][9]."</div>";
       }
       #echo "https://tracker.iguaserver.de/v3/html/server.php?type=arkse&ip=85.190.148.87&qport=27015";
       #readfile("$url?query=1&type=$typeI&ip=$ipI&qport=$qportI&gport=$gportI&rport=$rportI&banner=$bannerI");
