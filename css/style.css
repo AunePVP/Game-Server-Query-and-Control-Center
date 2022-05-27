@@ -239,6 +239,12 @@ td.format-html {
 	border-left: solid;
 	border-width: 2px;
 }
+.motd {
+	background-color: #1D1D1F;
+	border-radius: 4px;
+	width: fit-content;
+	padding: 10px 30px;
+}
 .width35 {
 	width: 35%;
 }
