@@ -29,13 +29,6 @@ function convertmodlistark($mod)
 }
 ?>
 <!DOCTYPE html>
-
-<httpProtocol>
-    <customHeaders>
-        <add name="Content-Security-Policy" value="frame-ancestors https://cdn.battlemetrics.com" />
-        <!-- Test this option as Chrome supports CSP now for Iframe opening-->
-    </customHeaders>
-</httpProtocol>
 <?php
 // I query the number that the server has at Battlemetrics. And create the link to the banner with it.
 $linkI = "https://cdn.battlemetrics.com/b/standardVertical/";
