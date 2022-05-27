@@ -36,7 +36,9 @@ Follow the Wiki to use it on your own Server.<br>
 <br>
 
 
-<h2>Thanks to</h2>
-https://api.mcsrvstat.us/ <br>
-Gamedig
+<h2>Used repos</h2>
 
+-[PHP Source Query](https://github.com/xPaw/PHP-Source-Query)<br />
+-[PHP Minecraft Query](https://github.com/xPaw/PHP-Minecraft-Query)<br />
+-[PHP Minecraft](https://github.com/Spirit55555/PHP-Minecraft)<br />
+-[Drawdown](https://github.com/adamvleggett/drawdown)<br />
