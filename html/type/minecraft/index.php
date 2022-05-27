@@ -1,5 +1,6 @@
 <?php
 use \Spirit55555\Minecraft\MinecraftColors;
+require_once 'minecraftcolor.php';
 if ($qport == 0) {
 // This is where I'm querying all the data I need and storing it in variables.
     $countplayers = $serverstatus->players->online;
@@ -27,19 +28,28 @@ if ($qport == 0) {
     }
     if (empty($titlename)) {
         $titlename = $serverstatus->description;
+        $titlename = MinecraftColors::clean($titlename);
     }
     if (is_object($titlename)) {
         $titlename = $serverstatus->description->text;
     }
     $title = $titlename;
 } else {
-    require_once 'minecraftcolor.php';
     $titleraw = $serverstatus->info->HostName;
     $titlestr = (str_replace("?","&", $titleraw));
     $title = MinecraftColors::clean($titlestr);
-    $motd = MinecraftColors::convertToHTML($titlestr, true, true, 'mc-motd--');
-    echo $motd;
+    $motd = MinecraftColors::convertToHTML($titlestr);
+    $version = $serverstatus->info->Version;
+    $countplayers = $serverstatus->info->Players;
+    $maxplayers = $serverstatus->info->MaxPlayers;
+    $img = "https://api.mcsrvstat.us/icon/".$ip;
     $titlename = $title;
+    $status = $serverstatus->info->MaxPlayers;
+    if (isset($status)) {
+        $status = 1;
+    } else {
+        $status = 0;
+    }
 
 }
 ?>
