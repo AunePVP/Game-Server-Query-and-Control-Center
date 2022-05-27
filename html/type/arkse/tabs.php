@@ -42,7 +42,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
         <td valign="top" class="sidebar">
 
             <div style="width:130px">
-                <button class="sidebar-button tablink" onclick="openCity(event, 'Überblick')"><?php echo $Überblick?></button>
+                <button class="sidebar-button tablink" onclick="openCity(event, 'Überblick')"><?php echo $language[$lang][1]?></button>
             </div>
         </td>
         <td class="Informationen">
@@ -112,7 +112,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
         </td>
         <td class="Spieler">
             <div class="Spieler">
-                <h1><?php echo $Spieler?></h1>
+                <h1><?php echo $language[$lang][4]?></h1>
                 <div class="player-scroll">
                     <?php
                     foreach ($serverstatus->players as $player) {
@@ -122,7 +122,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                         $rawtimeconv = $player->Time;
                         $rawtimeconv = round($rawtimeconv);
                         $output = sprintf('%02dh:%02dm:%02ds', ($rawtimeconv/ 3600),($rawtimeconv/ 60 % 60), $rawtimeconv% 60);
-                        echo $player->Name . " $seit ";
+                        echo $player->Name." ".$language[$lang][5]." ";
                         echo $output;
                         echo "</h5><br>";
                     }
