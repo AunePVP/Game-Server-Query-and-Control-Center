@@ -9,7 +9,7 @@ You can see the status of your game server and control it from a webpage written
 | ARK: Survival Evolved  | Valve Protocol  |           ✅            |
 | Counter-Strike: Global Offensive  |  Valve Protocol |     ❌(Coming Soon)     |
 |  Minecraft |   | ❌/ ✅ (almost finished) |
-|  Valheim | Valve Protocol  |     ❌(Coming Soon)     |
+|  Valheim | Valve Protocol  |     ❌/ ✅ (almost finished)     |
 | 7 Days to Die  | Valve Protocol  |           ❌            |
 | Age of Chivalry  |  Valve Protocol |           ❌            |
 | Mordhau (2019)  | Valve Protocol  |           ❌            |
@@ -25,7 +25,9 @@ You can see the status of your game server and control it from a webpage written
 
 There are many more games that are supported. If your game is missing, please just write in a pull request.
 
-## Screenshot<img width="1434" alt="Screen Shot 2022-05-11 at 19 30 27" src="https://user-images.githubusercontent.com/67545895/167980185-545f097c-3ad2-4380-b55a-6ebba7af6063.png">
+## Screenshot<img width="1440" alt="Screen Shot 2022-05-26 at 22 42 48" src="https://user-images.githubusercontent.com/67545895/170637561-a35c7b45-778e-4b0a-a53a-2cacefb7c811.png">
+
+
 
 <img width="1440" alt="Screen Shot 2022-05-25 at 20 22 32" src="https://user-images.githubusercontent.com/67545895/170409558-513d8a6a-89e6-43c7-a424-13332d78d883.png">
 
