@@ -1,6 +1,8 @@
 <?php
 use \Spirit55555\Minecraft\MinecraftColors;
+use \Spirit55555\Minecraft\MinecraftJSONColors;
 require_once 'minecraftcolor.php';
+require_once 'minecraftjsoncolor.php';
 if ($qport == 0) {
 // This is where I'm querying all the data I need and storing it in variables.
     $countplayers = $serverstatus->players->online;
@@ -11,7 +13,7 @@ if ($qport == 0) {
         $img = "https://cdn.muehlhaeusler.online/img/tracker/game-logos/minecraft.webp";
     }
     $connectlink = $ip . ":" . $gport;
-    $version = $serverstatus->version;
+    $version = $serverstatus->version->name;
 
 // If the server is offline, the variable will be empty. That' how I check if the server is online.
     $status = $serverstatus->players->max;
@@ -34,6 +36,8 @@ if ($qport == 0) {
         $titlename = $serverstatus->description->text;
     }
     $title = $titlename;
+    $motd = $serverstatus->description->extra;
+    echo MinecraftJSONColors::convertToLegacy($motd);
 } else {
     $titleraw = $serverstatus->info->HostName;
     $titlestr = (str_replace("?","&", $titleraw));
