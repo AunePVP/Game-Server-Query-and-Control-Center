@@ -9,34 +9,23 @@ if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 } else {
     $lang = "en";
 }
-if ($lang == "en") {
-    $Überblick = "General";
-    $Control = "Control";
-    $Config = "Config";
-    $Spieler = "Players";
-    $seit = "since";
-    $Status = "Status";
-    $Adresse = "IP";
-    $Name = "Title";
-    $mustlogin = "You have to log in first to add your own servers.";
-} elseif ($lang == "de") {
-    $Überblick = "Überblick";
-    $Control = "Control";
-    $Config = "Config";
-    $Spieler = "Spieler";
-    $seit = "seit";
-    $Status = "Status";
-    $Adresse = "Adresse";
-    $Name = "Name";
-    $mustlogin = "Du musst dich erst einloggen um eigene Server hinzuzufügen.";
-} else {
-    $Überblick = "General";
-    $Control = "Control";
-    $Config = "Config";
-    $Spieler = "Players";
-    $seit = "since";
-    $Status = "Status";
-    $Adresse = "IP";
-    $Name = "Title";
-    $mustlogin = "You have to log in first to add your own servers.";
-}
+//de
+$language['de'][1] = "Überblick";
+$language['de'][2] = "System";
+$language['de'][3] = "Cluster ID";
+$language['de'][4] = "Spieler";
+$language['de'][5] = "seit";
+$language['de'][6] = "Status";
+$language['de'][7] = "IP";
+$language['de'][8] = "Name";
+$language['de'][9] = "Du musst dich erst einloggen um eigene Server hinzuzufügen.";
+//en
+$language['en'][1] = "General";
+$language['en'][2] = "System";
+$language['de'][3] = "Cluster ID";
+$language['en'][4] = "Players";
+$language['en'][5] = "since";
+$language['en'][6] = "Status";
+$language['en'][7] = "IP";
+$language['en'][8] = "Title";
+$language['en'][9] = "Du musst dich erst einloggen um eigene Server hinzuzufügen.";
