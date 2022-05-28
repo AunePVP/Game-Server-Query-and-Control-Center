@@ -140,7 +140,7 @@ if (mysqli_num_rows($result) > 0) {
                         // Write the data as json in the file server/$id.json
                         file_put_contents('cron/' . $id . '.json', json_encode($data) . "\n", FILE_APPEND);
                         $lines = count(file($file));
-                        if ($lines > 72) {
+                        if ($lines > 2200) {
                             read_and_delete_first_line($file);
                         }
                     } // Check if an erropr occured
