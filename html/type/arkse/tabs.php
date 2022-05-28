@@ -1,25 +1,10 @@
 <?php
 include './html/langconf.php';
-if ($map == "Ragnarok") {
-    $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/KGcJjwL.jpg";
-} elseif ($map == "LostIsland") {
-    $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/gCDSBQA.jpg";
-} elseif ($map == "Valguero") {
-    $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/og8oSee.jpg";
-} elseif ($map == "TheIsland") {
-    $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/Ark-TheIsland-Map.jpg";
-} elseif ($map == "Aberration") {
-    $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/K8b0ezf.jpg";
-} elseif ($map == "Viking_P") {
-    $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/fpGj2Rl.jpg";
-} elseif ($map == "TheCenter") {
-    $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/OtJbTgc.jpg";
-} elseif ($map == "CrystalIsles") {
-    $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/mYFoUGU.jpg";
-} elseif ($map == "ScorchedEarth") {
-    $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/Nxm7tvV.jpg";
+$officialmaps = array("Aberration", "CrystalIsles", "Gen2", "Gen", "LostIsland", "Ragnarok", "ScorchedEarth", "TheCenter", "TheIsland", "Valguero", "Viking_P");
+if (in_array($map, $officialmaps)) {
+    $maplink = "html/img/map/$map.webp";
 } else {
-    $maplink = "https://cdn.muehlhaeusler.online/img/tracker/Maps/crt9S5y.jpg";
+    $maplink = "html/img/map/modmap.webp";
 }
 $modlink = '<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=';
 function convertmodlistark($mod)
