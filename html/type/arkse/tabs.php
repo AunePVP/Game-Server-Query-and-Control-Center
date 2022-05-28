@@ -54,7 +54,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                             <td class="Daten">
                                 <img class="map" src="<?php echo $maplink ?>" alt="<?php echo $maplink;?>"></img>
                                 <div style="text-align:left">Map: <?php echo $map ?></div>
-                                <div style="text-align:left">In-game Day: <?php echo $ingameday; ?></div>
+                                <div style="text-align:left"><?php echo $language[$lang][11].$ingameday; ?></div>
                                 <div style="text-align:left"><?php if ($pve == "true") {echo "PVE: True";} else {echo "PVP: True";} ?></div>
                 </div>
             </div>
@@ -71,8 +71,9 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                 if (isset($clusterid)) {echo $clusterid;}
                 ?>
             </div>
-            <div style="text-align:left">Password:
+            <div style="text-align:left">
                 <?php
+                echo $language[$lang][12];
                 if ($password == "true" ) {
                     echo "True";
                 } else {
