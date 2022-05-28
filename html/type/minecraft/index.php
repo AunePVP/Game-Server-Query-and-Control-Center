@@ -36,6 +36,9 @@ if ($qport == 0) {
             $motd .= $extra->text;
         }
         $motd = MinecraftColors::convertToHTML($motd);
+    } elseif (isset($serverstatus->description->text)) {
+        $titlename = $serverstatus->description->text;
+        $motd = "<span style='color: #FFFFFF'>".$titlename."</span>";
     }
     $title = $titlename;
 } else {
