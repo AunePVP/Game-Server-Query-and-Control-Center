@@ -202,6 +202,7 @@ section {
 	width: 90%;
 	flex: 0;
 	margin: 5%;
+	vertical-align: top;
 }
 .player-scroll {
 	max-height: 220px;
@@ -245,6 +246,20 @@ td.format-html {
 	width: fit-content;
 	padding: 10px 30px;
 }
+.mods {
+	text-align: center;
+	margin: auto;
+	padding: 5px 12px;
+}
+.mods .modcontent {
+	border-style: solid;
+	border-width: 2px;
+	width: 190px;
+	height: 230px;
+}
+.mctabcontent {
+	padding: 7px 0;
+}
 .width35 {
 	width: 35%;
 }
@@ -286,7 +301,6 @@ td.format-html {
 		max-width: 180px;
 	}
 }
-
 @media (max-width:725px) {
 	td.connectlink_cell {
 	display:none;
@@ -304,6 +318,7 @@ td.format-html {
 		display: -webkit-box;
 		-webkit-line-clamp: 3; /* number of lines to show */
 		-webkit-box-orient: vertical;
+		padding: 0 5px;
 	}
 	.status-letter-online {
 		display: none
