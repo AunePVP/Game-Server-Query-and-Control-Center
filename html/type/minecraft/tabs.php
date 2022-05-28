@@ -4,7 +4,7 @@ include './html/langconf.php';
 <!DOCTYPE html>
 <table>
     <tr>
-        <td style="display:flex;padding: 5px;">
+        <td style="display:flex;padding: 3px;">
             <div style="text-align: left;">
                 <div class="motd">
                     <?php echo $motd ?>
