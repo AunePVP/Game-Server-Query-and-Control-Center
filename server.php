@@ -27,34 +27,18 @@ $linkII = "https://api.battlemetrics.com/servers/" . $banner;
 
 // Query data -> decode data -> include correct file for reading data from array
 switch ($type) {
+    case "csgo":
+    case "valheim":
+    case "protocol-valve":
     case "arkse":
         include 'query/sourcequery.php';
-        $serverstatus = json_decode($queryresult);
-        $arr = json_decode($queryresult, true);
-        include('html/type/arkse/index.php');
         break;
     case "minecraft":
         include 'query/minecraftquery.php';
-        $serverstatus = json_decode($queryresult);
-        include('html/type/minecraft/index.php');
-        break;
-    case "valheim":
-        include 'query/sourcequery.php';
-        $serverstatus = json_decode($queryresult);
-        include('html/type/valheim/index.php');
-        break;
-    case "protocol-valve":
-        include 'query/sourcequery.php';
-        $serverstatus = json_decode($queryresult);
-        include('html/type/protocol-valve/index.php');
-        break;
-    case "csgo":
-        include 'query/sourcequery.php';
-        $serverstatus = json_decode($queryresult);
-        include('html/type/csgo/index.php');
         break;
 }
-
+$serverstatus = json_decode($queryresult);
+include('html/type/'.$type.'/index.php');
 // If the server is offline, it will show a red colour on the website. If its red, it will show a green colour.
 if ($status == 1) {
     $statusfarbe ='background-color: #00FF17;';
@@ -90,23 +74,7 @@ if ($status == 1) {
         </summary>
         <?php
         // Include the tab for the game
-        switch ($type) {
-            case "arkse":
-                include('html/type/arkse/tabs.php');
-                break;
-            case "minecraft":
-                include('html/type/minecraft/tabs.php');
-                break;
-            case "valheim":
-                include('html/type/valheim/tabs.php');
-                break;
-            case "protocol-valve":
-                include('html/type/valve/tabs.php');
-                break;
-            case "csgo":
-                include('html/type/csgo/tabs.php');
-                break;
-        }
+        include('html/type/'.$type.'/tabs.php');
         ?>
     </details>
 </section>
