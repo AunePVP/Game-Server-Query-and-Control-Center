@@ -11,7 +11,7 @@ if ($qport == 0) {
     if (isset($serverstatus->favicon)) {
         $img = $serverstatus->favicon;
     } else {
-        $img = "https://cdn.muehlhaeusler.online/img/tracker/game-logos/minecraft.webp";
+        $img = "html/img/logo/minecraft.webp";
     }
     $connectlink = $ip . ":" . $gport;
     $version = $serverstatus->version->name;

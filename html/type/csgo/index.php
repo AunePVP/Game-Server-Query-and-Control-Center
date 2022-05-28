@@ -3,7 +3,7 @@
 $countplayers = $serverstatus->raw->numplayers;
 $maxplayers = $serverstatus->maxplayers;
 $title = $serverstatus->name;
-$img = "https://cdn.muehlhaeusler.online/img/tracker/game-logos/csgo.webp";
+$img = "html/img/logo/csgo.webp";
 $connectlink = "steam://connect/$ip:$port";
 
 // If the server is offline, the variable will be empty. That' how I check if the server is online.
