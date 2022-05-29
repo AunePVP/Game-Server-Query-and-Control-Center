@@ -89,8 +89,8 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
         <div class="players">
             <div style="text-align: left;">
                 <div class="mods">
-                    <h1>Mods</h1>
-                    <div class="modcontent">
+                    <h1>Players</h1>
+                    <div class="modcontent" style="height: auto;min-height: 233px;">
                         <div class="player-scroll">
                             <?php
                             foreach ($serverstatus->players as $player) {
@@ -118,7 +118,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                 <div class="connectlink">
                     <a href="<?php echo $connectlink ?>>" title="Connect to server"><?php echo $ip . ":" . $gport ?></a>
                 </div>
-                <div class="items">
+                <div class="items flex">
                     <div class="flex width50">
                         <svg width="100%" height="100%" viewBox="0 0 123 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                             <g>
