@@ -166,7 +166,7 @@ if (mysqli_num_rows($result) > 0) {
                     } // Check if an erropr occured
                     catch (MinecraftQueryException $e) {
                         echo $e->getMessage();
-                        file_put_contents('cron/' . $id . '.json', '{"time":' . $time . ',"status":0,"players":0}' . "\n", FILE_APPEND);
+                        file_put_contents('cron/' . $id . '.json', '{"time":"' . $time . '","status":0,"players":0}' . "\n", FILE_APPEND);
                         $lines = count(file($file));
                         if ($lines >  1100) {
                             read_and_delete_first_line($file);
