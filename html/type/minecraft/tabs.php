@@ -4,12 +4,13 @@ include './html/langconf.php';
 <!DOCTYPE html>
 <table>
     <tr>
-        <td style="padding: 5px 0 5px 5px;vertical-align: top;"$language['en'][13] = "Query is disabled on this server.";>
+        <td style="padding: 5px 0 5px 5px;vertical-align: top;";>
             <div style="text-align: left;">
                 <div class="motd">
                     <?php echo $motd ?>
                 </div>
                 <div class="mctabcontent">Version: <?php echo $version ?></div>
+                <div class="mctabcontent"><?php echo "Uptime: $uptime" ?></div>
             </div>
         </td>
         <td style="width: 190px;">
