@@ -6,6 +6,7 @@ require_once 'minecraftcolor.php';
 $json = "";
 if ($qport == 0) {
 // This is where I'm querying all the data I need and storing it in variables.
+    $uptime = file_get_contents("query/cron/uptime/$ServerID")."%";
     $countplayers = $serverstatus->players->online;
     $maxplayers = $serverstatus->players->max;
     if (isset($serverstatus->favicon)) {
@@ -42,6 +43,7 @@ if ($qport == 0) {
     }
     $title = $titlename;
 } else {
+    $uptime = file_get_contents("query/cron/uptime/$ServerID")."%";
     $titleraw = $serverstatus->info->HostName;
     $titlestr = (str_replace("?", "&", $titleraw));
     $title = MinecraftColors::clean($titlestr);
