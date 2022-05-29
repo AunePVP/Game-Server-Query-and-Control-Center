@@ -1,5 +1,5 @@
 
-# Game-Server-Query-and-Control-Center [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/eexa.svg)](https://statuspage.muehlhaeusler.online)
+# Game-Server-Query-and-Control-Center [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/eexa.svg)](https://statuspage.muehlhaeusler.online)[![wakatime](https://wakatime.com/badge/github/AunePVP/Game-Server-Query-and-Control-Center.svg)](https://wakatime.com/badge/github/AunePVP/Game-Server-Query-and-Control-Center)
 ## Still in development!
 You can see the status of your game server and control it from a webpage written in PHP
 
