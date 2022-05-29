@@ -23,7 +23,7 @@ You can see the status of your game server and control it from a webpage written
 | The Forrest  | Valve Protocol  |           ❌            |
 | Grand Theft Auto V - FiveM  |   |    ❌ (Coming Soon)     |
 
-There are many more games that are supported. If your game is missing, please just write in a pull request.
+There are many more games that are supported. If your game is missing...
 
 ## Screenshot<img width="1440" alt="Screen Shot 2022-05-26 at 22 42 48" src="https://user-images.githubusercontent.com/67545895/170637561-a35c7b45-778e-4b0a-a53a-2cacefb7c811.png">
 
