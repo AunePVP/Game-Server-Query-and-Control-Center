@@ -1,5 +1,6 @@
 <?php
 // This is where I'm querying all the data I need and storing it in variables.
+$uptime = file_get_contents("query/cron/uptime/$ServerID")."%";
 $countplayers = $serverstatus->info->Players;
 $maxplayers = $serverstatus->info->MaxPlayers;
 $title = $serverstatus->info->HostName;

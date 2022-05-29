@@ -18,6 +18,7 @@ switch ($Os) {
         $Os = "mac";
         break;
 }
+$uptime = file_get_contents("query/cron/uptime/$ServerID")."%";
 $ingameday = $serverstatus->rules->DayTime_s;
 $clusterid = $serverstatus->rules->ClusterId_s;
 $maxplayers = $serverstatus->info->MaxPlayers;
