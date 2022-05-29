@@ -153,9 +153,6 @@ section {
 	text-decoration: none;
 	position: relative;
 }
-.Leistung a {
-	color: black;
-}
 .servername_cell {
 	width: 56%;
 	letter-spacing: 1px;
@@ -180,58 +177,17 @@ section {
 	font-weight: bold;
 	font-family: Helvetica Neue, sans-serif;
 }
-.sidebar {
-	width: 9%;
-	background-color: #e9e9e9;
-}
-.sidebar-button {
-	width: 100%;
-	border: none;
-	padding: 15px 10px;
-	font-size: 16px;
-	cursor: pointer;
-	background-color: #bebebe!important;
-}
-.sidebar-button:hover {
-	background-color: #bebebe!important;
-}
-.Überblick table {
-	width: 100%;
-}
-.Spieler {
-	width: 90%;
-	flex: 0;
-	margin: 5%;
-	vertical-align: top;
-}
 .player-scroll {
-	max-height: 220px;
+	max-height: 230px;
 	overflow-y: scroll;
 	scroll-behavior: smooth;
+	padding-top: 5px;
 }
 .map {
 	width: 100%;
 	border: 5px solid #888888;
 	border-radius: 8px;
 	box-sizing: border-box
-}
-.Daten {
-	width: 20%;
-	vertical-align: top;
-}
-.Leistung {
-	width: 46%;
-	vertical-align: top;
-	padding: 6px;
-	line-height: 21px;
-}
-td.Spieler {
-	border-style: solid;
-	border-width: 2px;
-	width: 17%;
-}
-td.format-html {
-	background-color: #222;
 }
 ::-webkit-scrollbar-corner {
 	display: none;
@@ -249,31 +205,122 @@ td.format-html {
 .mods {
 	text-align: center;
 	margin: auto;
-	padding: 5px 12px;
+	padding: 0 12px;
 }
 .mods .modcontent {
 	border-style: solid;
 	border-width: 2px;
 	width: 190px;
-	height: 230px;
+	height: 240px;
 }
 .mctabcontent {
 	padding: 7px 0;
 }
+.vchartdiv {
+	background-color: #1D1D1F;
+	width: 195px;
+	padding: 12px 10px 10px 10px;
+}
+.vchart {
+	margin: auto;
+}
+.vchartdiv .servername p {
+	font-family: Helvetica "Helvetica Neue", serif;
+	font-size: 14px;
+	font-weight: 500;
+	text-align: center;
+	color: white;
+	margin: 0;
+	padding: 0 0 8px 0;
+	letter-spacing: 1px;
+}
+.vchartdiv .connectlink {
+	display: flex;
+	justify-content: center;
+}
+.vchartdiv .connectlink a {
+	color: #2e87ff;
+	font-family: Helvetica,serif;
+	font-size: 15px;
+}
+.vchartdiv .items {
+	display: flex;
+	border-bottom: solid;
+	border-color: rgb(70,70,70);
+	margin: 0 0 8px 0;
+	padding: 5px 0;
+
+}
+.vchartdiv .items svg {
+	width: 25px;
+	height: 25px;
+	padding: 5px 2px 5px 5px;
+}
+.vchartdiv .items p {
+	margin:auto 0;
+	font-family: Helvetica,serif;
+	font-size: 14px;
+	color:white;
+	letter-spacing: normal;
+}
+.vchartdiv p {
+	font-family: Helvetica, sans-serif;
+	font-size: 16px;
+	font-stretch: expanded;
+	margin: auto;
+	text-align: center;
+	color: white;
+	letter-spacing: 2px;
+}
 .width35 {
 	width: 35%;
 }
+.width50 {
+	width: 50%;
+}
+.flex {
+	display: flex;
+}
+
+
+.sidebar-button {
+	width: 100%;
+	border: none;
+	padding: 15px 10px;
+	font-size: 16px;
+	cursor: pointer;
+	background-color: #bebebe!important;
+}
+.sidebar-button:hover {
+	background-color: #bebebe!important;
+}
+.sidebar {
+	background-color: #e9e9e9;
+	width: 130px;
+}
+.Informationen {
+	width: 100%;
+	padding: 4px;
+}
+.Daten {
+	width: 20%;
+}
+.moredata {
+	width: 37%;
+	padding: 6px;
+	line-height: 21px;
+}
+.moredata a {
+	color: black;
+}
 @media only screen and (max-width: 1500px){
-	td.Leistung {
+	.moredata {
 		width: 43%;
 	}
 }
 @media (max-width:1140px) {
-	.Leistung {
+	.moredata {
 		display:none;
-	}
-	td.format-html {
-		width:10%;
 	}
 	.servername_cell {
 		width: 54%;
@@ -290,9 +337,6 @@ td.format-html {
 	}
 }
 @media (max-width:750px) {
-	td.format-html {
-		display:none;
-	}
 	.server_list_table_top {
 		display: none;
 	}
