@@ -1,8 +1,31 @@
 <?php
 use AunePVP\jsonconversion;
 use Spirit55555\Minecraft\MinecraftColors;
+// function to get last lines of file
+require 'html/lloffile.php';
 require_once 'jsonconversion.php';
 require_once 'minecraftcolor.php';
+$uptime = file_get_contents("query/cron/uptime/$ServerID");
+$uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
+$uptime .= "%";
+// Get last players for banner
+$lastplayerlines = tailCustom("query/cron/$ServerID.json", 25);
+//$lastplayers = preg_split("/\r\n|\n|\r/", $lastplayerlines);
+$playerlineexit = array();
+$count = 0;
+foreach(preg_split("/((\r?\n)|(\r\n?))/", $lastplayerlines) as $playerline){
+    $playerlinedecode = json_decode($playerline);
+    $lastplayers[$count] = $playerlinedecode->players;
+    $count = $count + 1;
+}
+$seperatevar = "[";
+foreach ($lastplayers as $lastplayer) {
+    if ($seperatevar != "[") {
+        $seperatevar .= ", ";
+    }
+    $seperatevar .= $lastplayer;
+}
+$seperatevar .= "]";
 $json = "";
 if ($qport == 0) {
 // This is where I'm querying all the data I need and storing it in variables.
