@@ -63,6 +63,7 @@ html, body {
 }
 details table {
 	width: 100%;
+	position: relative;
 }
 #nav {
 	font-family: 'Lato', sans-serif;
@@ -178,7 +179,7 @@ section {
 	font-family: Helvetica Neue, sans-serif;
 }
 .player-scroll {
-	max-height: 230px;
+	max-height: 228px;
 	overflow-y: scroll;
 	scroll-behavior: smooth;
 	padding-top: 5px;
@@ -205,7 +206,7 @@ section {
 .mods {
 	text-align: center;
 	margin: auto;
-	padding: 0 12px;
+	padding: 0 7px;
 }
 .mods .modcontent {
 	border-style: solid;
@@ -214,7 +215,7 @@ section {
 	height: 240px;
 }
 .mctabcontent {
-	padding: 7px 0;
+	padding: 2cpx 0;
 }
 .vchartdiv {
 	background-color: #1D1D1F;
@@ -224,7 +225,7 @@ section {
 .vchart {
 	margin: auto;
 }
-.vchartdiv .servername p {
+.vchartdiv .servername p, .hchartdiv .servername p {
 	font-family: Helvetica "Helvetica Neue", serif;
 	font-size: 14px;
 	font-weight: 500;
@@ -234,36 +235,35 @@ section {
 	padding: 0 0 8px 0;
 	letter-spacing: 1px;
 }
-.vchartdiv .connectlink {
+.vchartdiv .connectlink.vchart, .hchart {
 	display: flex;
 	justify-content: center;
 }
-.vchartdiv .connectlink a {
+.vchartdiv .connectlink a, .hchartdiv .connectlink a {
 	color: #2e87ff;
 	font-family: Helvetica,serif;
 	font-size: 15px;
 }
 .vchartdiv .items {
-	display: flex;
 	border-bottom: solid;
 	border-color: rgb(70,70,70);
 	margin: 0 0 8px 0;
 	padding: 5px 0;
 
 }
-.vchartdiv .items svg {
+.vchartdiv .items svg, .hchartdiv .items svg {
 	width: 25px;
 	height: 25px;
 	padding: 5px 2px 5px 5px;
 }
-.vchartdiv .items p {
+.vchartdiv .items p, .hchartdiv .items p {
 	margin:auto 0;
 	font-family: Helvetica,serif;
 	font-size: 14px;
 	color:white;
 	letter-spacing: normal;
 }
-.vchartdiv p {
+.vchartdiv p, .hchartdiv p {
 	font-family: Helvetica, sans-serif;
 	font-size: 16px;
 	font-stretch: expanded;
@@ -312,6 +312,22 @@ section {
 }
 .moredata a {
 	color: black;
+}
+.hchartdiv {
+	position: absolute;
+	bottom: 5px;
+	background-color: #1D1D1F;
+	width: 510px;
+	padding: 12px 10px 10px 10px;
+}
+.hchartdiv .connectlink {
+	text-align: left;
+}
+.hchartdiv .items svg {
+	padding: 0;
+}
+.items .flex svg {
+	padding: 0 3px;
 }
 @media only screen and (max-width: 1500px){
 	.moredata {
