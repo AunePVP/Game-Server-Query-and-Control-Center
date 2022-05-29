@@ -26,7 +26,6 @@ function read_and_delete_first_line($filename) {
     file_put_contents($filename, $file);
 }
 function calc_uptime($filename, $lines, $id) {
-    $lines = $lines + 1;
     $handle = fopen($filename, "r");
     if ($handle) {
         $uptime = 0;
@@ -35,7 +34,6 @@ function calc_uptime($filename, $lines, $id) {
             $uptime = $uptime + $line->status;
         }
         fclose($handle);
-        echo $uptime."-".$lines."\n";
         $uptime = ($uptime/$lines) * 100;
         $uptime = (round($uptime,3));
         file_put_contents('cron/uptime/'.$id, $uptime);
