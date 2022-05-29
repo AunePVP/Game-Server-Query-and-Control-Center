@@ -1,4 +1,6 @@
 <?php
+// function to get last lines of file
+require 'html/lloffile.php';
 // This is where I'm querying all the data I need and storing it in variables.
 $countplayers = 0;
 foreach ($serverstatus->players as $player) {
@@ -18,7 +20,20 @@ switch ($Os) {
         $Os = "mac";
         break;
 }
-$uptime = file_get_contents("query/cron/uptime/$ServerID")."%";
+// Get uptime and round uptime for banner
+$uptime = file_get_contents("query/cron/uptime/$ServerID");
+$uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
+$uptime .= "%";
+// Get last players for banner
+$lastplayerlines = tailCustom("query/cron/$ServerID.json", 7);
+//$lastplayers = preg_split("/\r\n|\n|\r/", $lastplayerlines);
+$playerlineexit = array();
+$count = 0;
+foreach(preg_split("/((\r?\n)|(\r\n?))/", $lastplayerlines) as $playerline){
+    $playerlinedecode = json_decode($playerline);
+    $lastplayers[$count] = $playerlinedecode->players;
+    $count = $count + 1;
+}
 $ingameday = $serverstatus->rules->DayTime_s;
 $clusterid = $serverstatus->rules->ClusterId_s;
 $maxplayers = $serverstatus->info->MaxPlayers;

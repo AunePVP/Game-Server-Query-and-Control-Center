@@ -1,6 +1,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
     <!-- this is the part responsible for hidding the bottom bar -->
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
