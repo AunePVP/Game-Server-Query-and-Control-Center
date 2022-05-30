@@ -312,7 +312,7 @@ section {
 	padding: 4px;
 }
 .Daten {
-	width: 20%;
+	width: 30%;
 }
 .moredata {
 	width: 100%;
@@ -354,6 +354,9 @@ section {
 		width:100%;
 		height: 140px;
 	}
+	.Daten {
+		min-width: 215px;
+	}
 }
 @media only screen and (max-width: 1050px){
 	.canvasparent {
@@ -361,14 +364,13 @@ section {
 		height: 120px;
 	}
 }
-
 @media only screen and (max-width: 1500px){
 	.moredata {
 		width: 43%;
 	}
 }
 @media (max-width:1140px) {
-	.moredata {
+	.moredata, .hideunderimg {
 		display:none;
 	}
 	.servername_cell {
@@ -376,6 +378,9 @@ section {
 	}
 	.Informationen {
 		justify-content: center;
+	}
+	.Daten {
+		width: auto;
 	}
 }
 @media only screen and (max-width: 1000px){

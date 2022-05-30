@@ -23,7 +23,6 @@ switch ($Os) {
 // Get uptime and round uptime for banner
 $uptime = file_get_contents("query/cron/uptime/$ServerID");
 $uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
-$uptime .= "%";
 // Get last players for banner
 $lastplayerlines = tailCustom("query/cron/$ServerID.json", 7);
 //$lastplayers = preg_split("/\r\n|\n|\r/", $lastplayerlines);

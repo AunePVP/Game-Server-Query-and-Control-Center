@@ -29,18 +29,14 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
     </div>
     <div class="Informationen flex">
         <div class="Daten">
-            <img class="map" src="<?php echo $maplink ?>" alt="<?php echo $maplink;?>"></img>
-            <div style="text-align:left">Map: <?php echo $map ?></div>
-            <div style="text-align:left"><?php echo $language[$lang][11].$ingameday; ?></div>
-            <div style="text-align:left"><?php if ($pve == "true") {echo "PVE: True";} else {echo "PVP: True";} ?></div>
-            <div style="text-align:left"><?php echo "Uptime: $uptime" ?></div>
+            <img class="map" src="<?php echo $maplink ?>" alt="<?php echo $maplink;?>">
+            <div class="hideunderimg">
+                <div style="text-align:left">Map: <?php echo $map ?></div>
+                <div style="text-align:left"><?php echo $language[$lang][11].$ingameday; ?></div>
+            </div>
+
         </div>
             <div class="moredata">
-                <div style="text-align:left">Query Time:
-                    <?php
-                    echo $Timer;
-                    ?>
-                </div>
                 <div style="text-align:left">System:
                     <?php
                     if (isset($Os)) {echo $Os;}
@@ -51,6 +47,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                     if (isset($clusterid)) {echo $clusterid;}
                     ?>
                 </div>
+                <div style="text-align:left"><?php if ($pve == "true") {echo "PVE: True";} else {echo "PVP: False";} ?></div>
                 <div style="text-align:left">
                     <?php
                     echo $language[$lang][12];
