@@ -1,6 +1,5 @@
 <?php
 require_once 'html/config.php' ;
-#include 'html/langconf.php';
 // Checks if authentication is required. If it's required, it will load the Login window except the visitor of the website is already logged in.
  if ($authentication) {
     require 'users/login-snippet.php';
@@ -60,15 +59,8 @@ require_once 'html/config.php' ;
       if ($username == "public") {
           echo "<div class='white-inftext'>".$language[$lang][9]."</div>";
       }
-      #echo "https://tracker.iguaserver.de/v3/html/server.php?type=arkse&ip=85.190.148.87&qport=27015";
-      #readfile("$url?query=1&type=$typeI&ip=$ipI&qport=$qportI&gport=$gportI&rport=$rportI&banner=$bannerI");
-      #readfile("server.php?query=2&type=$typeII&ip=$ipII&qport=$qportII&gport=$gportII&rport=$rportII&banner=$bannerII");
       ?>
       </div>
-      <?php
-      #include 'html/footer.php';
-      ?>
-
 </body>
 <footer>
 
