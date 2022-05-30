@@ -26,8 +26,7 @@ require_once 'html/config.php' ;
           $url = "https://";
       else
           $url = "http://";
-      $url.= $_SERVER['HTTP_HOST'];
-      $url.= $_SERVER['REQUEST_URI']."server.php";
+      $url.= dirname($_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'])."/server.php";
       // First DB Connection
       $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
       if (!$conn) {
@@ -62,7 +61,4 @@ require_once 'html/config.php' ;
       ?>
       </div>
 </body>
-<footer>
-
-</footer>
 </html>
