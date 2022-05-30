@@ -6,7 +6,7 @@ You can see the status of your game server and control it from a webpage written
 ## Supported Gameserver
 | Game                             | Query Protocol |        Verified        |
 |----------------------------------|----------------|:----------------------:|
-| ARK: Survival Evolved            | Valve Protocol |           ✅            |
+| ARK: Survival Evolved            | Valve Protocol | ❌/ ✅ (almost finished) |
 | Counter-Strike: Global Offensive | Valve Protocol |     ❌(Coming Soon)     |
 | Minecraft                        |                | ❌/ ✅ (almost finished) |
 | Valheim                          | Valve Protocol | ❌/ ✅ (almost finished) |
