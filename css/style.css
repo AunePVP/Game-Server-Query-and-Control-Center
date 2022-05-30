@@ -63,7 +63,6 @@ html, body {
 }
 details table {
 	width: 100%;
-	position: relative;
 }
 #nav {
 	font-family: 'Lato', sans-serif;
@@ -193,16 +192,6 @@ section {
 ::-webkit-scrollbar-corner {
 	display: none;
 }
-.mcquery {
-	border-left: solid;
-	border-width: 2px;
-}
-.motd {
-	background-color: #1D1D1F;
-	border-radius: 4px;
-	width: fit-content;
-	padding: 10px 30px;
-}
 .mods {
 	text-align: center;
 	margin: auto;
@@ -213,9 +202,6 @@ section {
 	border-width: 2px;
 	width: 190px;
 	height: 240px;
-}
-.mctabcontent {
-	padding: 2cpx 0;
 }
 .vchartdiv {
 	background-color: #1D1D1F;
@@ -233,7 +219,7 @@ section {
 	color: white;
 	margin: 0;
 	padding: 0 0 8px 0;
-	letter-spacing: 1px;
+	letter-spacing: normal;
 }
 .vchartdiv .connectlink.vchart, .hchart {
 	display: flex;
@@ -256,12 +242,15 @@ section {
 	height: 25px;
 	padding: 5px 2px 5px 5px;
 }
-.vchartdiv .items p, .hchartdiv .items p {
-	margin:auto 0;
-	font-family: Helvetica,serif;
-	font-size: 14px;
-	color:white;
-	letter-spacing: normal;
+.vchartdiv .items p, .hchartdiv .items p, .version {
+	margin:auto 0!important;
+	font-family: Helvetica,serif!important;
+	font-size: 14px!important;
+	letter-spacing: normal!important;
+	color:white!important;
+	letter-spacing: normal!important;
+	text-align: left!important;
+	padding: 5px 0!important;
 }
 .vchartdiv p, .hchartdiv p {
 	font-family: Helvetica, sans-serif;
@@ -272,6 +261,10 @@ section {
 	color: white;
 	letter-spacing: 2px;
 }
+.mod {
+	color: white;
+	font-size: 14px;
+}
 .width35 {
 	width: 35%;
 }
@@ -281,8 +274,24 @@ section {
 .flex {
 	display: flex;
 }
+.hchartdiv details summary::-webkit-details-marker {
+	display:inline-block;
+}
 
+.hchartdiv details {
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	padding: 5px;
+	color: white;
+}
+.hchartdiv details[open] {
+	padding: .5em;
+}
 
+.hchartdiv details[open] summary {
+	border-bottom: 1px solid #aaa;
+	margin-bottom: .5em;
+}
 .sidebar-button {
 	width: 100%;
 	border: none;
@@ -314,10 +323,7 @@ section {
 	color: black;
 }
 .hchartdiv {
-	position: absolute;
-	bottom: 5px;
 	background-color: #1D1D1F;
-	width: 510px;
 	padding: 12px 10px 10px 10px;
 }
 .hchartdiv .connectlink {
@@ -329,6 +335,33 @@ section {
 .items .flex svg {
 	padding: 0 3px;
 }
+.canvasparent {
+	padding-top:5px;
+	width: 100%;
+	height: 140px;
+}
+.padding5055 {
+	padding: 5px 0 5px 5px;
+	vertical-align: top;
+}
+@media only screen and (max-width: 1230px){
+	.canvasparent {
+		width:626px;
+		height: 135px;
+	}
+}@media only screen and (min-width: 1230px){
+	.canvasparent {
+		width:100%;
+		height: 140px;
+	}
+}
+@media only screen and (max-width: 1050px){
+	.canvasparent {
+		width:500px;
+		height: 120px;
+	}
+}
+
 @media only screen and (max-width: 1500px){
 	.moredata {
 		width: 43%;
@@ -341,18 +374,41 @@ section {
 	.servername_cell {
 		width: 54%;
 	}
+	.Informationen {
+		justify-content: center;
+	}
 }
 @media only screen and (max-width: 1000px){
 	.servername_cell {
 		width: 50%;
 	}
 }
+@media only screen and (max-width: 950px){
+	.canvasparent {
+		width:450px;
+		height: 95px;
+	}
+	.mcquery {
+		display: none;
+	}
+}
 @media only screen and (max-width: 850px){
 	.servername_cell {
 		width: 45%;
 	}
+	.sidebar {
+		display: none;
+	}
+	.Daten {
+		width: 100%;
+	}
+	.canvasparent {
+		height: 140px;
+		width: 350px;
+	}
+
 }
-@media (max-width:750px) {
+@media (max-width:800px) {
 	.server_list_table_top {
 		display: none;
 	}
@@ -360,18 +416,28 @@ section {
 		width: auto;
 		max-width: 180px;
 	}
-}
-@media (max-width:725px) {
-	td.connectlink_cell {
-	display:none;
+	.padding5055 {
+		padding: 0;
 	}
 }
-@media only screen and (max-width: 725px){
+@media only screen and (max-width: 750px){
+	td.connectlink_cell {
+		display:none;
+	}
 	.modal-content {
 		width: 100%;
 	}
+	.container {
+		width: 90%;
+		padding-top: 20px;
+	}
 }
-@media (max-width:530px) {
+@media only screen and (max-width: 715px){
+	.Daten {
+		display: none;
+	}
+}
+@media (max-width:570px) {
 	.servername_nolink {
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -380,19 +446,19 @@ section {
 		-webkit-box-orient: vertical;
 		padding: 0 5px;
 	}
-	.status-letter-online {
+	ul, .mods .modcontent, td.players_cell, .server_list_table_top, .status-letter-offline, .status-letter-online {
 		display: none
 	}
-	.status-letter-offline {
-		display: none
+	.container {
+		width: 100%;
 	}
-	.server_list_table_top {
-		display: none
+	.mods {
+		padding: 2px;
 	}
-	ul {
-		display: none
+	.Informationen {
+		display: block;
 	}
-	.Daten {
-		display: none
+	.status-letter-online, .vchartdiv {
+		margin: auto;
 	}
 }
