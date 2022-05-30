@@ -1,8 +1,8 @@
 
-# Game-Server-Query-and-Control-Center [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/eexa.svg)](https://statuspage.muehlhaeusler.online)[![wakatime](https://wakatime.com/badge/github/AunePVP/Game-Server-Query-and-Control-Center.svg)](https://wakatime.com/badge/github/AunePVP/Game-Server-Query-and-Control-Center)
-## Still in development!
+# Game-Server-Query-and-Control-Center [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/eexa.svg)](https://statuspage.muehlhaeusler.online) [![wakatime](https://wakatime.com/badge/github/AunePVP/Game-Server-Query-and-Control-Center.svg)](https://wakatime.com/badge/github/AunePVP/Game-Server-Query-and-Control-Center) [![wakatime](https://img.shields.io/github/languages/top/AunePVP/Game-Server-Query-and-Control-Center)](https://img.shields.io/github/languages/top/AunePVP/Game-Server-Query-and-Control-Center)
+## [Example](https://tracker.iguaserver.de) | [How to install]( https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Installation ) | [Wiki](https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki)
+### Still in development!
 You can see the status of your game server and control it from a webpage written in PHP
-
 ## Supported Gameserver
 |  Game |  Query Protocol |        Verified        |
 | ------------ | ------------ |:----------------------:|
