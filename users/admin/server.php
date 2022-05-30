@@ -101,7 +101,7 @@ if ($_SESSION['username'] != "admin") {
     <?php
     endif;
     if (isset($_GET['id']) || !empty($_GET['id'])):
-        $ServerID = $_GET['id'];
+        $ServerID = (int) $_GET['id'];
         $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
