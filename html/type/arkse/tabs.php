@@ -36,6 +36,11 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
             <div style="text-align:left"><?php echo "Uptime: $uptime" ?></div>
         </div>
             <div class="moredata">
+                <div style="text-align:left">Query Time:
+                    <?php
+                    echo $Timer;
+                    ?>
+                </div>
                 <div style="text-align:left">System:
                     <?php
                     if (isset($Os)) {echo $Os;}
