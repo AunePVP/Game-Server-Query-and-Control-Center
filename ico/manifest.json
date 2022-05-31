@@ -1,5 +1,11 @@
 {
- "name": "App",
+ "name": "Game-Server-Query",
+ "short_name": "GSQ",
+ "description": "GSQ APP",
+ "display": "fullscreen",
+ "start_url": "/?homescreen=1",
+ "background_color": "#1D1D1F",
+ "theme_color": "#0f4a73",
  "icons": [
   {
    "src": "\/android-icon-36x36.png",

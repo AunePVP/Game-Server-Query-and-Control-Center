@@ -3,8 +3,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
     <!-- this is the part responsible for hiding the bottom bar -->
+    <meta name="apple-mobile-web-app-title" content="GSQ">
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <!--<script>(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(chref=d.href).replace(e.href,"").indexOf("#")&&(!/^[a-z\+\.\-]+:/i.test(chref)||chref.indexOf(e.protocol+"//"+e.host)===0)&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone");</script>-->
     <meta name="theme-color" content="#1D1D1F" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#1D1D1F" media="(prefers-color-scheme: dark)">
     <meta charset="utf-8">
