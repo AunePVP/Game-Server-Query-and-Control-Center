@@ -1,5 +1,5 @@
 
-# Game-Server-Query-and-Control-Center [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/eexa.svg)](https://statuspage.muehlhaeusler.online) [![wakatime](https://wakatime.com/badge/github/AunePVP/Game-Server-Query-and-Control-Center.svg)](https://wakatime.com/badge/github/AunePVP/Game-Server-Query-and-Control-Center) [![wakatime](https://img.shields.io/github/languages/top/AunePVP/Game-Server-Query-and-Control-Center)](https://img.shields.io/github/languages/top/AunePVP/Game-Server-Query-and-Control-Center)
+# Game-Server-Query-and-Control-Center [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/eexa.svg)](https://statuspage.muehlhaeusler.online) [![wakatime](https://wakatime.com/badge/github/AunePVP/Game-Server-Query-and-Control-Center.svg)](https://wakatime.com/badge/github/AunePVP/Game-Server-Query-and-Control-Center) [![wakatime](https://img.shields.io/github/languages/top/AunePVP/Game-Server-Query-and-Control-Center)](https://img.shields.io/github/languages/top/AunePVP/Game-Server-Query-and-Control-Center) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=AunePVP_Game-Server-Query-and-Control-Center&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=AunePVP_Game-Server-Query-and-Control-Center) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=AunePVP_Game-Server-Query-and-Control-Center&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=AunePVP_Game-Server-Query-and-Control-Center)
 ## [Example](https://tracker.iguaserver.de) | [How to install]( https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Installation ) | [Wiki](https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki) | [Screenshots]( https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Screenshots )
 ### Still in development!
 You can see the status of your game server and control it from a webpage written in PHP
@@ -25,7 +25,7 @@ You can see the status of your game server and control it from a webpage written
 
 There are many more games that are supported. If your game is missing...
 
-## Screenshot<img width="1440" alt="Screen Shot 2022-05-26 at 22 42 48" src="https://user-images.githubusercontent.com/67545895/170637561-a35c7b45-778e-4b0a-a53a-2cacefb7c811.png">
+## Screenshot<img width="1440" alt="Screen Shot 2022-05-30 at 23 26 12" src="https://user-images.githubusercontent.com/67545895/171106895-df23d899-bee7-4fa0-9e2c-17e741af81d0.png">
 
 
 
