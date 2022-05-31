@@ -338,5 +338,6 @@ $font['banner'] = "Helvetica, sans-serif";
         .players_cell, .IV {display: none!important}
         .container {width: 100%}
         .vchartdiv {width: auto}
+        .container {padding-top: 20px;}
     }
 </style>
