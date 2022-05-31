@@ -8,16 +8,18 @@
 //}
 //
 $addservers = 0;
-require_once 'config.php';
+$confname = "config.php";
+
+require_once $confname;
 if (isset($install) && !$install) {
     header("Location: /");
 }
-$path = "config.php";
+$path = $confname;
 $title = "Install";
 $configfail = "Writeable";
 $logfail = "Readable";
 $configfailclass = 0;
-if (!is_writable("config.php")) {
+if (!is_writable($confname)) {
     $configfailclass = "red";
     $configfail = "Not Writeable";
 }
