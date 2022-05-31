@@ -14,13 +14,6 @@ function convertmodlistark($mod)
 }
 ?>
 <!DOCTYPE html>
-<?php
-// I query the number that the server has at Battlemetrics. And create the link to the banner with it.
-$linkI = "https://cdn.battlemetrics.com/b/standardVertical/";
-$linkII = ".html?foreground=%23EEEEEE&linkColor=%231185ec&lines=%23333333&background=%23222222&chart=players%3A24H&chartColor=%23FF0700&maxPlayersHeight=300";
-// Url to Rcon control Website.
-$rconurl = "https://wo-ist-der-igua.de/example.php";
-?>
 <div class="tab flex">
     <div class="sidebar">
         <div style="width:130px">
@@ -91,7 +84,7 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
         <div class="players">
             <div style="text-align: left;">
                 <div class="mods">
-                    <h1>Players</h1>
+                    <h1><?php echo $language[$lang][4]?></h1>
                     <div class="modcontent" style="height: auto;min-height: 233px;">
                         <div class="player-scroll">
                             <?php
@@ -144,11 +137,6 @@ $rconurl = "https://wo-ist-der-igua.de/example.php";
                 <canvas id="Chart<?php echo $ServerID ?>" class="vchart" width="190" height="120"></canvas>
             </div>
         </div>
-        <script>
-            Chart.defaults.color = 'white';
-            let xLabels<?php echo $ServerID ?> = ['60','50','40','30','20','10','now'];
-            let xValues<?php echo $ServerID ?> = <?php echo "[$lastplayers[0], $lastplayers[1], $lastplayers[2], $lastplayers[3], $lastplayers[4], $lastplayers[5], $lastplayers[6]];"; ?>
-                new Chart("Chart<?php echo $ServerID ?>", {type: "line", data: {labels: xLabels<?php echo $ServerID ?>, datasets: [{label: "Players", data: xValues<?php echo $ServerID ?>, backgroundColor: "white", borderColor: "red", color: "white", borderWidth: 2, pointBorderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.4, pointBorderColor: "white",}]}, options: {scales: {x: {grid: {display:false}, ticks: {display: true}}, y: {grid:{display:true, color: 'rgb(70,70,70)',},}}, responsive: false, maintainAspectRatio: false, plugins: {legend: {display: false,}}}});
-        </script>
+        <script>Chart.defaults.color = 'white';let xLabels<?php echo $ServerID ?> = ['60','50','40','30','20','10','now'];let xValues<?php echo $ServerID ?> = <?php echo "[$lastplayers[0], $lastplayers[1], $lastplayers[2], $lastplayers[3], $lastplayers[4], $lastplayers[5], $lastplayers[6]];"; ?>new Chart("Chart<?php echo $ServerID ?>", {type: "line", data: {labels: xLabels<?php echo $ServerID ?>, datasets: [{label: "Players", data: xValues<?php echo $ServerID ?>, backgroundColor: "white", borderColor: "red", color: "white", borderWidth: 2, pointBorderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.4, pointBorderColor: "white",}]}, options: {scales: {x: {grid: {display:false}, ticks: {display: true}}, y: {grid:{display:true, color: 'rgb(70,70,70)',},}}, responsive: false, maintainAspectRatio: false, plugins: {legend: {display: false,}}}});</script>
     </div>
 </div>
