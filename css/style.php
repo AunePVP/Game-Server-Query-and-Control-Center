@@ -235,7 +235,7 @@ $font['banner'] = "Helvetica, sans-serif";
     .vchart {
         /*margin: auto;*/
     }
-    .vchartdiv .servername p, .hchartdiv .servername p {
+    .vchartdiv .servername p {
         font-family: Helvetica, serif;
         font-size: 14px;
         font-weight: 500;
@@ -249,12 +249,13 @@ $font['banner'] = "Helvetica, sans-serif";
         -webkit-line-clamp: 2; /* number of lines to show */
         line-clamp: 2;
         -webkit-box-orient: vertical;
+        min-height: 32px;
     }
-    .vchartdiv .connectlink.vchart, .hchart {
+    .vchartdiv .connectlink.vchart {
         display: flex;
         justify-content: center;
     }
-    .vchartdiv .connectlink a, .hchartdiv .connectlink a {
+    .vchartdiv .connectlink a{
         color: #2e87ff;
         font-family: Helvetica,serif;
         font-size: 15px;
@@ -266,12 +267,12 @@ $font['banner'] = "Helvetica, sans-serif";
         padding: 5px 0;
 
     }
-    .vchartdiv .items svg, .hchartdiv .items svg {
+    .vchartdiv .items svg{
         width: 25px;
         height: 25px;
         padding: 5px 2px 5px 5px;
     }
-    .vchartdiv .items p, .hchartdiv .items p, .version {
+    .vchartdiv .items p, .version {
         margin:auto 0!important;
         font-family: Helvetica,serif!important;
         font-size: 14px!important;
@@ -281,7 +282,7 @@ $font['banner'] = "Helvetica, sans-serif";
         text-align: left!important;
         padding: 5px 0!important;
     }
-    .vchartdiv p, .hchartdiv p {
+    .vchartdiv p {
         font-family: Helvetica, sans-serif;
         font-size: 16px;
         font-stretch: expanded;
