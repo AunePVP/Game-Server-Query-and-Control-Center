@@ -27,6 +27,7 @@ if ($_SESSION['username'] != "admin") {
         <button class="selected" onclick="window.location.href='server.php';">Server</button>
         <button onclick="window.location.href='user.php';">User</button>
         <button onclick="window.location.href='settings.php';">Settings</button>
+        <button onclick="window.location.href='../../index.php';">Home</button>
         <button class="bottom"
                 onclick="window.open('https://github.com/AunePVP/Game-Server-Query-and-Control-Center');">Github
         </button>
@@ -44,6 +45,7 @@ if ($_SESSION['username'] != "admin") {
             <button onclick="window.location.href='server.php';">Server</button>
             <button onclick="window.location.href='user.php';">User</button>
             <button onclick="window.location.href='settings.php';">Settings</button>
+            <button onclick="window.location.href='../../index.php';">Home</button>
             <button class="bottom"
                     onclick="window.open('https://github.com/AunePVP/Game-Server-Query-and-Control-Center');">Github
             </button>

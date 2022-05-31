@@ -27,9 +27,8 @@ if ($_SESSION['username'] != "admin") {
         <button onclick="window.location.href='server.php';">Server</button>
         <button onclick="window.location.href='user.php';">User</button>
         <button onclick="window.location.href='settings.php';">Settings</button>
-        <button class="bottom"
-                onclick="window.open('https://github.com/AunePVP/Game-Server-Query-and-Control-Center');">Github
-        </button>
+        <button onclick="window.location.href='../../index.php';">Home</button>
+        <button class="bottom" onclick="window.open('https://github.com/AunePVP/Game-Server-Query-and-Control-Center');">Github</button>
     </div>
     <div id="topbar">
         <span id="open-span" onclick="openNav()">☰</span>
@@ -44,9 +43,8 @@ if ($_SESSION['username'] != "admin") {
                 <button onclick="window.location.href='server.php';">Server</button>
                 <button onclick="window.location.href='user.php';">User</button>
                 <button onclick="window.location.href='settings.php';">Settings</button>
-                <button class="bottom"
-                        onclick="window.open('https://github.com/AunePVP/Game-Server-Query-and-Control-Center');">Github
-                </button>
+                <button onclick="window.location.href='../../index.php';">Home</button>
+                <button class="bottom" onclick="window.open('https://github.com/AunePVP/Game-Server-Query-and-Control-Center');">Github</button>
             </div>
         </div>
         <div class="server inlineflex flex-wrap">
