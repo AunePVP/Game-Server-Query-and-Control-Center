@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#1D1D1F" media="(prefers-color-scheme: dark)">
     <meta charset="utf-8">
     <title>Gamserver Query</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.php">
     <link rel="stylesheet" href="<?php
     if ($css_template == "light") {
         echo "css/light.css";
