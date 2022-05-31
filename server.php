@@ -76,7 +76,8 @@ $Timer = Number_Format( MicroTime( true ) - $Timer, 4, '.', '' )."sec";
         </summary>
         <?php
         // Include the tab for the game
-        include('html/type/'.$type.'/tabs.php');
+        //include('html/type/'.$type.'/tabs.php');
+        include('html/tabs.php');
         ?>
     </details>
 </section>
