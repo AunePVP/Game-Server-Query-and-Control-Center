@@ -36,8 +36,11 @@ foreach(preg_split("/((\r?\n)|(\r\n?))/", $lastplayerlines) as $playerline){
 $ingameday = $serverstatus->rules->DayTime_s;
 $clusterid = $serverstatus->rules->ClusterId_s;
 $maxplayers = $serverstatus->info->MaxPlayers;
-$title = $serverstatus->info->HostName;
-$titlename = $serverstatus->info->HostName;
+if ($name != 0) {
+    $title = $name;
+} else {
+    $title = $serverstatus->info->HostName;
+}
 $img = "html/img/logo/ark.webp";
 $connectlink = "steam://connect/$ip:$gport";
 $map = $serverstatus->info->Map;

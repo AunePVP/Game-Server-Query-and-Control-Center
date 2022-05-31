@@ -19,7 +19,6 @@ $uptime = file_get_contents("query/cron/uptime/$ServerID")."%";
 $countplayers = $serverstatus->info->Players;
 $maxplayers = $serverstatus->info->MaxPlayers;
 $title = $serverstatus->info->HostName;
-$titlename = $serverstatus->info->HostName;
 $img = "html/img/logo/valheim.webp";
 $connectlink = "steam://connect/$ip:$gport";
 
