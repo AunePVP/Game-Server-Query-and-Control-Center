@@ -15,7 +15,7 @@ if ($type == "arkse") {
         return $modlist['ArkModName'][$mod];
     }
 } elseif ($type == "minecraft") {
-    $display['IV'] = "none";
+    $display['IV'] = "block";
 } elseif ($type == "csgo") {
     $display['IV'] = "block";
 } elseif ($type == "valheim") {
@@ -65,19 +65,39 @@ if ($type == "arkse") {
     <div class="movediv"></div>
     <div class="III"></div>
     <div class="IV" style="display:<?php echo $display['IV']?>">
-        <p><?php echo $language[$lang][4]?></p>
+        <p><?php
+            // Check if Mods for Minecraft or Players for Ark is displayed
+            if ($type == "arkse") {
+                echo $language[$lang][4];
+            } elseif ($type == "minecraft") {
+                echo "Mods";
+            }
+            ?></p>
         <div class="scroll">
             <?php
-            foreach ($serverstatus->players as $player) {
-                if(!strlen($player->Name))
-                    continue;
-                echo '<h5 class="dark">';
-                $rawtimeconv = $player->Time;
-                $rawtimeconv = round($rawtimeconv);
-                $output = sprintf('%02dh:%02dm:%02ds', ($rawtimeconv/ 3600),($rawtimeconv/ 60 % 60), $rawtimeconv% 60);
-                echo $player->Name." ".$language[$lang][5]." ".$output;
-                echo "</h5><br>";
+            // Display players for ARK
+            if ($type == "arkse") {
+                foreach ($serverstatus->players as $player) {
+                    if(!strlen($player->Name))
+                        continue;
+                    echo '<h5 class="dark">';
+                    $rawtimeconv = $player->Time;
+                    $rawtimeconv = round($rawtimeconv);
+                    $output = sprintf('%02dh:%02dm:%02ds', ($rawtimeconv/ 3600),($rawtimeconv/ 60 % 60), $rawtimeconv% 60);
+                    echo $player->Name." ".$language[$lang][5]." ".$output;
+                    echo "</h5><br>";
+                }
+                // Display mods for Minecaft
+            } elseif ($type == "minecraft") {
+                if (!empty($serverstatus->modinfo->modList)) {
+                    foreach ($serverstatus->modinfo->modList as $mods) {
+                        echo $mods->modid."<br>";
+                    }
+                } else {
+                    echo $language[$lang][10];
+                }
             }
+
             ?>
         </div>
     </div>
