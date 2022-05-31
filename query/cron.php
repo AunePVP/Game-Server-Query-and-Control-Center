@@ -5,8 +5,12 @@ use xPaw\MinecraftPingException;
 use xPaw\MinecraftQuery;
 use xPaw\MinecraftQueryException;
 use xPaw\SourceQuery\SourceQuery;
+use AunePVP\jsonconversion;
+use Spirit55555\Minecraft\MinecraftColors;
 
 require '../html/config.php';
+require '../html/type/minecraft/jsonconversion.php';
+require '../html/type/minecraft/minecraftcolor.php';
 require __DIR__ . '/SourceQuery/bootstrap.php';
 require __DIR__ . '/minecraft/src/MinecraftPing.php';
 require __DIR__ . '/minecraft/src/MinecraftPingException.php';
@@ -31,7 +35,9 @@ function calc_uptime($filename, $lines, $id) {
         $uptime = 0;
         while (($line = fgets($handle)) !== false) {
             $line = json_decode($line);
-            $uptime = $uptime + $line->status;
+            if (isset($line->status)) {
+                $uptime = $uptime + $line->status;
+            }
         }
         fclose($handle);
         $uptime = ($uptime/$lines) * 100;
@@ -39,11 +45,24 @@ function calc_uptime($filename, $lines, $id) {
         file_put_contents('cron/uptime/'.$id, $uptime);
         
     }
-
+}
+function uploadname($namequery, $id) {
+    global $DB_SERVER;
+    global $DB_USERNAME;
+    global $DB_PASSWORD;
+    global $DB_NAME;
+    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+    $sql = "UPDATE serverconfig SET Name='$namequery' WHERE ID='$id'";
+    if (mysqli_query($conn, $sql)) {
+        echo "Record updated successfully";
+    } else {
+        echo "Error updating record: " . mysqli_error($conn);
+    }
+    mysqli_close($conn);
 }
 // Connect to database and get required data of server
 $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-$sql = "SELECT ID, IP, type, QueryPort, GamePort, RconPort FROM serverconfig WHERE enabled='1'";
+$sql = "SELECT ID, IP, type, QueryPort, GamePort, RconPort, Name FROM serverconfig WHERE enabled='1'";
 $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
@@ -58,6 +77,7 @@ if (mysqli_num_rows($result) > 0) {
         $qport = $row["QueryPort"];
         $gport = $row["GamePort"];
         $rport = $row["RconPort"];
+        $name = $row["Name"];
         $file = 'cron/' . $id . '.json';
         //
         # Source Query
@@ -71,6 +91,7 @@ if (mysqli_num_rows($result) > 0) {
                     $Query->Connect($ip, $qport, SQ_TIMEOUT, SQ_ENGINE);
                     switch ($type) {
                         case "arkse":
+                            $queryresult["info"] = $Query->GetInfo();
                             $queryresult["players"] = $Query->GetPlayers();
                             if (!isset($countplayers)) {$countplayers = 0;}
                             foreach ($queryresult["players"] as $player) {
@@ -83,6 +104,11 @@ if (mysqli_num_rows($result) > 0) {
                             $queryresult["info"] = $Query->GetInfo();
                             $countplayers = $queryresult["info"]["Players"];
                             break;
+                    }
+                    $namequery = $queryresult['info']['HostName'];
+                    // Check if host name changed or is in database and if the name is not in the, call a function to update the name
+                    if ($name != $namequery) {
+                        uploadname($namequery, $id);
                     }
                     // Store necessary data in an array
                     $data["time"] = $time;
@@ -118,6 +144,23 @@ if (mysqli_num_rows($result) > 0) {
                     try {
                         $Query = new MinecraftPing($ip, $gport);
                         $queryresult = $Query->Query();
+                        $queryresultobj = json_decode(json_encode($queryresult));
+
+                        //Get name and if necessary, convert name to plain text
+                        $namequery = "";
+                        if (is_string($queryresultobj->description)) {
+                            $namequery = MinecraftColors::clean($queryresultobj->description);
+                        } elseif (is_array($queryresultobj->description->extra)) {
+                            foreach ($queryresultobj->description->extra as $extra) {
+                                $namequery .= $extra->text;
+                            }
+                        } elseif (isset($queryresultobj->description->text)) {
+                            $namequery = $queryresultobj->description->text;
+                        }
+                        // Check if host name changed or is in database and if the name is not in the, call a function to update the name
+                        if ($name != $namequery) {
+                            uploadname($namequery, $id);
+                        }
                         // Store necessary data in an array
                         $data["time"] = $time;
                         $data["status"] = 1;
@@ -150,6 +193,15 @@ if (mysqli_num_rows($result) > 0) {
                     try {
                         $Query->Connect($ip, $qport);
                         $queryresult["info"] = ($Query->GetInfo());
+                        $queryresultobj = json_decode(json_encode($queryresult));
+                        // Convert name to clean text
+                        $titleraw = $queryresultobj->info->HostName;
+                        $titlestr = (str_replace("?", "&", $titleraw));
+                        $namequery = MinecraftColors::clean($titlestr);
+                        // If name is different from db upload it to db
+                        if ($name != $namequery) {
+                            uploadname($namequery, $id);
+                        }
                         // Store necessary data in an array
                         $data["time"] = $time;
                         $data["status"] = 1;
