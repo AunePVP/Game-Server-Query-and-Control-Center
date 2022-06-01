@@ -2,7 +2,7 @@
 include './html/langconf.php';
 if ($type == "arkse") {
     $display['IV'] = "block";
-    $officialmaps = array("Aberration", "CrystalIsles", "Gen2", "Gen", "LostIsland", "Ragnarok", "ScorchedEarth", "TheCenter", "TheIsland", "Valguero", "Viking_P");
+    $officialmaps = array("Aberration", "CrystalIsles", "Gen2", "Gen", "LostIsland", "Ragnarok", "ScorchedEarth", "TheCenter", "TheIsland", "Valguero", "Viking_P", "Valhalla", "TheVolcano");
     if (in_array($map, $officialmaps)) {
         $maplink = "html/img/map/$map.webp";
     } else {
@@ -104,7 +104,7 @@ if ($type == "arkse") {
     <div class="V">
         <div class="vchartdiv">
             <div class="servername">
-                <p href="#"><?php if (isset($motd)) {echo $motd;} else {echo $titlename;}?></p>
+                <p href="#"><?php if (isset($motd)) {echo $motd;} else {echo $title;}?></p>
             </div>
             <div class="connectlink">
                 <a href="<?php echo $connectlink ?>>" title="Connect to server"><?php echo $ip . ":" . $gport ?></a>
