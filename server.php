@@ -17,15 +17,12 @@ if (mysqli_num_rows($result) > 0) {
         $qport = $row["QueryPort"];
         $gport = $row["GamePort"];
         $rport = $row["RconPort"];
-        $banner = $row["BatPort"];
+        $name = $row["Name"];
     }
 } else {
     echo "0 results";
 }
 $conn->close();
-// Create Link for Battle Metrics API
-$linkII = "https://api.battlemetrics.com/servers/" . $banner;
-
 // Query data -> decode data -> include correct file for reading data from array
 switch ($type) {
     case "csgo":
@@ -70,7 +67,7 @@ $Timer = Number_Format( MicroTime( true ) - $Timer, 4, '.', '' )."sec";
                     <td title="<?php if (isset($title)) {echo $title;} ?>" class="servername_cell">
                         <div class="servername_nolink"><?php if (isset($title)) {echo $title;} ?></div></td>
                     <td class="players_cell"><div class="outer_bar"><div class="inner_bar"><span class="players_numeric"><?php echo $countplayers . '/' . $maxplayers;?></span></div></div></td>
-                    <td class="img-cell"><img src="<?php echo $img; ?>" width="80px" height="80px" style="float:right;margin-right: 8px;"></img></td>
+                    <td class="img-cell"><img src="<?php echo $img; ?>" width="80px" height="80px" style="float:right;margin-right: 8px;"></td>
                 </tr>
                 </tbody></table>
         </summary>
