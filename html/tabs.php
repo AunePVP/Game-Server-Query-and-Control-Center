@@ -82,7 +82,7 @@ if ($type == "arkse") {
     <div class="IV" style="display:<?php echo $display['IV']?>">
         <p><?php
             // Check if Mods for Minecraft or Players for Ark is displayed
-            if ($type == "arkse" || $type = "csgo") {
+            if ($type == "arkse" || $type == "csgo") {
                 echo $language[$lang][4];
             } elseif ($type == "minecraft") {
                 echo "Mods";
@@ -117,7 +117,7 @@ if ($type == "arkse") {
         </div>
     </div>
     <div class="V">
-        <div class="vchartdiv" style='<?php if($type=="valheim"){echo "width:320px";}?>'>
+        <div class="vchartdiv" style='<?php if($type == "valheim"){echo "width:320px";}?>'>
             <div class="servername">
                 <p href="#"><?php if (!empty($motd)) {echo $motd;} else {echo $title;}?></p>
             </div>
