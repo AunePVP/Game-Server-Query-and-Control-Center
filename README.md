@@ -7,20 +7,14 @@ You can see the status of your game server and control it from a webpage written
 | Game                             | Query Protocol |        Verified        |
 |----------------------------------|----------------|:----------------------:|
 | ARK: Survival Evolved            | Valve Protocol |           ✅           |
-| Counter-Strike: Global Offensive | Valve Protocol |     ❌(Coming Soon)     |
-| Minecraft                        |                | ❌/ ✅ (almost finished) |
+| Counter-Strike: Global Offensive | Valve Protocol |     ❌(Coming Soon)    |
+| Minecraft                        |                |           ✅           |
 | Valheim                          | Valve Protocol | ❌/ ✅ (almost finished) |
-| 7 Days to Die                    | Valve Protocol |           ❌            |
-| Age of Chivalry                  | Valve Protocol |           ❌            |
-| Mordhau (2019)                   | Valve Protocol |           ❌            |
-| Atlas                            | Valve Protocol |           ❌            |
-| Battalion 1944                   | Valve Protocol |           ❌            |
+| Factorio                         | Valve Protocol |           ❌            |
 | Conan Exiles                     | Valve Protocol |           ❌            |
-| DayZ                             | Valve Protocol |           ❌            |
-| Insurgency: Sandstorm            | Valve Protocol |           ❌            |
+| Rust                             | Valve Protocol |           ❌            |
 | PixARK                           | Valve Protocol |           ❌            |
-| Killing Floor 2                  | Valve Protocol |           ❌            |
-| The Forrest                      | Valve Protocol |           ❌            |
+| Satisfactory                     | Valve Protocol |           ❌            |
 | Grand Theft Auto V - FiveM       |                |    ❌ (Coming Soon)     |
 
 There are many more games that are supported. If your game is missing...
