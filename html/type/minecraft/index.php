@@ -27,17 +27,17 @@ foreach ($lastplayers as $lastplayer) {
 }
 $seperatevar .= "]";
 $json = "";
+$connectlink = $ip . ":" . $gport;
 if ($qport == 0) {
 // This is where I'm querying all the data I need and storing it in variables.
     $countplayers = $serverstatus->players->online ?? '0';
     $maxplayers = $serverstatus->players->max ?? '0';
     $img = $serverstatus->favicon ?? "html/img/logo/minecraft.webp";
-    $connectlink = $ip . ":" . $gport;
     $version = $serverstatus->version->name;
 
 // If the server is offline, the variable will be empty. That' how I check if the server is online.
-    $status = $serverstatus->players->max;
-    if (isset($status)) {
+    $status = $serverstatus->players->max ?? false;
+    if (!empty($status)) {
         $status = 1;
     } else {
         $status = 0;
@@ -47,10 +47,12 @@ if ($qport == 0) {
     if (is_string($serverstatus->description)) {
         $title = MinecraftColors::clean($serverstatus->description);
         $motd = MinecraftColors::convertToHTML($serverstatus->description);
-    } elseif (is_array($serverstatus->description->extra)) {
+    } elseif (is_array($serverstatus->description->extra ?? false)) {
         foreach ($serverstatus->description->extra as $extra) {
-            $title .= $extra->text;
+            $title = $title ?? '';
+            $title .= $extra->text ?? '';
             $color = $extra->color;
+            $motd = $motd ?? '';
             $motd .= (new jsonconversion)->convertcolor($color);
             $motd .= $extra->text;
         }
@@ -60,16 +62,17 @@ if ($qport == 0) {
         $motd = "<span style='color: #FFFFFF'>".$title."</span>";
     }
 } else {
-    $titleraw = $serverstatus->info->HostName;
+    $titleraw = $serverstatus->info->HostName ?? '';
     $titlestr = (str_replace("?", "&", $titleraw));
     $title = MinecraftColors::clean($titlestr);
     $motd = MinecraftColors::convertToHTML($titlestr);
-    $version = $serverstatus->info->Version;
-    $countplayers = $serverstatus->info->Players;
-    $maxplayers = $serverstatus->info->MaxPlayers;
+    $version = $serverstatus->info->Version ?? '0';
+    $countplayers = $serverstatus->info->Players ?? '0';
+    $maxplayers = $serverstatus->info->MaxPlayers ?? '0';
     $img = "https://api.mcsrvstat.us/icon/" . $ip;
-    $status = $serverstatus->info->MaxPlayers;
-    if (isset($status)) {
+    // If the server is offline, the variable will be empty. That' how I check if the server is online.
+    $status = $serverstatus->info->MaxPlayers ?? false;
+    if (!empty($status)) {
         $status = 1;
     } else {
         $status = 0;
@@ -77,7 +80,6 @@ if ($qport == 0) {
 }
 // Check if title was set if not use cached title from db
 if (empty($title)) {
-    echo "isset";
     $title = $name;
     echo gettype($name);
 }

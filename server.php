@@ -35,6 +35,7 @@ switch ($type) {
         include 'query/minecraftquery.php';
         break;
 }
+$queryresult = $queryresult ?? false;
 $serverstatus = json_decode($queryresult);
 include('html/type/'.$type.'/index.php');
 // If the server is offline, it will show a red colour on the website. If its red, it will show a green colour.

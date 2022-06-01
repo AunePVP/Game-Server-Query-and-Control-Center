@@ -77,8 +77,8 @@ if ($type == "arkse") {
             <?php
             // Display players for ARK
             if ($type == "arkse") {
-                foreach ($serverstatus->players as $player) {
-                    if(!strlen($player->Name))
+                foreach ($serverstatus->players ?? (array) "0" as $player) {
+                    if(!strlen($player->Name ?? ''))
                         continue;
                     echo '<h5 class="dark">';
                     $rawtimeconv = $player->Time;
@@ -104,7 +104,7 @@ if ($type == "arkse") {
     <div class="V">
         <div class="vchartdiv">
             <div class="servername">
-                <p href="#"><?php if (isset($motd)) {echo $motd;} else {echo $title;}?></p>
+                <p href="#"><?php if (!empty($motd)) {echo $motd;} else {echo $title;}?></p>
             </div>
             <div class="connectlink">
                 <a href="<?php echo $connectlink ?>>" title="Connect to server"><?php echo $ip . ":" . $gport ?></a>
