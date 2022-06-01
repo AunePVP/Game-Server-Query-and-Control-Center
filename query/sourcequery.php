@@ -24,10 +24,15 @@ try
             $queryresult["players"] = $Query->GetPlayers();
             $queryresult["rules"] = $Query->GetRules();
             break;
+        case "csgo":
+            $queryresult["players"] = $Query->GetPlayers();
+            $queryresult["rules"] = $Query->GetRules() ?? false;
+            break;
         case "valheim":
             break;
     }
     $queryresult = json_encode($queryresult);
+    print_r($queryresult);
 }
 catch( Exception $e )
 {

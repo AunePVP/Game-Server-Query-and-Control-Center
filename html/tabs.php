@@ -82,7 +82,7 @@ if ($type == "arkse") {
     <div class="IV" style="display:<?php echo $display['IV']?>">
         <p><?php
             // Check if Mods for Minecraft or Players for Ark is displayed
-            if ($type == "arkse") {
+            if ($type == "arkse" || $type = "csgo") {
                 echo $language[$lang][4];
             } elseif ($type == "minecraft") {
                 echo "Mods";
@@ -91,7 +91,7 @@ if ($type == "arkse") {
         <div class="scroll">
             <?php
             // Display players for ARK
-            if ($type == "arkse") {
+            if ($type == "arkse" || $type == "csgo") {
                 foreach ($serverstatus->players ?? (array) "0" as $player) {
                     if(!strlen($player->Name ?? ''))
                         continue;
