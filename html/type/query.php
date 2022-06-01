@@ -2,16 +2,16 @@
 use AunePVP\jsonconversion;
 use Spirit55555\Minecraft\MinecraftColors;
 require 'html/lloffile.php';
-require 'html/type/jsonconversion.php';
-require 'html/type/minecraftcolor.php';
+require 'html/type/minecraft/jsonconversion.php';
+require 'html/type/minecraft/minecraftcolor.php';
 
 // function to convert shortend os name to full name
 function convertos($Os)
 {
     $Opers = array(
-        'l' => 'linux',
-        'w' => 'windows',
-        'm' => 'mac'
+        'l' => 'Linux',
+        'w' => 'Windows',
+        'm' => 'Mac'
     );
     return $Opers[$Os];
 }

@@ -29,17 +29,31 @@ if ($type == "arkse") {
 <style>
 </style>
 <div class="tab flex">
-    <div class="I">
+    <div class="I" style="<?php if($type=="valheim"){echo "min-width:330px";}?>">
         <?php
         if ($type == "arkse") {
             echo '<img class="map" src="'.$maplink.'" alt="'.$maplink.'">';
             echo '<div style="text-align:left">Map: '.$map.'</div>';
             echo '<div style="text-align:left">'.$language[$lang][11].$ingameday.'</div>';
+        } elseif ($type == "valheim") {
+            echo('<a class="twitter-timeline" data-chrome="nofooter noheader" id="twitter-timeline" data-width="330" data-height="275" data-dnt="true" data-theme="dark" href="https://twitter.com/Valheimgame">Tweets by Valheimgame</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>');
         }
         ?>
     </div>
     <div class="II">
         <?php
+        switch ($type) {
+            case "valheim":
+                echo "System: $Os<br>";
+                echo "Map: $map<br>";
+                echo "Max Players: $maxplayers<br>";
+                echo "Query Port: $qport<br>";
+                echo "Steam Page: <a href='https://store.steampowered.com/app/892970/Valheim/'>Link</a><br>";
+                echo "Wiki: <a href='https://valheim.fandom.com/wiki/Valheim_Wiki'>Link</a><br>";
+                echo "Website: <a href='https://www.valheimgame.com'>Link</a><br>";
+
+                break;
+        }
         if ($type == "arkse") {
             echo "System: $Os<br>";
             echo "Cluster ID: $clusterid<br>";
@@ -63,7 +77,8 @@ if ($type == "arkse") {
         ?>
     </div>
     <div class="movediv"></div>
-    <div class="III"></div>
+    <div class="III">
+    </div>
     <div class="IV" style="display:<?php echo $display['IV']?>">
         <p><?php
             // Check if Mods for Minecraft or Players for Ark is displayed
@@ -102,7 +117,7 @@ if ($type == "arkse") {
         </div>
     </div>
     <div class="V">
-        <div class="vchartdiv">
+        <div class="vchartdiv" style='<?php if($type=="valheim"){echo "width:320px";}?>'>
             <div class="servername">
                 <p href="#"><?php if (!empty($motd)) {echo $motd;} else {echo $title;}?></p>
             </div>
