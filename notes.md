@@ -51,7 +51,7 @@ http://array.include-once.org      |   Json Abfrage php erleichtert
 
 
 
-# Minecraft rcon commands
+# Minecraft Skins
 
 http://mineatlas.com/?levelName=2620669636049101976&seed=2620669636049101976 <br>
 https://www.mcseeder.com/?seed=3945554479&version=18 <br>
@@ -59,6 +59,8 @@ https://crafatar.com<br>
 https://crafatar.com/avatars/0c68fb91f49546b6ad1ab4735f9da583<br>
 https://playerdb.co/api/player/minecraft/tomctl2<br>
 https://api.mojang.com/users/profiles/minecraft/<username> <br>
+
+# Minecraft rcon commands
 /experience<br>
 /difficulty<br>
 /weather<br>
