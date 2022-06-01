@@ -29,14 +29,9 @@ $seperatevar .= "]";
 $json = "";
 if ($qport == 0) {
 // This is where I'm querying all the data I need and storing it in variables.
-    $uptime = file_get_contents("query/cron/uptime/$ServerID")."%";
-    $countplayers = $serverstatus->players->online;
-    $maxplayers = $serverstatus->players->max;
-    if (isset($serverstatus->favicon)) {
-        $img = $serverstatus->favicon;
-    } else {
-        $img = "html/img/logo/minecraft.webp";
-    }
+    $countplayers = $serverstatus->players->online ?? '0';
+    $maxplayers = $serverstatus->players->max ?? '0';
+    $img = $serverstatus->favicon ?? "html/img/logo/minecraft.webp";
     $connectlink = $ip . ":" . $gport;
     $version = $serverstatus->version->name;
 
@@ -64,9 +59,7 @@ if ($qport == 0) {
         $title = $serverstatus->description->text;
         $motd = "<span style='color: #FFFFFF'>".$title."</span>";
     }
-    //$title = $titlename;
 } else {
-    $uptime = file_get_contents("query/cron/uptime/$ServerID")."%";
     $titleraw = $serverstatus->info->HostName;
     $titlestr = (str_replace("?", "&", $titleraw));
     $title = MinecraftColors::clean($titlestr);
@@ -75,13 +68,16 @@ if ($qport == 0) {
     $countplayers = $serverstatus->info->Players;
     $maxplayers = $serverstatus->info->MaxPlayers;
     $img = "https://api.mcsrvstat.us/icon/" . $ip;
-    //$titlename = $title;
     $status = $serverstatus->info->MaxPlayers;
     if (isset($status)) {
         $status = 1;
     } else {
         $status = 0;
     }
-
 }
-?>
+// Check if title was set if not use cached title from db
+if (empty($title)) {
+    echo "isset";
+    $title = $name;
+    echo gettype($name);
+}

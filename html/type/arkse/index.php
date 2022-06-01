@@ -33,9 +33,10 @@ foreach(preg_split("/((\r?\n)|(\r\n?))/", $lastplayerlines) as $playerline){
     $lastplayers[$count] = $playerlinedecode->players;
     $count = $count + 1;
 }
-$ingameday = $serverstatus->rules->DayTime_s;
-$clusterid = $serverstatus->rules->ClusterId_s;
-$maxplayers = $serverstatus->info->MaxPlayers;
+$ingameday = $serverstatus->rules->DayTime_s ?? '';
+$clusterid = $serverstatus->rules->ClusterId_s ?? '';
+$maxplayers = $serverstatus->info->MaxPlayers ?? '0';
+
 if ($name != 0) {
     $title = $name;
 } else {
