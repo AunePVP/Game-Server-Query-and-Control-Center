@@ -32,7 +32,6 @@ try
             break;
     }
     $queryresult = json_encode($queryresult);
-    print_r($queryresult);
 }
 catch( Exception $e )
 {
