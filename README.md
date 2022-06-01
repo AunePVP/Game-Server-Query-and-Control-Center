@@ -6,10 +6,10 @@ You can see the status of your game server and control it from a webpage written
 ## Supported Gameserver
 | Game                             | Query Protocol |        Verified        |
 |----------------------------------|----------------|:----------------------:|
-| ARK: Survival Evolved            | Valve Protocol |           ✅           |
-| Counter-Strike: Global Offensive | Valve Protocol |     ❌(Coming Soon)    |
-| Minecraft                        |                |           ✅           |
-| Valheim                          | Valve Protocol | ❌/ ✅ (almost finished) |
+| ARK: Survival Evolved            | Valve Protocol |           ✅            |
+| Counter-Strike: Global Offensive | Valve Protocol |     ❌(Coming Soon)     |
+| Minecraft                        |                | ❌/ ✅ (almost finished) |
+| Valheim                          | Valve Protocol |           ✅            |
 | Factorio                         | Valve Protocol |           ❌            |
 | Conan Exiles                     | Valve Protocol |           ❌            |
 | Rust                             | Valve Protocol |           ❌            |
