@@ -49,8 +49,8 @@ require_once 'html/config.php' ;
           mysqli_close($conn);
           $serverhelper = json_decode($serverhelper);
           foreach ($serverhelper->serverowner as $value) {
-              $ServerID = $value->sID;
-              if (isset($ServerID)){
+              $ServerID = $value->sID ?? '';
+              if (!empty($ServerID)){
                   readfile("$url?serverid=$ServerID");
               }
           }

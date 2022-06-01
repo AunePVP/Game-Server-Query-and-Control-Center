@@ -29,6 +29,7 @@ else {
 
         $queryresult["info"] = ($Query->GetInfo());
         $queryresult["players"] = ($Query->GetPlayers());
+        $queryresult = $queryresult;
         $queryresult = json_encode($queryresult);
     } catch (MinecraftQueryException $e) {
         echo $e->getMessage();

@@ -3,12 +3,14 @@
 require 'html/lloffile.php';
 // This is where I'm querying all the data I need and storing it in variables.
 $countplayers = 0;
-foreach ($serverstatus->players as $player) {
-    if(!strlen($player->Name))
-        continue;
-    $countplayers = $countplayers + 1;
+if (isset($serverstatus->players)) {
+    foreach ($serverstatus->players as $player) {
+        if(!strlen($player->Name))
+            continue;
+        $countplayers = $countplayers + 1;
+    }
 }
-$Os = $serverstatus->info->Os;
+$Os = $serverstatus->info->Os ?? '';
 switch ($Os) {
     case 'l':
         $Os = "Linux";
@@ -44,11 +46,11 @@ if ($name != 0) {
 }
 $img = "html/img/logo/ark.webp";
 $connectlink = "steam://connect/$ip:$gport";
-$map = $serverstatus->info->Map;
-$password = $serverstatus->rules->ServerPassword_b;
-$battleye = $serverstatus->rules->SERVERUSESBATTLEYE_b;
-$pve = $serverstatus->rules->SESSIONISPVE_i;
-$hasmods = $serverstatus->rules->HASACTIVEMODS_i;
+$map = $serverstatus->info->Map ?? '';
+$password = $serverstatus->rules->ServerPassword_b ?? '';
+$battleye = $serverstatus->rules->SERVERUSESBATTLEYE_b ?? '';
+$pve = $serverstatus->rules->SESSIONISPVE_i ?? '';
+$hasmods = $serverstatus->rules->HASACTIVEMODS_i ?? '';
 if ($hasmods) {
     $keys = (array) $serverstatus->rules;
     $matched = preg_grep('/MOD\d+_s/', array_keys($keys));
@@ -64,10 +66,9 @@ if ($hasmods) {
     }
 }
 // If the server is offline, the variable will be empty. That' how I check if the server is online.
-$status = $serverstatus->info->Players;
-if (isset($status)) {
+$status = $serverstatus->info->HostName ?? false;
+if (!empty($status)) {
     $status = 1;
 } else {
     $status = 0;
 }
-?>
