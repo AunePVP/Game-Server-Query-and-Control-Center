@@ -1,19 +1,30 @@
 <?php
 header("Content-type: text/css");
+$theme = "light"; // Choose between dark and light
 $background = "#1D1D1F";
-
-$server['color'] = "#F5F5F5";
+switch ($theme) {
+    case "dark":
+        $server['color'] = "#3b3b3b";
+        $players['color'] = "#ff2b2b";
+        $map['border'] = "none";
+        $font['color'] = "#ebebeb";
+        $font['linkcolor'] = "#d7d7d7";
+        $font['serverlinkcolor'] = "#0093ff";
+        break;
+    case "light":
+        $server['color'] = "#F5F5F5";
+        $players['color'] = "#FF0000";
+        $map['border'] = "5px solid #888888";
+        $font['color'] = "black";
+        $font['linkcolor'] = "#323232";
+        $font['serverlinkcolor'] = "#007CFF";
+        break;
+}
 $server['spacing'] = "10px";
 $server['width'] = "80%";
-
 $players['size'] = "25px";
-$players['color'] = "#FF0000";
 $players['weight'] = "bold";
-
 $tab['padding'] = "4px";
-
-$map['border'] = "#888888";
-
 $font['normal'] = "Montserrat, sans-serif";
 $font['banner'] = "Helvetica, sans-serif";
 ?>
@@ -136,7 +147,7 @@ $font['banner'] = "Helvetica, sans-serif";
         font-size: x-large;
     }
     section {
-        color: black;
+        color: <?php echo $font['color']?>;
         background-color: <?php echo $server['color']?>;
         margin-bottom: <?php echo $server['spacing']?>;
     }
@@ -173,7 +184,7 @@ $font['banner'] = "Helvetica, sans-serif";
         width: 15%;
     }
     .connectlink_cell a {
-        color: #007CFF;
+        color: <?php echo $font['serverlinkcolor'] ?>;
         text-decoration: none;
         position: relative;
     }
@@ -185,7 +196,7 @@ $font['banner'] = "Helvetica, sans-serif";
         width: 11%;
     }
     .server_list_table {
-        color: black;
+        color: <?php echo $font['color']?>;
         width: 100%;
         font-family: Montserrat, sans-serif;
     }
@@ -207,7 +218,7 @@ $font['banner'] = "Helvetica, sans-serif";
         padding: 4px 7px;
     }
     .II a {
-        color: #323232;
+        color: <?php echo $font['linkcolor']?>;
     }
     .IV {
         min-width: 215px;
@@ -222,6 +233,7 @@ $font['banner'] = "Helvetica, sans-serif";
         border-style: solid;
         border-width: 2px;
         overflow-y: scroll;
+        padding: 0 7px;
     }
     /* vchart div */
     .canvasparent {
@@ -298,10 +310,13 @@ $font['banner'] = "Helvetica, sans-serif";
     }
     /* END new tab css */
     .map {
-        border: 5px solid <?php echo $map['border']?>;
+        border: <?php echo $map['border']?>;
         border-radius: 8px;
         box-sizing: border-box;
         height: 234px;
+    }
+    @media only screen and (min-width: 1700px) {
+        .container {width: 75%;}
     }
     @media only screen and (max-width: 1280px) {
         .map {height: 220px;}
