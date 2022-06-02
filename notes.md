@@ -85,7 +85,8 @@ whitelist list<br>
 whitelist reload<br>
 stop<br>
 
-
+## CSGO API Request
+https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002/?appid=730&key=<Steam Web API Key>&steamid=76561197998840550
 ## Add new games
 
 - Add the games in the install.ph
