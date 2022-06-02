@@ -212,6 +212,9 @@ $font['banner'] = "Helvetica, sans-serif";
         font-weight: <?php echo $players['weight']?>;
         font-family: Helvetica Neue, sans-serif;
     }
+    .I {
+        height: 275px;
+    }
     .II {
         text-align: left;
         min-width: -webkit-fit-content;
