@@ -29,22 +29,23 @@ function read_and_delete_first_line($filename) {
     unset($file[0]);
     file_put_contents($filename, $file);
 }
-function calc_uptime($filename, $lines, $id) {
+function calc_uptime($filename, $lines, $status) {
+    $lines++;
     $handle = fopen($filename, "r");
     if ($handle) {
-        $uptime = 0;
+        $uptime = $status ?? 0;
         while (($line = fgets($handle)) !== false) {
             $line = json_decode($line);
             if (isset($line->status)) {
                 $uptime = $uptime + $line->status;
             }
         }
-        fclose($handle);
         $uptime = ($uptime/$lines) * 100;
         $uptime = (round($uptime,3));
-        file_put_contents('cron/uptime/'.$id, $uptime);
-        
+        fclose($handle);
+        //file_put_contents('cron/uptime/'.$id, $uptime);
     }
+    return $uptime ?? 0;
 }
 function uploadname($namequery, $id) {
     global $DB_SERVER;
@@ -79,6 +80,9 @@ if (mysqli_num_rows($result) > 0) {
         $rport = $row["RconPort"];
         $name = $row["Name"];
         $file = 'cron/' . $id . '.json';
+        if (!file_exists($file)) {
+            fopen($file, "w");
+        }
         //
         # Source Query
         switch ($type) {
@@ -125,22 +129,25 @@ if (mysqli_num_rows($result) > 0) {
                         uploadname($namequery, $id);
                     }
                     // Store necessary data in an array
+                    $lines = count(file($file) ?? 0);
                     $data["time"] = $time;
                     $data["status"] = 1;
+                    $data['uptime'] = calc_uptime($file, $lines, 1);
                     $data["players"] = $countplayers;
                     // Write the data as json in the file server/$id.json
                     file_put_contents($file, json_encode($data) . "\n", FILE_APPEND);
-                    $lines = count(file($file));
                     if ($lines >  1100) {
                         read_and_delete_first_line($file);
                     }
-                      calc_uptime($file, $lines, $id);
                 } // Check if an erropr occured
                 catch (Exception $e) {
                     // If there's an error display server as offline and show players 0
-                    echo $e->getMessage();
-                    file_put_contents($file, '{"time":"' . $time . '","status":0,"players":0}' . "\n", FILE_APPEND);
                     $lines = count(file($file));
+                    $data["time"] = $time;
+                    $data["status"] = 0;
+                    $data['uptime'] = calc_uptime($file, $lines, 0);
+                    $data["players"] = 0;
+                    file_put_contents($file, json_encode($data) . "\n", FILE_APPEND);
                     if ($lines >  1100) {
                         read_and_delete_first_line($file);
                     }
@@ -176,27 +183,28 @@ if (mysqli_num_rows($result) > 0) {
                             uploadname($namequery, $id);
                         }
                         // Store necessary data in an array
+                        $lines = count(file($file));
                         $data["time"] = $time;
                         $data["status"] = 1;
+                        $data['uptime'] = calc_uptime($file, $lines, 1);
                         $data["players"] = $queryresult['players']['online'];
-                        // Encode array in json
-                        $queryresult = json_encode($queryresult);
                         // Write the data as json in the file server/$id.json
-                        file_put_contents('cron/' . $id . '.json', json_encode($data) . "\n", FILE_APPEND);
-                        $lines = count(file($file));
+                        file_put_contents($file, json_encode($data) . "\n", FILE_APPEND);
                         if ($lines >  1100) {
                             read_and_delete_first_line($file);
                         }
-                          calc_uptime($file, $lines, $id);
-                    } // Check if an erropr occured
+                    } // Check if an error occurred
                     catch (MinecraftPingException $e) {
-                        echo $e->getMessage();
-                        file_put_contents('cron/' . $id . '.json', '{"time":' . $time . ',"status":0,"players":0}' . "\n", FILE_APPEND);
+                        $lines = count(file($file));
+                        $data["time"] = $time;
+                        $data["status"] = 0;
+                        $data['uptime'] = calc_uptime($file, $lines, 0);
+                        $data["players"] = 0;
+                        file_put_contents($file, json_encode($data) . "\n", FILE_APPEND);
                         $lines = count(file($file));
                         if ($lines >  1100) {
                             read_and_delete_first_line($file);
                         }
-                          calc_uptime($file, $lines, $id);
                     } // Disconnect from Server
                     finally {
                         $Query?->Close();
@@ -217,27 +225,28 @@ if (mysqli_num_rows($result) > 0) {
                             uploadname($namequery, $id);
                         }
                         // Store necessary data in an array
+                        $lines = count(file($file));
                         $data["time"] = $time;
                         $data["status"] = 1;
+                        $data['uptime'] = calc_uptime($file, $lines, 1);
                         $data["players"] = $queryresult["info"]["Players"];
-                        // Encode array in json
-                        $queryresult = json_encode($queryresult);
                         // Write the data as json in the file server/$id.json
-                        file_put_contents('cron/' . $id . '.json', json_encode($data) . "\n", FILE_APPEND);
-                        $lines = count(file($file));
+                        file_put_contents($file, json_encode($data) . "\n", FILE_APPEND);
                         if ($lines >  1100) {
                             read_and_delete_first_line($file);
                         }
-                          calc_uptime($file, $lines, $id);
-                    } // Check if an erropr occured
+                    } // Check if an error occurred
                     catch (MinecraftQueryException $e) {
-                        echo $e->getMessage();
-                        file_put_contents('cron/' . $id . '.json', '{"time":"' . $time . '","status":0,"players":0}' . "\n", FILE_APPEND);
+                        $lines = count(file($file));
+                        $data["time"] = $time;
+                        $data["status"] = 0;
+                        $data['uptime'] = calc_uptime($file, $lines, 1);
+                        $data["players"] = 0;
+                        file_put_contents($file, json_encode($data) . "\n", FILE_APPEND);
                         $lines = count(file($file));
                         if ($lines >  1100) {
                             read_and_delete_first_line($file);
                         }
-                          calc_uptime($file, $lines, $id);
                     }
                 }
                 break;
