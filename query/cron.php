@@ -114,6 +114,7 @@ if (mysqli_num_rows($result) > 0) {
                             }
                             break;
                         case "valheim":
+                        case "csgo":
                             $queryresult["info"] = $Query->GetInfo();
                             $countplayers = $queryresult["info"]["Players"];
                             break;
