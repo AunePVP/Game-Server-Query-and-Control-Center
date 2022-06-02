@@ -17,10 +17,6 @@ function convertos($Os)
 
 //#// GLOBAL //#//
 
-// Get uptime and round uptime for banner
-$uptime = file_get_contents("query/cron/uptime/$ServerID") ?? 0;
-$uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
-
 // Get the game logo
 $img = "html/img/logo/$type.webp";
 // Get last players for banner
@@ -31,7 +27,9 @@ foreach(preg_split("/((\r?\n)|(\r\n?))/", $lastplayerlines) as $playerline){
     $playerlinedecode = json_decode($playerline);
     $lastplayers[$count] = $playerlinedecode->players;
     $count = $count + 1;
+    $uptime = $playerlinedecode->uptime;
 }
+$uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
 
 // Switch to find out game type
 switch ($type) {
