@@ -1,5 +1,4 @@
 <?php
-$Timer = MicroTime( true );
 // include conifg and get serverid from url
 require 'html/config.php';
 $ServerID = $_GET['serverid'];
@@ -45,7 +44,6 @@ if ($status == 1) {
 } else {
     $statusfarbe ='background-color: #E20401;';
 }
-$Timer = Number_Format( MicroTime( true ) - $Timer, 4, '.', '' )."sec";
 ?>
 <section>
     <details>
