@@ -1,7 +1,6 @@
 <?php
 use AunePVP\jsonconversion;
 use Spirit55555\Minecraft\MinecraftColors;
-require 'html/lloffile.php';
 require 'html/type/minecraft/jsonconversion.php';
 require 'html/type/minecraft/minecraftcolor.php';
 
@@ -19,7 +18,7 @@ function convertos($Os)
 //#// GLOBAL //#//
 
 // Get uptime and round uptime for banner
-$uptime = file_get_contents("query/cron/uptime/$ServerID");
+$uptime = file_get_contents("query/cron/uptime/$ServerID") ?? 0;
 $uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
 
 // Get the game logo
