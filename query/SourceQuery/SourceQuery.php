@@ -115,7 +115,7 @@
 		 * @throws InvalidArgumentException
 		 * @throws SocketException
 		 */
-		public function Connect( string $Address, int $Port, int $Timeout = 3, int $Engine = self::SOURCE ) : void
+		public function Connect( string $Address, int $Port, int $Timeout = 2, int $Engine = self::SOURCE ) : void
 		{
 			$this->Disconnect( );
 			
