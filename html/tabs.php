@@ -48,9 +48,9 @@ if ($type == "arkse") {
                 echo "Map: $map<br>";
                 echo "Max Players: $maxplayers<br>";
                 echo "Query Port: $qport<br>";
-                echo "Steam Page: <a href='https://store.steampowered.com/app/892970/Valheim/'>Link</a><br>";
-                echo "Wiki: <a href='https://valheim.fandom.com/wiki/Valheim_Wiki'>Link</a><br>";
-                echo "Website: <a href='https://www.valheimgame.com'>Link</a><br>";
+                echo "Steam Page: <a href='https://store.steampowered.com/app/892970/Valheim/' target='_blank' rel='noopener noreferrer'>Link</a><br>";
+                echo "Wiki: <a href='https://valheim.fandom.com/wiki/Valheim_Wiki' target='_blank' rel='noopener noreferrer'>Link</a><br>";
+                echo "Website: <a href='https://www.valheimgame.com' target='_blank' rel='noopener noreferrer'>Link</a><br>";
 
                 break;
         }
