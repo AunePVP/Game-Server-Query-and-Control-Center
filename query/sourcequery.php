@@ -2,7 +2,6 @@
 require __DIR__ . '/SourceQuery/bootstrap.php';
 
 use xPaw\SourceQuery\SourceQuery;
-
 // For the sake of this example
 header( 'X-Content-Type-Options: nosniff' );
 
@@ -16,9 +15,6 @@ try
 {
     $Query->Connect( $ip, $qport, SQ_TIMEOUT, SQ_ENGINE );
     $queryresult["info"] = $Query->GetInfo();
-    $queryresult["info"]["Game"] = $type;
-    $queryresult["info"]["IP"] = $ip;
-    $queryresult["info"]["Port"] = $qport;
     switch ($type) {
         case "arkse":
             $queryresult["players"] = $Query->GetPlayers();
@@ -26,7 +22,7 @@ try
             break;
         case "csgo":
             $queryresult["players"] = $Query->GetPlayers();
-            $queryresult["rules"] = $Query->GetRules() ?? false;
+            $queryresult["rules"] = $Query->GetRules();
             break;
         case "valheim":
             break;
