@@ -18,6 +18,12 @@ if ($type == "arkse") {
     $display['IV'] = "block";
 } elseif ($type == "csgo") {
     $display['IV'] = "block";
+    $officialmaps = array("de_dust2", "ar_baggage", "ar_dizzy", "ar_lunacy", "ar_monastery", "ar_shoots", "cs_agency", "cs_assault", "cs_climb", "cs_italy", "cs_militia", "cs_office", "de_ancient", "de_bank", "de_cache", "de_canals", "de_cbble", "de_crete", "de_dust2", "de_hive", "de_inferno", "de_iris", "de_lake", "de_mirage", "de_nuke", "de_overpass", "de_safehouse", "de_shortdust", "de_shortnuke", "de_stmarc", "de_sugarcane", "de_train", "de_vertigo", "dz_blacksite", "dz_ember", "dz_sirocco", "dz_vineyard", "gd_cbble");
+    if (in_array($map, $officialmaps)) {
+        $maplink = "html/img/map/$map.webp";
+    } else {
+        $maplink = "html/img/map/modmap.webp";
+    }
 } elseif ($type == "valheim") {
     $display['IV'] = "none";
 } elseif ($type == "vrising") {
@@ -37,6 +43,9 @@ if ($type == "arkse") {
             echo '<div style="text-align:left">'.$language[$lang][11].$ingameday.'</div>';
         } elseif ($type == "valheim") {
             echo('<a class="twitter-timeline" data-chrome="nofooter noheader noscrollbar" id="twitter-timeline" data-width="330" data-height="275" data-dnt="true" data-theme="dark" href="https://twitter.com/Valheimgame">Tweets by Valheimgame</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>');
+        } elseif ($type == "csgo") {
+            echo '<img class="map" src="'.$maplink.'" alt="'.$maplink.'">';
+            echo '<div style="text-align:left;max-width: 234px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Map:<br> '.$map.'</div>';
         }
         ?>
     </div>
@@ -148,7 +157,7 @@ if ($type == "arkse") {
             <div class="canvasparent">
                 <canvas id="Chart<?php echo $ServerID ?>" class="vchart" width="190" height="120"></canvas>
             </div>
-            <script>Chart.defaults.color = 'white';let xLabels<?php echo $ServerID ?> = ['60','50','40','30','20','10','now'];let xValues<?php echo $ServerID ?> = <?php echo "[$lastplayers[0], $lastplayers[1], $lastplayers[2], $lastplayers[3], $lastplayers[4], $lastplayers[5], $lastplayers[6]];"; ?>new Chart("Chart<?php echo $ServerID ?>", {type: "line", data: {labels: xLabels<?php echo $ServerID ?>, datasets: [{label: "Players", data: xValues<?php echo $ServerID ?>, backgroundColor: "white", borderColor: "red", color: "white", borderWidth: 2, pointBorderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.4, pointBorderColor: "white",}]}, options: {scales: {x: {grid: {display:false}, ticks: {display: true}}, y: {grid:{display:true, color: 'rgb(70,70,70)',},}}, responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false,}}}});</script>
+            <script>Chart.defaults.color = 'white';let xLabels<?php echo $ServerID ?> = ['60','50','40','30','20','10','now'];let xValues<?php echo $ServerID ?> = <?php echo "[$lastplayers[0], $lastplayers[1], $lastplayers[2], $lastplayers[3], $lastplayers[4], $lastplayers[5], $lastplayers[6]];"; ?>new Chart("Chart<?php echo $ServerID ?>", {type: "line", data: {labels: xLabels<?php echo $ServerID ?>, datasets: [{label: "Players", data: xValues<?php echo $ServerID ?>, backgroundColor: "white", borderColor: "red", color: "white", borderWidth: 2, pointBorderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.4, pointBorderColor: "white",}]}, options: {scales: {x: {grid: {display:false}, ticks: {display: true}}, y: {<?php if ($lastplayers[0] < 200) {echo "beginAtZero: true, ";}?>grid:{display:true, color: 'rgb(70,70,70)',},}}, responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false,}}}});</script>
         </div>
     </div>
 </div>
