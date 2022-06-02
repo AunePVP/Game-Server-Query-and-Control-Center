@@ -83,6 +83,19 @@ if (mysqli_num_rows($result) > 0) {
         # Source Query
         switch ($type) {
             case "csgo":
+                    $Query = new SourceQuery();
+                    try {
+                        $Query->Connect($ip, $qport, SQ_TIMEOUT, SQ_ENGINE);
+                        $csgoruleresult = $Query->GetRules();
+                        $data["csgorules"] = "1";
+                    }
+                    catch( Exception $e )
+                    {
+                        $data["csgorules"] = "0";
+                    }
+                    finally {
+                        $Query->Disconnect();
+                    }
             case "valheim":
             case "protocol-valve":
             case "arkse":

@@ -1,6 +1,5 @@
 <?php
 require __DIR__ . '/SourceQuery/bootstrap.php';
-
 use xPaw\SourceQuery\SourceQuery;
 // For the sake of this example
 header( 'X-Content-Type-Options: nosniff' );
@@ -21,8 +20,12 @@ try
             $queryresult["rules"] = $Query->GetRules();
             break;
         case "csgo":
+            $lastplayerline = json_decode(tailCustom("query/cron/$ServerID.json", 1));
+            $csgorules = $lastplayerline->csgorules ?? "0";
             $queryresult["players"] = $Query->GetPlayers();
-            $queryresult["rules"] = $Query->GetRules();
+            if ($csgorules == "1") {
+                $queryresult["rules"] = $Query->GetRules();
+            }
             break;
         case "valheim":
             break;
