@@ -36,7 +36,7 @@ if ($type == "arkse") {
             echo '<div style="text-align:left">Map: '.$map.'</div>';
             echo '<div style="text-align:left">'.$language[$lang][11].$ingameday.'</div>';
         } elseif ($type == "valheim") {
-            echo('<a class="twitter-timeline" data-chrome="nofooter noheader" id="twitter-timeline" data-width="330" data-height="275" data-dnt="true" data-theme="dark" href="https://twitter.com/Valheimgame">Tweets by Valheimgame</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>');
+            echo('<a class="twitter-timeline" data-chrome="nofooter noheader noscrollbar" id="twitter-timeline" data-width="330" data-height="275" data-dnt="true" data-theme="dark" href="https://twitter.com/Valheimgame">Tweets by Valheimgame</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>');
         }
         ?>
     </div>
