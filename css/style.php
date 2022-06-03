@@ -218,13 +218,41 @@ $font['banner'] = "Helvetica, sans-serif";
     .II {
         text-align: left;
         min-width: -webkit-fit-content;
-        padding: 4px 7px;
+        padding: 4px 7px 0;
     }
     .II a {
         color: <?php echo $font['linkcolor']?>;
     }
+    .II.csgo th {
+        color: black;
+        font-weight: 600;
+    }
+    .II.csgo tbody {
+        display: block;
+        overflow-y: scroll;
+        max-height: 166px;
+    }
+    .II.csgo td.name {
+        max-width: 340px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+    }
+    .II.csgo td.value {
+        max-width: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: right;
+    }
+    .II.csgo table tr {
+        display: table;
+        width: 100%;
+    }
     .IV {
         min-width: 215px;
+        max-width: 215px;
         padding: 0 4px;
     }
     .IV p {
@@ -320,6 +348,10 @@ $font['banner'] = "Helvetica, sans-serif";
     }
     @media only screen and (min-width: 1700px) {
         .container {width: 75%;}
+    }
+    @media only screen and (min-width: 1400px) {
+        .csmovedivhide {display: none}
+        .II, .II table {width: 100%;}
     }
     @media only screen and (max-width: 1280px) {
         .map {height: 220px;}
