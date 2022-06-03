@@ -7,7 +7,7 @@ You can see the status of your game server and control it from a webpage written
 | Game                             | Query Protocol |        Verified        |
 |----------------------------------|----------------|:----------------------:|
 | ARK: Survival Evolved            | Valve Protocol |           ✅            |
-| Counter-Strike: Global Offensive | Valve Protocol |     ❌(Coming Soon)     |
+| Counter-Strike: Global Offensive | Valve Protocol |           ✅            |
 | Minecraft                        | Ping / Query   | ❌/ ✅ (almost finished) |
 | Valheim                          | Valve Protocol |           ✅            |
 | Factorio                         | Valve Protocol |           ❌            |
