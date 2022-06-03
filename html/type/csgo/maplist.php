@@ -1,0 +1,42 @@
+<?php
+
+$maplist = array(
+    'CsgoMapName' =>
+        array(
+            'ar_baggage' => 'Baggage',
+            'ar_dizzy' => 'Dizzy',
+            'ar_lunacy' => 'Lunacy',
+            'ar_monastery' => 'Monastery',
+            'ar_shoots' => 'Shoots',
+            'cs_agency' => 'Agency',
+            'cs_assault' => 'Assault',
+            'cs_climb' => 'Climb',
+            'cs_italy' => 'Italy',
+            'cs_militia' => 'Militia',
+            'cs_office' => 'Office',
+            'de_ancient' => 'Ancient',
+            'de_bank' => 'Bank',
+            'de_cache' => 'Cache',
+            'de_canals' => 'Canals',
+            'de_cbble' => 'Cobblestone',
+            'de_crete' => 'Crete',
+            'de_dust2' => 'Dust II',
+            'de_hive' => 'Hive',
+            'de_iris' => 'Iris',
+            'de_lake' => 'Lake',
+            'de_mirage' => 'Mirage',
+            'de_nuke' => 'Nuke',
+            'de_overpass' => 'Overpass',
+            'de_safehouse' => 'Safehouse',
+            'de_shortdust' => 'Shortdust',
+            'de_shortnuke' => 'Shortnuke',
+            'de_stmarc' => 'St. Marc',
+            'de_sugarcane' => 'Sugarcane',
+            'de_train' => 'Train',
+            'de_vertigo' => 'Vertigo',
+            'dz_blacksite' => 'Blacksite',
+            'dz_ember' => 'Ember',
+            'dz_sirocco' => 'Sirocco',
+            'dz_vineyard' => 'Vineyard'
+        ),
+);
