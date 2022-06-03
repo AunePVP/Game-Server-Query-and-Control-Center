@@ -54,16 +54,15 @@ if ($_SESSION['username'] != "admin") {
             if (!$conn) {
                 die("Connection failed: " . mysqli_connect_error());
             }
-            $sql = "SELECT ID, IP, BatPort, type FROM serverconfig WHERE owner='admin' AND enabled='1'";
+            $sql = "SELECT ID, IP, type FROM serverconfig";
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
-                $serverhelper = '{"serverowner":[';
                 while ($row = mysqli_fetch_assoc($result)) {
                     $battlemetricsid = $row["BatPort"];
                     $type = $row["type"];
                     $ip = $row["IP"];
                     $id = $row["ID"];
-                    $battlemetrics = json_decode(file_get_contents("https://api.battlemetrics.com/servers/" . $battlemetricsid));
+
                     $name = $battlemetrics->data->attributes->name;
                     $status = $battlemetrics->data->attributes->status;
                     $players = $battlemetrics->data->attributes->players;
@@ -123,8 +122,13 @@ if ($_SESSION['username'] != "admin") {
                 <div class="itemtitle">Releases</div>
                 <div class="item" style="width: auto; display: flex;">
                     <?php
-                    $options  = array('http' => array('user_agent' => 'AunePVP'));
-                    $context  = stream_context_create($options);
+                    $context = stream_context_create(
+                        array(
+                            "http" => array(
+                                "header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+                            )
+                        )
+                    );
                     $github = json_decode(file_get_contents('https://api.github.com/repos/AunePVP/Game-Server-Query-and-Control-Center/releases/latest', false, $context));
                     $releasename = $github->name;
                     $markdown = $github->body;
