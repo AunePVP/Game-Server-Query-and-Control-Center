@@ -6,7 +6,7 @@ switch ($theme) {
     case "dark":
         $server['color'] = "#3b3b3b";
         $players['color'] = "#ff2b2b";
-        $map['border'] = "none";
+        $mapimg['border'] = "none";
         $font['color'] = "#ebebeb";
         $font['linkcolor'] = "#d7d7d7";
         $font['serverlinkcolor'] = "#0093ff";
@@ -14,11 +14,13 @@ switch ($theme) {
     case "light":
         $server['color'] = "#F5F5F5";
         $players['color'] = "#FF0000";
-        $map['border'] = "5px solid #888888";
+        $mapimg['border'] = "5px solid #888888";
         $font['color'] = "black";
         $font['linkcolor'] = "#323232";
         $font['serverlinkcolor'] = "#007CFF";
         break;
+    default:
+        trigger_error("No theme chosen", E_USER_ERROR);
 }
 $server['spacing'] = "10px";
 $server['width'] = "80%";
@@ -341,7 +343,7 @@ $font['banner'] = "Helvetica, sans-serif";
     }
     /* END new tab css */
     .map {
-        border: <?php echo $map['border']?>;
+        border: <?php echo $mapimg['border']?>;
         border-radius: 8px;
         box-sizing: border-box;
         height: 234px;
