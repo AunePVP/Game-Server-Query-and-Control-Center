@@ -55,7 +55,7 @@ if (isset($_POST['reg_user'])) {
     if (count($errors) == 0) {
 
         // Password encryption to increase data security
-        $password = md5($password_1);
+        $password = hash('sha256', $password_1);
 
         // Inserting data into table
         $query = "INSERT INTO users (username, password) VALUES('$username', '$password')";
@@ -95,7 +95,7 @@ if (isset($_POST['login_user'])) {
     if (count($errors) == 0) {
 
         // Password matching
-        $password = md5($password);
+        $password = hash('sha256', $password);
 
         $query = "SELECT * FROM users WHERE username=
                 '$username' AND password='$password'";
