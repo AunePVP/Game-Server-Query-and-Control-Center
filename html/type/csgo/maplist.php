@@ -37,6 +37,7 @@ $maplist = array(
             'dz_blacksite' => 'Blacksite',
             'dz_ember' => 'Ember',
             'dz_sirocco' => 'Sirocco',
-            'dz_vineyard' => 'Vineyard'
+            'dz_vineyard' => 'Vineyard',
+            'ze_Bathroom_v2_5' => 'Bathroom v2.5'
         ),
 );
