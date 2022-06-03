@@ -73,7 +73,7 @@ if (array_key_exists('submit', $_POST)) {
             '$install = 1;' . "\n" .
             '$authentication = ' . $authenticationI . ';' . "\n" .
             '$create_users = ' . $create_usersI . ';' . "\n" .
-            '$steamwebapi_key = "' . $steamwebapi_keyI . '";' . "\n" . "\n" .
+            '$steamwebapi_key = "' . $steamwebapi_keyI . '";' . "\n\n" .
             '$DB_SERVER = "' . $DB_SERVERI . '";' . "\n" .
             '$DB_USERNAME = "' . $DB_USERNAMEI . '";' . "\n" .
             '$DB_PASSWORD = "' . $DB_PASSWORDI . '";' . "\n" .
