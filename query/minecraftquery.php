@@ -4,8 +4,6 @@ use xPaw\MinecraftPingException;
 use xPaw\MinecraftQuery;
 use xPaw\MinecraftQueryException;
 if ($qport == 0) {
-    require __DIR__ . '/minecraft/src/MinecraftPing.php';
-    require __DIR__ . '/minecraft/src/MinecraftPingException.php';
     try {
         $Query = new MinecraftPing($ip, $gport);
 
@@ -18,11 +16,7 @@ if ($qport == 0) {
             $Query->Close();
         }
     }
-}
-
-else {
-    require __DIR__ . '/minecraft/src/MinecraftQuery.php';
-    require __DIR__ . '/minecraft/src/MinecraftQueryException.php';
+} else {
     $Query = new MinecraftQuery();
     try {
         $Query->Connect($ip, $qport);

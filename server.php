@@ -1,51 +1,5 @@
 <?php
-// include conifg and get serverid from url
-require 'html/config.php';
-$ServerID = $_GET['serverid'];
-function tailCustom($filepath, $lines = 1, $adaptive = true)
-{
-    $f = @fopen($filepath, "rb");
-    if ($f === false) return false;
-    if (!$adaptive) $buffer = 4096;
-    else $buffer = ($lines < 2 ? 64 : ($lines < 10 ? 512 : 4096));
-    fseek($f, -1, SEEK_END);
-    if (fread($f, 1) != "\n") $lines -= 1;
-    $output = '';
-    $chunk = '';
-    while (ftell($f) > 0 && $lines >= 0) {
-        $seek = min(ftell($f), $buffer);
-        fseek($f, -$seek, SEEK_CUR);
-        $output = ($chunk = fread($f, $seek)) . $output;
-        fseek($f, -mb_strlen($chunk, '8bit'), SEEK_CUR);
-        $lines -= substr_count($chunk, "\n");
-    }
-    while ($lines++ < 0) {
-        $output= substr($output, strpos($output, "\n") + 1);
-    }
-    fclose($f);
-    return trim($output);
-}
-// Query DB for Server Data.
-$conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-$sql = "SELECT * FROM serverconfig WHERE ID='$ServerID'";
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    while($row = mysqli_fetch_assoc($result)) {
-        $ip = $row["IP"];
-        $type = $row["type"];
-        $qport = $row["QueryPort"];
-        $gport = $row["GamePort"];
-        $rport = $row["RconPort"];
-        $name = $row["Name"];
-    }
-} else {
-    echo "0 results";
-}
-$conn->close();
-// Query data -> decode data -> include correct file for reading data from array
+unset($Os, $img, $version, $password, $title, $motd, $connectlink, $map);
 switch ($type) {
     case "csgo":
     case "valheim":
@@ -57,11 +11,9 @@ switch ($type) {
         include 'query/minecraftquery.php';
         break;
 }
-$queryresult = $queryresult ?? false;
-$serverstatus = json_decode($queryresult);
-//include('html/type/'.$type.'/index.php');
-include 'html/type/query.php';
-// If the server is offline, it will show a red colour on the website. If its red, it will show a green colour.
+$serverstatus = json_decode($queryresult ?? false);
+require 'html/type/query.php';
+// Set color if server is offline or online
 if ($status == 1) {
     $statusfarbe ='background-color: #00FF17;';
 } else {

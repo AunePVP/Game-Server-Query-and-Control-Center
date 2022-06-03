@@ -1,15 +1,6 @@
 <?php
-require __DIR__ . '/SourceQuery/bootstrap.php';
 use xPaw\SourceQuery\SourceQuery;
-// For the sake of this example
-header( 'X-Content-Type-Options: nosniff' );
-
-// Edit this ->
-define( 'SQ_TIMEOUT',     1 );
-define( 'SQ_ENGINE',      SourceQuery::SOURCE );
-// Edit this <-
 $Query = new SourceQuery( );
-
 try
 {
     $Query->Connect( $ip, $qport, SQ_TIMEOUT, SQ_ENGINE );
@@ -40,3 +31,4 @@ finally
 {
     $Query->Disconnect( );
 }
+?>

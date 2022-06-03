@@ -1,11 +1,11 @@
 <?php
 use AunePVP\jsonconversion;
 use Spirit55555\Minecraft\MinecraftColors;
-require 'html/type/minecraft/jsonconversion.php';
-require 'html/type/minecraft/minecraftcolor.php';
+//require 'html/type/minecraft/jsonconversion.php';
+//require 'html/type/minecraft/minecraftcolor.php';
 
 // function to convert shortend os name to full name
-function convertos($Os)
+/*function convertos($Os)
 {
     $Opers = array(
         'l' => 'Linux',
@@ -13,7 +13,7 @@ function convertos($Os)
         'm' => 'Mac'
     );
     return $Opers[$Os];
-}
+}*/
 
 //#// GLOBAL //#//
 
@@ -50,7 +50,7 @@ switch ($type) {
         $title = $serverstatus->info->HostName;
         // If the server is offline, it won't respond. Therefore, in this case, we must use the cached title from the database
         if (empty($title)) {
-        $title = $name;
+            $title = $name;
         }
         // Create the connect link
         $connectlink = "steam://connect/$ip:$gport";
