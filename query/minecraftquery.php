@@ -30,6 +30,7 @@ else {
         $queryresult["info"] = ($Query->GetInfo());
         $queryresult["players"] = ($Query->GetPlayers());
         $queryresult = json_encode($queryresult);
+        #$queryresult =  ('{"info":{"HostName":"?4Linux?aGSM?3 von ?eLeo","GameType":"SMP","GameName":"MINECRAFT","Version":"1.18.2","Plugins":"","Map":"world","Players":0,"MaxPlayers":20,"HostPort":25565,"HostIp":"193.23.126.118","Software":"Vanilla"},"players":false}');
     } catch (MinecraftQueryException $e) {
         echo $e->getMessage();
     }
