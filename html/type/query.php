@@ -44,6 +44,8 @@ switch ($type) {
         $countplayers = $serverstatus->info->Players;
         // Get Maxplayers
         $maxplayers = $serverstatus->info->MaxPlayers ?? '0';
+        // Get server version
+        $version = $serverstatus->info->Version;
         // Get the server name
         $title = $serverstatus->info->HostName;
         // If the server is offline, it won't respond. Therefore, in this case, we must use the cached title from the database
@@ -170,4 +172,17 @@ switch ($type) {
             $title = $name;
         }
         break;
+    case "csgo":
+        if (isset($serverstatus->rules)) {
+            $count = 0;
+            foreach ($serverstatus->rules as $rulename => $rule) {
+                $count++;
+                $rulename = ucwords(str_replace("_"," ", $rulename));
+                $csgorule[$count][1] = $rulename;
+                $csgorule[$count][2] = $rule;
+                if (empty($csgorule[$count][2])) {$csgorule[$count][2] = "0";}
+            }
+        }
+        break;
+
 }
