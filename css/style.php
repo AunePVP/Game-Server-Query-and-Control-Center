@@ -2,6 +2,7 @@
 header("Content-type: text/css");
 $theme = "light"; // Choose between dark and light
 $background = "#1D1D1F";
+echo $querytime['display'] = "block"; // Display Querytime at bottom of page
 switch ($theme) {
     case "dark":
         $server['color'] = "#3b3b3b";
@@ -10,6 +11,7 @@ switch ($theme) {
         $font['color'] = "#ebebeb";
         $font['linkcolor'] = "#d7d7d7";
         $font['serverlinkcolor'] = "#0093ff";
+        $querytime['color'] = "white";
         break;
     case "light":
         $server['color'] = "#F5F5F5";
@@ -18,6 +20,7 @@ switch ($theme) {
         $font['color'] = "black";
         $font['linkcolor'] = "#323232";
         $font['serverlinkcolor'] = "#007CFF";
+        $querytime['color'] = "white";
         break;
     default:
         trigger_error("No theme chosen", E_USER_ERROR);
@@ -86,7 +89,7 @@ $font['banner'] = "Helvetica, sans-serif";
         padding: 0;
     }
     html, body {
-        min-height: 90vh;
+        min-height: 100vh;
         background-color: #1D1D1F;
         text-align: center;
         font-family: Montserrat, sans-serif;
@@ -268,7 +271,6 @@ $font['banner'] = "Helvetica, sans-serif";
         overflow-y: scroll;
         padding: 0 7px;
     }
-    /* vchart div */
     .canvasparent {
         height: 120px!important;
     }
@@ -276,9 +278,6 @@ $font['banner'] = "Helvetica, sans-serif";
         background-color: #1D1D1F;
         width: 195px;
         padding: 12px 10px 10px 10px;
-    }
-    .vchart {
-        /*margin: auto;*/
     }
     .vchartdiv .servername p {
         font-family: Helvetica, serif;
@@ -336,17 +335,18 @@ $font['banner'] = "Helvetica, sans-serif";
         color: white;
         letter-spacing: 2px;
     }
-    /* END vchart div*/
-    /* New tab css */
     .tab {
         padding: <?php echo $tab['padding']?>;
     }
-    /* END new tab css */
     .map {
         border: <?php echo $mapimg['border']?>;
         border-radius: 8px;
         box-sizing: border-box;
         height: 234px;
+    }
+    .querytime {
+        display: <?php echo $querytime['display'] ?>;
+        color: <?php echo $querytime['color'] ?>;
     }
     @media only screen and (min-width: 1700px) {
         .container {width: 75%;}
