@@ -33,23 +33,18 @@ require_once 'html/config.php' ;
           die("Connection failed: " . mysqli_connect_error());
       }
       if (!isset($username)) {$username = "public";};
-      $sql = "SELECT ID FROM serverconfig WHERE owner='$username' AND enabled='1'";
+      $sql = "SELECT server FROM users WHERE username='$username'";
       $result = mysqli_query($conn, $sql);
       if (mysqli_num_rows($result) > 0) {
-          $serverhelper = '{"serverowner":[';
           while($row = mysqli_fetch_assoc($result)) {
-              $serverid = $row["ID"];
-              $serverhelper = $serverhelper.'{"sID":"'.$serverid.'"},';
+              $serverjson = json_decode($row["server"]);
           }
       } else {
           echo "0 results";
       }
-      if (isset($serverhelper)) {
-          $serverhelper = $serverhelper.'{"zero":"zero"}]}';
+      if (isset($serverjson)) {
           mysqli_close($conn);
-          $serverhelper = json_decode($serverhelper);
-          foreach ($serverhelper->serverowner as $value) {
-              $ServerID = $value->sID ?? '';
+          foreach ($serverjson as $ServerID) {
               if (!empty($ServerID)){
                   readfile("$url?serverid=$ServerID");
               }
@@ -57,7 +52,7 @@ require_once 'html/config.php' ;
       }
       if ($username == "public") {
           echo "<div class='white-inftext'>".$language[$lang][9]."</div>";
-      }
+      };
       ?>
       </div>
 </body>
