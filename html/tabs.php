@@ -18,10 +18,17 @@ if ($type == "arkse") {
     $display['IV'] = "block";
 } elseif ($type == "csgo") {
     $display['IV'] = "block";
-    $officialmaps = array("de_dust2", "ar_baggage", "ar_dizzy", "ar_lunacy", "ar_monastery", "ar_shoots", "cs_agency", "cs_assault", "cs_climb", "cs_italy", "cs_militia", "cs_office", "de_ancient", "de_bank", "de_cache", "de_canals", "de_cbble", "de_crete", "de_dust2", "de_hive", "de_inferno", "de_iris", "de_lake", "de_mirage", "de_nuke", "de_overpass", "de_safehouse", "de_shortdust", "de_shortnuke", "de_stmarc", "de_sugarcane", "de_train", "de_vertigo", "dz_blacksite", "dz_ember", "dz_sirocco", "dz_vineyard", "gd_cbble");
+    $officialmaps = array("ar_baggage", "ar_dizzy", "ar_lunacy", "ar_monastery", "ar_shoots", "cs_agency", "cs_assault", "cs_climb", "cs_italy", "cs_militia", "cs_office", "de_ancient", "de_bank", "de_cache", "de_canals", "de_cbble", "de_crete", "de_dust2", "de_hive", "de_inferno", "de_iris", "de_lake", "de_mirage", "de_nuke", "de_overpass", "de_safehouse", "de_shortdust", "de_shortnuke", "de_stmarc", "de_sugarcane", "de_train", "de_vertigo", "dz_blacksite", "dz_ember", "dz_sirocco", "dz_vineyard", "ze_Bathroom_v2_5");
+    function convertcsgomapname($mapname)
+    {
+        include ('html/type/csgo/maplist.php');
+        return $mapname['CsgoMapName'][$mapname];
+    }
     if (in_array($map, $officialmaps)) {
         $maplink = "html/img/map/$map.webp";
+        $mapname = convertcsgomapname($map) ?? $map;
     } else {
+        $mapname = ucwords(str_replace("_"," ", substr($map, 3)));
         $maplink = "html/img/map/modmap.webp";
     }
 } elseif ($type == "valheim") {
@@ -45,32 +52,20 @@ if ($type == "arkse") {
             echo('<a class="twitter-timeline" data-chrome="nofooter noheader noscrollbar" id="twitter-timeline" data-width="330" data-height="275" data-dnt="true" data-theme="dark" href="https://twitter.com/Valheimgame">Tweets by Valheimgame</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>');
         } elseif ($type == "csgo") {
             echo '<img class="map" src="'.$maplink.'" alt="'.$maplink.'">';
-            echo '<div style="text-align:left;max-width: 234px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Map:<br> '.$map.'</div>';
+            echo '<div style="text-align:left;max-width: 234px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Map: '.$mapname.'</div>';
         }
         ?>
     </div>
-    <div class="II">
+    <div class="II <?php if($type=="csgo"){echo'csgo';}?>">
         <?php
-        switch ($type) {
-            case "valheim":
-                echo "System: $Os<br>";
-                echo "Map: $map<br>";
-                echo "Max Players: $maxplayers<br>";
-                echo "Query Port: $qport<br>";
-                echo "Steam Page: <a href='https://store.steampowered.com/app/892970/Valheim/' target='_blank' rel='noopener noreferrer'>Link</a><br>";
-                echo "Wiki: <a href='https://valheim.fandom.com/wiki/Valheim_Wiki' target='_blank' rel='noopener noreferrer'>Link</a><br>";
-                echo "Website: <a href='https://www.valheimgame.com' target='_blank' rel='noopener noreferrer'>Link</a><br>";
-
-                break;
-        }
         if ($type == "arkse") {
-            echo "System: $Os<br>";
-            echo "Cluster ID: $clusterid<br>";
-            if ($pve == "true") {echo "PVE: True<br>";} else {echo "PVP: True<br>";}
-            if ($password == "true" ) {echo $language[$lang][12]." :True<br>";} else {echo $language[$lang][12]." :False<br>";}
-            if ($battleye == "true") {echo "Battleye: True<br>";} else {echo "Battleye: False<br>";}
+            echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
+            echo "<span style='font-weight: 500;'>Cluster ID:</span> $clusterid<br>";
+            if ($pve == "true") {echo "<span style='font-weight: 500;'>PVE:</span> True<br>";} else {echo "<span style='font-weight: 500;'>PVP:</span> True<br>";}
+            if ($password == "true" ) {echo "<span style='font-weight: 500;'>".$language[$lang][12].":</span> True<br>";} else {echo "<span style='font-weight: 500;'>".$language[$lang][12].":</span> False<br>";}
+            if ($battleye == "true") {echo "<span style='font-weight: 500;'>Battleye:</span> True<br>";} else {echo "<span style='font-weight: 500;'>Battleye:</span> False<br>";}
             if ($hasmods) {
-                echo "Mods:<br>";
+                echo "<span style='font-weight: 500;'>Mods:</span><br>";
                 foreach ($mods as $mod) {
                     echo $modlink . $mod . '" target="_blank">';
                     $convertedmod = convertmodlistark($mod);
@@ -82,10 +77,36 @@ if ($type == "arkse") {
                     echo "</a><br>";
                 }
             }
+        } elseif ($type == "valheim") {
+            echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
+            echo "<span style='font-weight: 500;'>Map:</span> $map<br>";
+            echo "<span style='font-weight: 500;'>Max Players:</span> $maxplayers<br>";
+            echo "<span style='font-weight: 500;'>Query Port:</span> $qport<br>";
+            echo "<span style='font-weight: 500;'>Steam Page:</span> <a href='https://store.steampowered.com/app/892970/Valheim/' target='_blank' rel='noopener noreferrer'>Link</a><br>";
+            echo "<span style='font-weight: 500;'>Wiki:</span> <a href='https://valheim.fandom.com/wiki/Valheim_Wiki' target='_blank' rel='noopener noreferrer'>Link</a><br>";
+            echo "<span style='font-weight: 500;'>Website:</span> <a href='https://www.valheimgame.com' target='_blank' rel='noopener noreferrer'>Link</a><br>";
+        } elseif ($type == "csgo") {
+            echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
+            echo "<span style='font-weight: 500;'>Version:</span> $version<br>";
+            if ($password == "true" ) {echo "<span style='font-weight: 500;'>".$language[$lang][12]."</span>: True<br>";} else {echo "<span style='font-weight: 500;'>".$language[$lang][12]."</span>: False<br>";}
+            if (isset($serverstatus->rules)) {
+                echo "<span style='font-weight: 500;'>Server Settings:<br></span>";
+                echo "<div style='height: 100%; width: 100%;'>";
+                echo "<table><thead><tr style='border-bottom: solid;border-width: 2px;'><th>Name</th><th style='text-align: right'>Value</th></tr></thead><tbody>";
+                // Print every rulename and value inside the table
+                foreach ($csgorule as $rule) {
+                    echo "<tr><td class='name'>";
+                    print_r($rule[1]);
+                    echo "</td><td class='value'>";
+                    print_r($rule[2]);
+                    echo "</td></tr>";
+                }
+                echo "</tbody></table></div>";
+            }
         }
         ?>
     </div>
-    <div class="movediv"></div>
+    <div class="movediv<?php if ($type == "csgo" && isset($serverstatus->rules)) {echo " csmovedivhide";}?>"></div>
     <div class="III">
     </div>
     <div class="IV" style="display:<?php echo $display['IV']?>">
