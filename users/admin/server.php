@@ -61,7 +61,7 @@ if ($_SESSION['username'] != "admin") {
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
         }
-        $sql = "SELECT ID, IP, BatPort, type FROM serverconfig WHERE owner='admin' AND enabled='1'";
+        $sql = "SELECT ID, IP, type FROM serverconfig WHERE owner='admin' AND enabled='1'";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             $serverhelper = '{"serverowner":[';
@@ -123,36 +123,79 @@ if ($_SESSION['username'] != "admin") {
             echo "0 results";
         }
         $conn->close();
-        switch ($type) {
-            case "arkse":
-                include '../../query/sourcequery.php';
-                $serverstatus = json_decode($queryresult);
-                $arr = json_decode($queryresult, true);
-                include('../../html/type/arkse/index.php');
-                break;
-            case "minecraft":
-                include '../../query/minecraftquery.php';
-                $serverstatus = json_decode($queryresult);
-                include('../../html/type/minecraft/index.php');
-                break;
-            case "valheim":
-                include '../../query/sourcequery.php';
-                $serverstatus = json_decode($queryresult);
-                include('../../html/type/valheim/index.php');
-                break;
-            case "protocol-valve":
-                include '../../query/sourcequery.php';
-                $serverstatus = json_decode($queryresult);
-                include('../../html/type/protocol-valve/index.php');
-                break;
-            case "csgo":
-                include '../../query/sourcequery.php';
-                $serverstatus = json_decode($queryresult);
-                include('../../html/type/csgo/index.php');
-                break;
-        }
     ?>
-    <div id="Hostname"><?php echo $titlename ?></div>
+        <?php
+        $logFile = "/var/log/nginx/error.log";
+        $interval = 1000;
+        $color = "";
+
+        if(!$color) {$textColor = "white";};
+        if($interval < 100)  {$interval = 100;};
+            ?>
+
+            <style>
+                @import url(https://fonts.googleapis.com/css?family=Ubuntu);
+                body{
+                    background-color: black;
+                    color: <?php echo $textColor; ?>;
+                    font-family: 'Ubuntu', sans-serif;
+                    font-size: 16px;
+                    line-height: 20px;
+                }
+                h4{
+                    font-size: 18px;
+                    line-height: 22px;
+                    color: #353535;
+                }
+                #log {
+                    position: relative;
+                    top: -34px;
+                }
+                #scrollLock{
+                    width:2px;
+                    height: 2px;
+                    overflow:visible;
+                }
+            </style>
+            <script>
+                setInterval(readLogFile, <?php echo $interval; ?>);
+                window.onload = readLogFile;
+                var pathname = window.location.pathname;
+                var scrollLock = true;
+
+                $(document).ready(function(){
+                    $('.disableScrollLock').click(function(){
+                        $("html,body").clearQueue()
+                        $(".disableScrollLock").hide();
+                        $(".enableScrollLock").show();
+                        scrollLock = false;
+                    });
+                    $('.enableScrollLock').click(function(){
+                        $("html,body").clearQueue()
+                        $(".enableScrollLock").hide();
+                        $(".disableScrollLock").show();
+                        scrollLock = true;
+                    });
+                });
+                function readLogFile(){
+                    $.get(pathname, { getLog : "true" }, function(data) {
+                        data = data.replace(new RegExp("\n", "g"), "<br />");
+                        $("#log").html(data);
+
+                        if(scrollLock == true) { $('html,body').animate({scrollTop: $("#scrollLock").offset().top}, <?php echo $interval; ?>) };
+                    });
+                }
+            </script>
+            <body>
+            <h4><?php echo $logFile; ?></h4>
+            <div id="log">
+
+            </div>
+            <div id="scrollLock"> <input class="disableScrollLock" type="button" value="Disable Scroll Lock" /> <input class="enableScrollLock" style="display: none;" type="button" value="Enable Scroll Lock" /></div>
+
+
+
+        <div id="Hostname"><?php echo $titlename ?></div>
     <div class="ctrlsett">
         <a class="control">Control</a>
         <a class="settings">Settings</a>
@@ -161,10 +204,7 @@ if ($_SESSION['username'] != "admin") {
         <div></div>
         <div></div>
     </div>
+</div>
     <?php
     endif;
     ?>
-</div>
-</main>
-</body>
-</html>
