@@ -108,8 +108,6 @@ class SourceRcon
             if( $PacketSize === 0 )
             {
                 throw new InvalidPacketException( 'Read ' . strlen( $Data ) . ' bytes from socket, ' . $Remaining . ' remaining', InvalidPacketException::BUFFER_EMPTY );
-
-                break;
             }
 
             $Data .= $Data2;
