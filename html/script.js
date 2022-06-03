@@ -4,7 +4,6 @@ function steamwebapikeyFuntion() {
         x.type = "text";
         x.size = "33";
         x.style.textAlign = "center";
-        x.s
     } else {
         x.type = "password";
         x.size = "17";
