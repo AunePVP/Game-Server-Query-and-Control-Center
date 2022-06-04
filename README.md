@@ -10,6 +10,7 @@ You can see the status of your game server and control it from a webpage written
 | Counter-Strike: Global Offensive | Valve Protocol |           ✅            |
 | Minecraft                        | Ping / Query   | ❌/ ✅ (almost finished) |
 | Valheim                          | Valve Protocol |           ✅            |
+| Vrising                          | Valve Protocol |    ❌ (coming soon)     |
 | Factorio                         | Valve Protocol |           ❌            |
 | Conan Exiles                     | Valve Protocol |           ❌            |
 | Rust                             | Valve Protocol |           ❌            |
