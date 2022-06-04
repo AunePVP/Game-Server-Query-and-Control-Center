@@ -88,7 +88,7 @@ if ($type == "arkse") {
         } elseif ($type == "csgo") {
             echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
             echo "<span style='font-weight: 500;'>Version:</span> $version<br>";
-            if ($password == "true" ) {echo "<span style='font-weight: 500;'>".$language[$lang][12]."</span>: True<br>";} else {echo "<span style='font-weight: 500;'>".$language[$lang][12]."</span>: False<br>";}
+            if ($password == "true" ?? false) {echo "<span style='font-weight: 500;'>".$language[$lang][12]."</span>: True<br>";} else {echo "<span style='font-weight: 500;'>".$language[$lang][12]."</span>: False<br>";}
             if (isset($serverstatus->rules)) {
                 echo "<span style='font-weight: 500;'>Server Settings:<br></span>";
                 echo "<div style='height: 100%; width: 100%;'>";
