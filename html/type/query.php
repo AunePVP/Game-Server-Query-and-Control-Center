@@ -38,8 +38,10 @@ switch ($type) {
     case "protocol-valve":
     case "arkse":
         // Get the operating system and convert it to full name
-        $Os = $serverstatus->info->Os ?? '';
-        $Os = convertos($Os);
+        if (function_exists("convertos")) {
+            $Os = $serverstatus->info->Os ?? '';
+            $Os = convertos($Os);
+        }
         // Get Players. Note Ark will use another method to get the players
         $countplayers = $serverstatus->info->Players;
         // Get Maxplayers
@@ -173,6 +175,7 @@ switch ($type) {
         }
         break;
     case "csgo":
+        $password = $serverstatus->rules->ServerPassword_b ?? '';
         if (isset($serverstatus->rules)) {
             $count = 0;
             foreach ($serverstatus->rules as $rulename => $rule) {
