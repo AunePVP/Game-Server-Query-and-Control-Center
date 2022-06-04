@@ -2,7 +2,7 @@
 header("Content-type: text/css");
 $theme = "light"; // Choose between dark and light
 $background = "#1D1D1F";
-echo $querytime['display'] = "block"; // Display Querytime at bottom of page
+$querytime['display'] = "block"; // Display Querytime at bottom of page
 switch ($theme) {
     case "dark":
         $server['color'] = "#3b3b3b";
