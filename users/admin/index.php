@@ -1,12 +1,45 @@
 <?php
 require_once '../../html/config.php';
+require '../../query/SourceQuery/bootstrap.php';
+require '../../query/minecraft/src/MinecraftPing.php';
+require '../../query/minecraft/src/MinecraftPingException.php';
+require '../../query/minecraft/src/MinecraftQuery.php';
+require '../../query/minecraft/src/MinecraftQueryException.php';
+require '../../html/type/minecraft/jsonconversion.php';
+require '../../html/type/minecraft/minecraftcolor.php';
+use xPaw\SourceQuery\SourceQuery;
+const SQ_TIMEOUT = 1;
+const SQ_ENGINE = SourceQuery::SOURCE;
 session_start();
 if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You have to log in first";
-    header('location: login.php');
+    header('location: ../login.php');
 }
 if ($_SESSION['username'] != "admin") {
     header("location: ../login.php");
+}
+function tailCustom($filepath, $lines = 1, $adaptive = true)
+{
+    $f = @fopen($filepath, "rb");
+    if ($f === false) return false;
+    if (!$adaptive) $buffer = 4096;
+    else $buffer = ($lines < 2 ? 64 : ($lines < 10 ? 512 : 4096));
+    fseek($f, -1, SEEK_END);
+    if (fread($f, 1) != "\n") $lines -= 1;
+    $output = '';
+    $chunk = '';
+    while (ftell($f) > 0 && $lines >= 0) {
+        $seek = min(ftell($f), $buffer);
+        fseek($f, -$seek, SEEK_CUR);
+        $output = ($chunk = fread($f, $seek)) . $output;
+        fseek($f, -mb_strlen($chunk, '8bit'), SEEK_CUR);
+        $lines -= substr_count($chunk, "\n");
+    }
+    while ($lines++ < 0) {
+        $output = substr($output, strpos($output, "\n") + 1);
+    }
+    fclose($f);
+    return trim($output);
 }
 ?>
 <!doctype html>
@@ -54,36 +87,38 @@ if ($_SESSION['username'] != "admin") {
             if (!$conn) {
                 die("Connection failed: " . mysqli_connect_error());
             }
-            $sql = "SELECT ID, IP, type FROM serverconfig";
+            $sql = "SELECT * FROM serverconfig";
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
-                    $battlemetricsid = $row["BatPort"];
-                    $type = $row["type"];
-                    $ip = $row["IP"];
+                    unset($queryresult);
                     $id = $row["ID"];
-
-                    $name = $battlemetrics->data->attributes->name;
-                    $status = $battlemetrics->data->attributes->status;
-                    $players = $battlemetrics->data->attributes->players;
-                    $maxplayers = $battlemetrics->data->attributes->maxPlayers;
+                    $ip = $row["IP"];
+                    $type = $row["type"];
+                    $qport = $row["QueryPort"];
+                    $gport = $row["GamePort"];
+                    $rport = $row["RconPort"];
+                    $name = $row["Name"];
+                    $enabled = $row["enabled"];
                     switch ($type) {
+                        case "csgo":
+                        case "valheim":
+                        case "protocol-valve":
                         case "arkse":
-                            $img = "https://cdn.muehlhaeusler.online/img/tracker/game-logos/ark.png";
+                            include '../../query/sourcequery.php';
                             break;
                         case "minecraft":
-                            $img = "https://api.mcsrvstat.us/icon/".$ip;
+                            include '../../query/minecraftquery.php';
                             break;
-                        case "valheim":
-                            $img = "https://cdn.muehlhaeusler.online/img/tracker/game-logos/valheim.png";
-                            break;
-                        case "csgo":
-                            $img = "https://cdn.muehlhaeusler.online/img/tracker/game-logos/csgo.png";
-                            break;
-                        default:
-                            $img = "";
                     }
-                    echo "<div class='serversnippet flex' ".'onclick="'."location.href='server.php?id=$id';".'"'."><div class='status $status'></div><div class='content'><div class='name'>$name</div><div class='logo flex'><img src='$img' width='85px' height='85px'></div><div class='player'>$players/$maxplayers</div></div></div>";
+                    $serverstatus = json_decode($queryresult ?? false);
+                    include '../../html/type/query.php';
+                    // Correct image link if necessary
+                    $imgcheck = $rest = substr($img, 0 ,5);
+                    if ($imgcheck == "html/") {
+                        $img = "../../$img";
+                    }
+                    echo "<div class='serversnippet flex' ".'onclick="'."location.href='server.php?id=$id';".'"'."><div class='status $status'></div><div class='content'><div class='name'>$name</div><div class='logo flex'><img src='$img' width='85px' height='85px'></div><div class='player'>$countplayers/$maxplayers</div></div></div>";
                 }
             } else {
                 echo "0 results";
@@ -176,6 +211,7 @@ if($emarkdown):
     </script>
 <?php
 endif;
+file_put_contents("text.txt", "1" . "\n", FILE_APPEND);
 ?>
 </body>
 </html>
