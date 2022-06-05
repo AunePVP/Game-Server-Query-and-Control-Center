@@ -8,11 +8,28 @@ require 'query/minecraft/src/MinecraftQueryException.php';
 require 'html/type/minecraft/jsonconversion.php';
 require 'html/type/minecraft/minecraftcolor.php';
 require_once 'html/config.php';
+if (file_exists("query/cron/cache/minecraft.php")) {
+    include 'query/cron/cache/minecraft.php';
+}
 
 use xPaw\SourceQuery\SourceQuery;
 
 const SQ_TIMEOUT = 1;
 const SQ_ENGINE = SourceQuery::SOURCE;
+function minecraftcache($username) {
+    global $mcuuid;
+
+    if (!isset($mcuuid[$username])) {
+        $data = json_decode(file_get_contents("https://api.mojang.com/users/profiles/minecraft/$username"));
+        $uuid = $data->id;
+        $data = '$mcuuid[\''.$username.'\'] = "'. $uuid .'";';
+        file_put_contents("query/cron/cache/minecraft.php", $data . "\n", FILE_APPEND);
+        return $uuid;
+    } else {
+        return $mcuuid[$username];
+    }
+
+}
 function tailCustom($filepath, $lines = 1, $adaptive = true)
 {
     $f = @fopen($filepath, "rb");

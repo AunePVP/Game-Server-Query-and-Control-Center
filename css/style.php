@@ -100,7 +100,10 @@ $font['banner'] = "Helvetica, sans-serif";
 
     }
     .movediv {
-        width: 100%;t
+        width: 100%;
+    }
+    .mcmovedivhide {
+        display: none;
     }
     .flex {
         display: flex;
@@ -338,12 +341,45 @@ $font['banner'] = "Helvetica, sans-serif";
     }
     .tab {
         padding: <?php echo $tab['padding']?>;
+        -ms-user-select: auto;
+        -moz-user-select: auto;
+        -webkit-user-select: auto;
+        user-select: auto;
     }
     .map {
         border: <?php echo $mapimg['border']?>;
         border-radius: 8px;
         box-sizing: border-box;
         height: 234px;
+    }
+    .mcheads {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .mcheads .mchead {
+        display: grid;
+        width: 95px;
+        padding-bottom: 5px;
+    }
+    .mcheads .mchead img {
+        width: 60px;
+        padding: 3px;
+        margin: 0 auto;
+    }
+    .mcheads .mchead .name {
+        text-align: center;
+        max-width: 90px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        min-height: 28px;
+        word-break: break-word;
+        font-family: Helvetica Neue, sans-serif;
+        font-weight: 300;
+        font-size: 14px;
     }
     .querytime {
         display: <?php echo $querytime['display'] ?>;

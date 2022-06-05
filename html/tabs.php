@@ -84,7 +84,7 @@ if ($type == "arkse") {
         ?>
     </div>
     <!-- DETAILS -->
-    <div class="II <?php if($type=="csgo"){echo'csgo';}?>">
+    <div class="II <?php if($type=="csgo"){echo'csgo';}elseif($type=="minecraft"&&$qport == 0) {echo "flex";}?>">
         <?php
         if ($type == "arkse") {
             echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
@@ -150,11 +150,20 @@ if ($type == "arkse") {
             }
             echo "</div>";
         } elseif ($type == "minecraft") {
-
+            if ($qport == 0) {
+                echo '<div style="margin:auto">'.$language[$lang][13].'</div>';
+            } else {
+                echo "<div class='mcheads'>";
+                foreach ($serverstatus->players as $player) {
+                    $crafatar = "https://crafatar.com/avatars/". minecraftcache($player);
+                    echo "<div class='mchead'><img src='$crafatar' alt='Skin from crafatar'><div class='name'>$player</div></div>";
+                }
+                echo "</div>";
+            }
         }
         ?>
     </div>
-    <div class="movediv<?php if ($type == "csgo" && isset($serverstatus->rules)) {echo " csmovedivhide";}?>"></div>
+    <div class="movediv<?php if ($type == "csgo" && isset($serverstatus->rules)){echo " csmovedivhide";} elseif ($type == "minecraft"){echo " mcmovedivhide";}?>"></div>
     <!-- DIV III (Not used yet) -->
     <div class="III"></div>
     <div class="IV" style="display:<?php echo $display['IV']?>">

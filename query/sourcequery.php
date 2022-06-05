@@ -15,6 +15,7 @@ try
             // Why do I isolate csfo from the other servers? Because CSGO doesn't always respond to a A2S_RULES query.
         case "csgo":
             $lastplayerline = json_decode(tailCustom("query/cron/$ServerID.json", 1));
+            // I check with the cronjob if the server accepts A2S_Rules Requests.
             $csgorules = $lastplayerline->csgorules ?? "0";
             $queryresult["players"] = $Query->GetPlayers();
             if ($csgorules == "1") {

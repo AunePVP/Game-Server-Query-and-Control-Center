@@ -4,18 +4,18 @@
 ### Still in development!
 You can see the status of your game server and control it from a webpage written in PHP
 ## Supported Gameserver
-| Game                             | Query Protocol |        Verified        |
-|----------------------------------|----------------|:----------------------:|
-| ARK: Survival Evolved            | Valve Protocol |           ✅            |
-| Counter-Strike: Global Offensive | Valve Protocol |           ✅            |
-| Minecraft                        | Ping / Query   | ❌/ ✅ (almost finished) |
-| Valheim                          | Valve Protocol |           ✅            |
-| Vrising                          | Valve Protocol |           ✅            |
-| Conan Exiles                     | Valve Protocol |           ❌            |
-| Rust                             | Valve Protocol |           ✅            |
-| PixARK                           | Valve Protocol |           ❌            |
-| Satisfactory                     | Valve Protocol |           ❌            |
-| Grand Theft Auto V - FiveM       |                |    ❌ (Coming Soon)     |
+| Game                             | Query Protocol |    Verified     |
+|----------------------------------|----------------|:---------------:|
+| ARK: Survival Evolved            | Valve Protocol |        ✅        |
+| Counter-Strike: Global Offensive | Valve Protocol |        ✅        |
+| Minecraft                        | Ping / Query   |        ✅        |
+| Valheim                          | Valve Protocol |        ✅        |
+| Vrising                          | Valve Protocol |        ✅        |
+| Conan Exiles                     | Valve Protocol |        ❌        |
+| Rust                             | Valve Protocol |        ✅        |
+| PixARK                           | Valve Protocol |        ❌        |
+| Satisfactory                     | Valve Protocol |        ❌        |
+| Grand Theft Auto V - FiveM       |                | ❌ (Coming Soon) |
 
 There are many more games that are supported. If your game is missing...
 
