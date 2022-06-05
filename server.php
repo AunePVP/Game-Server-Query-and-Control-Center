@@ -3,6 +3,7 @@ unset($Os, $img, $version, $password, $title, $motd, $connectlink, $map);
 switch ($type) {
     case "csgo":
     case "valheim":
+    case "vrising":
     case "protocol-valve":
     case "arkse":
         include 'query/sourcequery.php';

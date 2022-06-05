@@ -34,7 +34,8 @@ if ($type == "arkse") {
 } elseif ($type == "valheim") {
     $display['IV'] = "none";
 } elseif ($type == "vrising") {
-    $display['IV'] = "none";
+    $maplink = "html/img/map/$map.webp";
+    $display['IV'] = "block";
 } elseif ($type == "fivem") {
     $display['IV'] = "none";
 }
@@ -42,20 +43,27 @@ if ($type == "arkse") {
 <style>
 </style>
 <div class="tab flex">
+    <!-- MAP -->
     <div class="I" style="<?php if($type=="valheim"){echo "min-width:330px";}?>">
         <?php
         if ($type == "arkse") {
             echo '<img class="map" src="'.$maplink.'" alt="'.$maplink.'">';
-            echo '<div style="text-align:left">Map: '.$map.'</div>';
-            echo '<div style="text-align:left">'.$language[$lang][11].$ingameday.'</div>';
+            echo '<div style="text-align:left"><span style="font-weight: 500;">Map:</span> '.$map.'</div>';
+            echo '<div style="text-align:left"><span style="font-weight: 500;">'.$language[$lang][11]."</span>".$ingameday.'</div>';
         } elseif ($type == "valheim") {
             echo('<a class="twitter-timeline" data-chrome="nofooter noheader noscrollbar" id="twitter-timeline" data-width="330" data-height="275" data-dnt="true" data-theme="dark" href="https://twitter.com/Valheimgame">Tweets by Valheimgame</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>');
         } elseif ($type == "csgo") {
             echo '<img class="map" src="'.$maplink.'" alt="'.$maplink.'">';
             echo '<div style="text-align:left;max-width: 234px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Map: '.$mapname.'</div>';
         }
+        elseif ($type == "vrising") {
+            echo '<img class="map" src="'.$maplink.'" alt="'.$maplink.'">';
+            echo '<div style="text-align:left"><span style="font-weight: 500;">Map:</span> '.$map.'</div>';
+            echo '<div style="text-align:left"><span style="font-weight: 500;">'.$language[$lang][11]."</span>".$ingameday.'</div>';
+        }
         ?>
     </div>
+    <!-- DETAILS -->
     <div class="II <?php if($type=="csgo"){echo'csgo';}?>">
         <?php
         if ($type == "arkse") {
@@ -103,16 +111,21 @@ if ($type == "arkse") {
                 }
                 echo "</tbody></table></div>";
             }
+        } elseif ($type == "vrising") {
+            echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
+            echo "<span style='font-weight: 500;'>".$language[$lang][12].":</span> $password<br>";
+            echo "<span style='font-weight: 500;'>Bloodbound:</span> $bloodbound<br>";
+            echo "<div style='width:-webkit-min-content;'><span style='font-weight: 500;'>Description:</span> $description<br></div>";
         }
         ?>
     </div>
     <div class="movediv<?php if ($type == "csgo" && isset($serverstatus->rules)) {echo " csmovedivhide";}?>"></div>
-    <div class="III">
-    </div>
+    <!-- DIV III (Not used yet) -->
+    <div class="III"></div>
     <div class="IV" style="display:<?php echo $display['IV']?>">
         <p><?php
             // Check if Mods for Minecraft or Players for Ark is displayed
-            if ($type == "arkse" || $type == "csgo") {
+            if ($type == "arkse" || $type == "csgo" || $type == "vrising") {
                 echo $language[$lang][4];
             } elseif ($type == "minecraft") {
                 echo "Mods";
@@ -120,8 +133,8 @@ if ($type == "arkse") {
             ?></p>
         <div class="scroll">
             <?php
-            // Display players for ARK
-            if ($type == "arkse" || $type == "csgo") {
+            // Display players for ARK, Csgo, Vrising
+            if ($type == "arkse" || $type == "csgo" || $type == "vrising") {
                 foreach ($serverstatus->players ?? (array) "0" as $player) {
                     if(!strlen($player->Name ?? ''))
                         continue;

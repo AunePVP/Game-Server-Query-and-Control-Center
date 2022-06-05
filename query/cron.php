@@ -101,6 +101,7 @@ if (mysqli_num_rows($result) > 0) {
                         $Query->Disconnect();
                     }
             case "valheim":
+            case "vrising":
             case "protocol-valve":
             case "arkse":
                 $Query = new SourceQuery();
@@ -118,6 +119,7 @@ if (mysqli_num_rows($result) > 0) {
                             }
                             break;
                         case "valheim":
+                        case "vrising":
                         case "csgo":
                             $queryresult["info"] = $Query->GetInfo();
                             $countplayers = $queryresult["info"]["Players"];

@@ -7,6 +7,7 @@ try
     $queryresult["info"] = $Query->GetInfo();
     switch ($type) {
         case "arkse":
+        case "vrising":
             $queryresult["players"] = $Query->GetPlayers();
             $queryresult["rules"] = $Query->GetRules();
             break;

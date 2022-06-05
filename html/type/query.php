@@ -35,6 +35,7 @@ $uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
 switch ($type) {
     case "csgo":
     case "valheim":
+    case "vrising":
     case "protocol-valve":
     case "arkse":
         // Get the operating system and convert it to full name
@@ -187,5 +188,19 @@ switch ($type) {
             }
         }
         break;
-
+    case "vrising":
+        // Check if server has a password
+        $password = $serverstatus->info->Password ?? '';
+        if ($password == "True") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
+        // Get the server description
+        $description = $serverstatus->rules->desc0 ?? '';
+        // Check if bloodhound is on or off and set the matching value (On|Off)
+        $bloodbound = $serverstatus->rules->{'blood-bound-enabled'} ?? false;
+        if ($bloodbound == "True") {$bloodbound = $language[$lang][14];} else {$bloodbound = [$lang][15];}
+        // Check if Catle heart damage is enabled
+        $castleheartdamagemode = $serverstatus->rules->{'castle-heart-damage-mode'} ?? '';
+        // Get the ingame day
+        $ingameday = $serverstatus->rules->{'days-running'} ?? '';
+        // Get the game tags
+        $GameTags = $serverstatus->info->GameTags;
 }

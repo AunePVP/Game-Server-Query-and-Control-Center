@@ -23,6 +23,8 @@ $language['de'][10] = "Keine Mods auf dem Server gefunden.";
 $language['de'][11] = "In-game Tag: ";
 $language['de'][12] = "Passwort";
 $language['de'][13] = "Query ist auf diesem Server deaktiviert.";
+$language['de'][14] = "An";
+$language['de'][15] = "Aus";
 //en
 $language['en'][1] = "General";
 $language['en'][2] = "System";
@@ -37,3 +39,5 @@ $language['en'][10] = "There are no mods installed on this server.";
 $language['en'][11] = "In-game Day: ";
 $language['en'][12] = "Password";
 $language['en'][13] = "Query is disabled on this server.";
+$language['en'][14] = "On";
+$language['en'][15] = "Off";
