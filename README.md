@@ -11,7 +11,6 @@ You can see the status of your game server and control it from a webpage written
 | Minecraft                        | Ping / Query   | ❌/ ✅ (almost finished) |
 | Valheim                          | Valve Protocol |           ✅            |
 | Vrising                          | Valve Protocol |           ✅            |
-| Factorio                         | Valve Protocol |           ❌            |
 | Conan Exiles                     | Valve Protocol |           ❌            |
 | Rust                             | Valve Protocol |           ❌            |
 | PixARK                           | Valve Protocol |           ❌            |
