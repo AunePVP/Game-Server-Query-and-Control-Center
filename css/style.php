@@ -356,8 +356,14 @@ $font['banner'] = "Helvetica, sans-serif";
         .csmovedivhide {display: none}
         .II.csgo, .II.csgo table {width: 100%;}
     }
+    @media only screen and (max-width: 1353px) {
+        .II.csgo table {width: 100%;}
+        .II.csgo td.name {max-width: 300px;}
+
+    }
     @media only screen and (max-width: 1280px) {
         .map {height: 220px;}
+        .II.csgo td.name {max-width: 200px;}
     }
     @media only screen and (max-width: 1200px) {
         .map {height: 200px;}
