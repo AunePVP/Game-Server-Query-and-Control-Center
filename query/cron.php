@@ -103,6 +103,7 @@ if (mysqli_num_rows($result) > 0) {
             case "valheim":
             case "vrising":
             case "protocol-valve":
+            case "rust":
             case "arkse":
                 $Query = new SourceQuery();
                 try {
@@ -119,6 +120,7 @@ if (mysqli_num_rows($result) > 0) {
                             }
                             break;
                         case "valheim":
+                        case "rust":
                         case "vrising":
                         case "csgo":
                             $queryresult["info"] = $Query->GetInfo();

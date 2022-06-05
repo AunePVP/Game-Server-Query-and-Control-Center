@@ -1,5 +1,6 @@
 <?php
 include './html/langconf.php';
+// Set image, convert mods...
 if ($type == "arkse") {
     $display['IV'] = "block";
     $officialmaps = array("Aberration", "CrystalIsles", "Gen2", "Gen", "LostIsland", "Ragnarok", "ScorchedEarth", "TheCenter", "TheIsland", "Valguero", "Viking_P", "Valhalla", "TheVolcano");
@@ -36,7 +37,21 @@ if ($type == "arkse") {
 } elseif ($type == "vrising") {
     $maplink = "html/img/map/$map.webp";
     $display['IV'] = "block";
+}elseif ($type == "rust") {
+    $display['IV'] = "block";
+    unset($metas,$mapurl);
+    $mapurl = "https://rustmaps.com/map/".$worldsize."_".$seed."?embed=img_i_l";
+
+    $metas = get_meta_tags($mapurl);
+    if (isset($metas['twitter:image'])) {
+        $metas = ($metas['twitter:image']);
+        $maplink = str_replace('FullMap.png', 'Thumbnail.png', $metas);
+    } else {
+        $maplink = "html/img/map/rustgenerate.webp";
+    }
 } elseif ($type == "fivem") {
+    $display['IV'] = "none";
+} else {
     $display['IV'] = "none";
 }
 ?>
@@ -60,6 +75,11 @@ if ($type == "arkse") {
             echo '<img class="map" src="'.$maplink.'" alt="'.$maplink.'">';
             echo '<div style="text-align:left"><span style="font-weight: 500;">Map:</span> '.$map.'</div>';
             echo '<div style="text-align:left"><span style="font-weight: 500;">'.$language[$lang][11]."</span>".$ingameday.'</div>';
+        }
+        elseif ($type == "rust") {
+            echo '<a href="'.$mapurl.'" target="_blank" rel="noopener noreferrer"><img class="map" src="'.$maplink.'" alt="'.$maplink.'"></a>';
+            echo '<div style="text-align:left"><span style="font-weight: 500;">Map:</span> '.$map.'</div>';
+            echo '<div style="text-align:left"><span style="font-weight: 500;">Uptime:</span> '.$rustuptime.'<br></div>';
         }
         ?>
     </div>
@@ -116,6 +136,13 @@ if ($type == "arkse") {
             echo "<span style='font-weight: 500;'>".$language[$lang][12].":</span> $password<br>";
             echo "<span style='font-weight: 500;'>Bloodbound:</span> $bloodbound<br>";
             echo "<div style='width:-webkit-min-content;'><span style='font-weight: 500;'>Description:</span> $description<br></div>";
+        } elseif ($type == "rust") {
+            echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
+            echo "<span style='font-weight: 500;'>".$language[$lang][12].":</span> $password<br>";
+            echo "<span style='font-weight: 500;'>Website:</span><a href='$rustwebsite'  target='_blank' rel='noopener noreferrer'> $rustwebsite</a><br>";
+            echo "<span style='font-weight: 500;'>PVP:</span> $pvp<br>";
+            echo "<span style='font-weight: 500;'>FPS:</span> $rustfps<br>";
+            echo "<div style='width:-webkit-min-content;'><span style='font-weight: 500;'>Description:</span> $description<br></div>";
         }
         ?>
     </div>
@@ -125,7 +152,7 @@ if ($type == "arkse") {
     <div class="IV" style="display:<?php echo $display['IV']?>">
         <p><?php
             // Check if Mods for Minecraft or Players for Ark is displayed
-            if ($type == "arkse" || $type == "csgo" || $type == "vrising") {
+            if ($type == "arkse" || $type == "csgo" || $type == "vrising" || $type == "rust") {
                 echo $language[$lang][4];
             } elseif ($type == "minecraft") {
                 echo "Mods";
@@ -134,7 +161,7 @@ if ($type == "arkse") {
         <div class="scroll">
             <?php
             // Display players for ARK, Csgo, Vrising
-            if ($type == "arkse" || $type == "csgo" || $type == "vrising") {
+            if ($type == "arkse" || $type == "csgo" || $type == "vrising" || $type == "rust") {
                 foreach ($serverstatus->players ?? (array) "0" as $player) {
                     if(!strlen($player->Name ?? ''))
                         continue;

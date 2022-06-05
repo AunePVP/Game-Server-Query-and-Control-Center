@@ -8,9 +8,11 @@ try
     switch ($type) {
         case "arkse":
         case "vrising":
+        case "rust":
             $queryresult["players"] = $Query->GetPlayers();
             $queryresult["rules"] = $Query->GetRules();
             break;
+            // Why do I isolate csfo from the other servers? Because CSGO doesn't always respond to a A2S_RULES query.
         case "csgo":
             $lastplayerline = json_decode(tailCustom("query/cron/$ServerID.json", 1));
             $csgorules = $lastplayerline->csgorules ?? "0";

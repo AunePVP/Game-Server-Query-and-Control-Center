@@ -37,6 +37,7 @@ switch ($type) {
     case "valheim":
     case "vrising":
     case "protocol-valve":
+    case "rust":
     case "arkse":
         // Get the operating system and convert it to full name
         if (function_exists("convertos")) {
@@ -203,4 +204,17 @@ switch ($type) {
         $ingameday = $serverstatus->rules->{'days-running'} ?? '';
         // Get the game tags
         $GameTags = $serverstatus->info->GameTags;
+        break;
+    case "rust":
+        $seed = $serverstatus->rules->{'world.seed'};
+        $worldsize = $serverstatus->rules->{'world.size'};
+        $password = $serverstatus->info->Password ?? '';
+        $rustuptime = $serverstatus->rules->uptime;
+        $rustwebsite = $serverstatus->rules->url;
+        if ($serverstatus->rules->pve == "False") {
+            $pvp = $language[$lang][14];
+        } else {
+            $pvp = $language[$lang][15];
+        }
+        $rustfps = $serverstatus->rules->fps;
 }

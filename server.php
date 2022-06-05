@@ -5,6 +5,7 @@ switch ($type) {
     case "valheim":
     case "vrising":
     case "protocol-valve":
+    case "rust":
     case "arkse":
         include 'query/sourcequery.php';
         break;
