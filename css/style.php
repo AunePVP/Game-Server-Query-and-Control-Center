@@ -222,14 +222,15 @@ $font['banner'] = "Helvetica, sans-serif";
     }
     .II {
         text-align: left;
-        min-width: -webkit-fit-content;
+        //min-width: -webkit-fit-content;
+        width: 200%;
         padding: 4px 7px 0;
     }
     .II a {
         color: <?php echo $font['linkcolor']?>;
     }
     .II.csgo th {
-        color: black;
+        color: <?php echo $font['color']?>;
         font-weight: 600;
     }
     .II.csgo tbody {
@@ -258,7 +259,7 @@ $font['banner'] = "Helvetica, sans-serif";
     .IV {
         min-width: 215px;
         max-width: 215px;
-        padding: 0 4px;
+        padding: 0 4px 0 0;
     }
     .IV p {
         font-size: 20px;

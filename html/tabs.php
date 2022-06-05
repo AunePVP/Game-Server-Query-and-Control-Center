@@ -135,6 +135,7 @@ if ($type == "arkse") {
             echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
             echo "<span style='font-weight: 500;'>".$language[$lang][12].":</span> $password<br>";
             echo "<span style='font-weight: 500;'>Bloodbound:</span> $bloodbound<br>";
+            echo "<div style='max-width:300px'><span style='font-weight: 500;'>Tags:</span> $GameTags<br></div>";
             echo "<div style='width:-webkit-min-content;'><span style='font-weight: 500;'>Description:</span> $description<br></div>";
         } elseif ($type == "rust") {
             echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
@@ -142,7 +143,14 @@ if ($type == "arkse") {
             echo "<span style='font-weight: 500;'>Website:</span><a href='$rustwebsite'  target='_blank' rel='noopener noreferrer'> $rustwebsite</a><br>";
             echo "<span style='font-weight: 500;'>PVP:</span> $pvp<br>";
             echo "<span style='font-weight: 500;'>FPS:</span> $rustfps<br>";
-            echo "<div style='width:-webkit-min-content;'><span style='font-weight: 500;'>Description:</span> $description<br></div>";
+            echo "<div style='max-width:300px'><span style='font-weight: 500;'>Tags:</span> $GameTags<br></div>";
+            echo "<div style='width:300px;'><span style='font-weight: 500;'>Description:</span>";
+            foreach ($rustdesc as $description) {
+                echo "$description<br>";
+            }
+            echo "</div>";
+        } elseif ($type == "minecraft") {
+
         }
         ?>
     </div>

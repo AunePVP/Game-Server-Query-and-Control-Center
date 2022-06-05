@@ -204,17 +204,39 @@ switch ($type) {
         $ingameday = $serverstatus->rules->{'days-running'} ?? '';
         // Get the game tags
         $GameTags = $serverstatus->info->GameTags;
+        $GameTags =  preg_replace("/,/", ", ", $GameTags);
         break;
     case "rust":
+        // Get the seed and world size
         $seed = $serverstatus->rules->{'world.seed'};
         $worldsize = $serverstatus->rules->{'world.size'};
+        // Check if the server has a password
         $password = $serverstatus->info->Password ?? '';
+        if ($password == "True") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
+        // Get the uptime of the server
         $rustuptime = $serverstatus->rules->uptime;
+        // Get the url of the server
         $rustwebsite = $serverstatus->rules->url;
+        // Check if the Rustserver has PVP or PVE enabled
         if ($serverstatus->rules->pve == "False") {
             $pvp = $language[$lang][14];
         } else {
             $pvp = $language[$lang][15];
         }
+        // Get the fps of the server
         $rustfps = $serverstatus->rules->fps;
+        // Get the description and store it in an array
+        $keys = (array) $serverstatus->rules;
+        $matched = preg_grep('/description_\d+/', array_keys($keys));
+        $value = 0;
+        foreach ($matched as $descriptionkey) {
+            if(!strlen($serverstatus->rules->{$descriptionkey}))
+                continue;
+            $value++;
+            $rustdescription = $serverstatus->rules->{$descriptionkey};
+            $rustdesc[$value] = $rustdescription;
+        }
+        // Get the game tags
+        $GameTags = $serverstatus->info->GameTags;
+        $GameTags =  preg_replace("/,/", ", ", $GameTags);
 }
