@@ -12,7 +12,7 @@ You can see the status of your game server and control it from a webpage written
 | Valheim                          | Valve Protocol |           ✅            |
 | Vrising                          | Valve Protocol |           ✅            |
 | Conan Exiles                     | Valve Protocol |           ❌            |
-| Rust                             | Valve Protocol |           ❌            |
+| Rust                             | Valve Protocol | ❌/ ✅ (almost finished) |
 | PixARK                           | Valve Protocol |           ❌            |
 | Satisfactory                     | Valve Protocol |           ❌            |
 | Grand Theft Auto V - FiveM       |                |    ❌ (Coming Soon)     |
