@@ -96,3 +96,8 @@ https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002/?appid=73
 - create a tabs file
 - add the servers in admin in servers.php
 
+
+
+## Rust
+https://rustmaps.com/map/5000_796230758
+http://playrust.io/map/?Procedural%20Map_4250_37631
