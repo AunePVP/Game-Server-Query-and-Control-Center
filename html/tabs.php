@@ -100,6 +100,7 @@ if ($type == "arkse") {
                 echo "<span style='font-weight: 500;'>Mods:</span><br>";
                 foreach ($mods as $mod) {
                     echo $modlink . $mod . '" target="_blank">';
+                    // convert the mod id into the mod name
                     $convertedmod = convertmodlistark($mod);
                     if (!empty($convertedmod)) {
                         echo $convertedmod;
