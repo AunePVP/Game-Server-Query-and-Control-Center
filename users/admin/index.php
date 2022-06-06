@@ -105,6 +105,8 @@ function tailCustom($filepath, $lines = 1, $adaptive = true)
                         case "valheim":
                         case "protocol-valve":
                         case "arkse":
+                        case "vrising":
+                        case "rust":
                             include '../../query/sourcequery.php';
                             break;
                         case "minecraft":
