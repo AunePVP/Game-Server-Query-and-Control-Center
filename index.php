@@ -16,61 +16,11 @@ use xPaw\SourceQuery\SourceQuery;
 
 const SQ_TIMEOUT = 1;
 const SQ_ENGINE = SourceQuery::SOURCE;
-function minecraftcache($username) {
-    global $mcuuid;
 
-    if (!isset($mcuuid[$username])) {
-        $data = json_decode(file_get_contents("https://api.mojang.com/users/profiles/minecraft/$username"));
-        $uuid = $data->id;
-        $data = '$mcuuid[\''.$username.'\'] = "'. $uuid .'";';
-        file_put_contents("query/cron/cache/minecraft.php", $data . "\n", FILE_APPEND);
-        return $uuid;
-    } else {
-        return $mcuuid[$username];
-    }
+require "html/tailcustom.php";
+require "functions.php";
 
-}
-function tailCustom($filepath, $lines = 1, $adaptive = true)
-{
-    $f = @fopen($filepath, "rb");
-    if ($f === false) return false;
-    if (!$adaptive) $buffer = 4096;
-    else $buffer = ($lines < 2 ? 64 : ($lines < 10 ? 512 : 4096));
-    fseek($f, -1, SEEK_END);
-    if (fread($f, 1) != "\n") $lines -= 1;
-    $output = '';
-    $chunk = '';
-    while (ftell($f) > 0 && $lines >= 0) {
-        $seek = min(ftell($f), $buffer);
-        fseek($f, -$seek, SEEK_CUR);
-        $output = ($chunk = fread($f, $seek)) . $output;
-        fseek($f, -mb_strlen($chunk, '8bit'), SEEK_CUR);
-        $lines -= substr_count($chunk, "\n");
-    }
-    while ($lines++ < 0) {
-        $output = substr($output, strpos($output, "\n") + 1);
-    }
-    fclose($f);
-    return trim($output);
-}
 
-function convertos($Os)
-{
-    $Opers = array(
-        'l' => 'Linux',
-        'w' => 'Windows',
-        'm' => 'Mac'
-    );
-    return $Opers[$Os];
-}
-function get_title($url){
-    $str = file_get_contents($url);
-    if(strlen($str)>0){
-        $str = trim(preg_replace('/\s+/', ' ', $str)); // supports line breaks inside <title>
-        preg_match("/\<title\>(.*)\<\/title\>/i",$str,$title); // ignore case
-        return $title[1];
-    }
-}
 ?>
     <!doctype html>
     <html lang="<?php
