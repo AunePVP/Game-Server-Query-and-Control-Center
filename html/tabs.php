@@ -104,7 +104,13 @@ if ($type == "arkse") {
                     if (!empty($convertedmod)) {
                         echo $convertedmod;
                     } else {
-                        echo $mod;
+                        // If mod is not in modlist, get the mod from the steamcommunity website and store the mod in the modlist file
+                        $convertedmod = substr(get_title("https://steamcommunity.com/sharedfiles/filedetails/?id=$mod"), 16);
+                        echo $convertedmod;
+                        $convertedmod = str_replace("'", "\'", $convertedmod);
+                        $convertedmod = '$modlist[\'ArkModName\']'."[$mod] = '$convertedmod';";
+                        file_put_contents("html/type/arkse/modlist.php", $convertedmod . "\n", FILE_APPEND);
+
                     }
                     echo "</a><br>";
                 }
@@ -114,7 +120,7 @@ if ($type == "arkse") {
             echo "<span style='font-weight: 500;'>Map:</span> $map<br>";
             echo "<span style='font-weight: 500;'>Max Players:</span> $maxplayers<br>";
             echo "<span style='font-weight: 500;'>Query Port:</span> $qport<br>";
-            echo "<span style='font-weight: 500;'>Steam Page:</span> <a href='https://store.steampowered.com/app/892970/Valheim/' target='_blank' rel='noopener noreferrer'>Link</a><br>";
+            echo "<span style='font-weight: 500;'>Steam Page:</span> <a href='https://store.steampowered.com/appv/892970/Valheim/' target='_blank' rel='noopener noreferrer'>Link</a><br>";
             echo "<span style='font-weight: 500;'>Wiki:</span> <a href='https://valheim.fandom.com/wiki/Valheim_Wiki' target='_blank' rel='noopener noreferrer'>Link</a><br>";
             echo "<span style='font-weight: 500;'>Website:</span> <a href='https://www.valheimgame.com' target='_blank' rel='noopener noreferrer'>Link</a><br>";
         } elseif ($type == "csgo") {
