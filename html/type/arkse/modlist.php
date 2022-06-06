@@ -174,5 +174,13 @@ $modlist = array (
             2007411835 => 'Automated Ark Add-on: Automation',
             2007430597 => 'AA Add-on: Gardening',
             2187784730 => 'Ark Chaos Creator (Twitch Streamer Integration)',
+            1606695557 => 'Compressed Meat',
+            2811733950 => 'Dale',
+            2810648906 => 'Skinable Tek + Adv Tek Suit',
+            2816575700 => 'Obsidian Armour',
+            2813537954 => '1万叠加 HG 10K Stacking',
+            2805157978 => 'TekForce Custom Valguero by Exar',
+            2786238883 => 'ARK: Project Anomaly',
+            2795947433 => 'eco\'s Highland Homes',
         ),
 );
