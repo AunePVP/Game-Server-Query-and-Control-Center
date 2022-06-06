@@ -29,8 +29,12 @@ if ($type == "arkse") {
         $maplink = "html/img/map/$map.webp";
         $mapname = convertcsgomapname($map) ?? $map;
     } else {
-        $mapname = ucwords(str_replace("_"," ", substr($map, 3)));
-        $maplink = "html/img/map/modmap.webp";
+        $substr = substr($map, 0, 3);
+        if (preg_match('/[a-zA-Z]{2}\_{1}/m', $substr)) {
+            $map = substr($map, 3);
+        }
+        $mapname = ucwords(str_replace("_"," ", $map));
+        $maplink = "html/img/map/csgo_modmap.webp";
     }
 } elseif ($type == "valheim") {
     $display['IV'] = "none";
