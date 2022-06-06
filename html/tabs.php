@@ -164,9 +164,11 @@ if ($type == "arkse") {
                 echo '<div style="margin:auto">'.$language[$lang][13].'</div>';
             } else {
                 echo "<div class='mcheads'>";
-                foreach ($serverstatus->players as $player) {
-                    $crafatar = "https://crafatar.com/avatars/". minecraftcache($player);
-                    echo "<div class='mchead'><img src='$crafatar' alt='Skin from crafatar'><div class='name'>$player</div></div>";
+                if (!empty($serverstatus->players)) {
+                    foreach ($serverstatus->players as $player) {
+                        $crafatar = "https://crafatar.com/avatars/". minecraftcache($player);
+                        echo "<div class='mchead'><img src='$crafatar' alt='Skin from crafatar'><div class='name'>$player</div></div>";
+                    }
                 }
                 echo "</div>";
             }
