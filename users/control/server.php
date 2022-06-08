@@ -169,9 +169,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </nav>
 <main>
     <div class="padding30" <?php
-    if ($_GET['id'] == "addserver") {
-        echo "style='padding:0!important'";
-    } ?>>
+    if (!empty($_GET['id'])) {
+        if ($_GET['id'] == "addserver") {
+            echo "style='padding:0!important'";
+        }
+    }?>>
         <?php
         include 'overlaynav.php' ?>
 
@@ -204,6 +206,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php
         if (!empty($_GET['id'])):
         if ($_GET['id'] != "addserver") {
+            $ServerID = (int)$_GET['id'];
             $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
             if (!$conn) {
                 die("Connection failed: " . mysqli_connect_error());
@@ -242,7 +245,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "0 results";
             }
             $conn->close();
-            $ServerID = (int)$_GET['id'];
         }
         ?>
         <!-- _------------‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾------------_ -->
