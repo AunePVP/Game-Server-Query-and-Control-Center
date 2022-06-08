@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,900|IBM+Plex+Mono');
 html, body {
     margin: 0;
     padding: 0;
@@ -291,11 +293,36 @@ label #type {
 .addsrv:hover {
     background-color: rgb(210, 210, 210);
 }
+#controlsettingsparent {
+    height: 80vh;
+    background-color: #383B4F;
+    border-radius: 6px;
+}
+#control, #settings {
+    padding: 30px 40px;
+}
 #settings {
     display: none;
 }
 #tab1 {
     text-decoration: underline;
+}
+
+#serverinf table td, #serverinf table th {
+    text-align: center;
+    font-family: Helvetica, serif;
+    margin: 0;
+    font-size: 17px;
+    letter-spacing: 1px;
+}
+#serverinf table td input {
+    text-align: center;
+    background-color: #5a5d72;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 5px 0;
 }
 @media only screen and (max-width: 775px) {
     #sidebar, #sidebar button.bottom {

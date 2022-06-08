@@ -260,9 +260,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a class="control" onclick="tab(this.id)" id="tab1">Control</a>
             <a class="settings" onclick="tab(this.id)" id="tab2">Settings</a>
         </div>
-        <div style="height:80vh;background-color: #383B4F;">
+        <div id="controlsettingsparent">
             <div id="control">ff</div>
-            <div id="settings">dsfs</div>
+            <div id="settings">
+                <!-- Display server information -->
+                <div id="serverinf">
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>IP</th>
+                            <th>Game Port</th>
+                            <th>Query Port</th>
+                            <th>Rcon Port</th>
+                        </tr>
+                        <tr>
+                            <td><input type="text" readonly="readonly" size="15" value="<?php echo $type?>"></td>
+                            <td><input type="text" readonly="readonly" size="32" value="<?php echo $ip?>"></td>
+                            <td><input type="text" readonly="readonly" size="13" value="<?php echo $gport?>"></td>
+                            <td><input type="text" readonly="readonly" size="13" value="<?php echo $qport?>"></td>
+                            <td><input type="text" readonly="readonly" size="13" value="<?php echo $rport?>"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     <?php
