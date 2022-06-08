@@ -3,24 +3,16 @@ use AunePVP\jsonconversion;
 use Spirit55555\Minecraft\MinecraftColors;
 //require 'html/type/minecraft/jsonconversion.php';
 //require 'html/type/minecraft/minecraftcolor.php';
-
-// function to convert shortend os name to full name
-/*function convertos($Os)
-{
-    $Opers = array(
-        'l' => 'Linux',
-        'w' => 'Windows',
-        'm' => 'Mac'
-    );
-    return $Opers[$Os];
-}*/
-
+if (isset($controlpanel)) {
+    $controlpanellink = "../../";
+} else {
+    $controlpanellink = "";
+}
 //#// GLOBAL //#//
-
 // Get the game logo
 $img = "html/img/logo/$type.webp";
 // Get last players for banner
-$lastplayerlines = tailCustom("query/cron/$ServerID.json", 7);
+$lastplayerlines = tailCustom($controlpanellink."query/cron/$ServerID.json", 7);
 $playerlineexit = array();
 $count = 0;
 foreach(preg_split("/((\r?\n)|(\r\n?))/", $lastplayerlines) as $playerline){

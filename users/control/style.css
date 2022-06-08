@@ -9,6 +9,10 @@ main {
     background-color: #151f34;
     padding-left: 225px;
 }
+input:invalid {
+    border: 2px dashed red;
+    background-color: #ffc3c3;
+}
 #topbar {
     display: none;
 }
@@ -198,6 +202,24 @@ textarea.plain {
     font-family: Helvetica Neue, sans-serif;
     font-size: 31px;
 }
+#tab1, #tab2 {
+    cursor: pointer;
+    -webkit-user-select: None;
+}
+.centeraddserverdiv {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.addserverdiv {
+    margin: auto;
+    width: 500px;
+    height: 500px;
+    background-color: #2B2F43;
+    border-radius: 14px;
+    color: white;
+}
 .ctrlsett {
     display: flex;
 }
@@ -206,6 +228,68 @@ textarea.plain {
     font-weight: 300;
     padding: 8px 8px 5px;
     font-size: 25px;
+}
+label {
+    font-family: Helvetica,sans-serif;
+    font-size: 20px;
+}
+label #type {
+    border-radius: 4px;
+    width: 100%;
+    margin: 0 0 10px 0;
+    padding: 5px 35px 5px 5px;
+    font-size: 16px;
+    height: 34px;
+    border: none;
+}
+.padding25 {
+    padding: 25px;
+}
+.events p {
+    text-align: center;
+    font-family: Helvetica Neue, sans-serif;
+    font-size: 18px;
+    margin: 0;
+    padding: 10px 0 0;
+    font-weight: 300;
+}
+.cAx {
+    font-family: Helvetica,sans-serif;
+    font-size: 20px;
+}
+#input {
+    margin: 0 0 10px 0;
+}
+#input-domain-ip, #input-gport, #input-qport, #input-rport{
+    width: -webkit-fill-available;
+    padding: 0 5px;
+    border-radius: 4px;
+    border: none;
+    display: inline-block;
+    font-size: 16px;
+    height: 34px;
+    font-family: Helvetica, sans-serif;
+    outline: none;
+}
+#notes {
+    font-family: Helvetica, sans-serif;
+    color: #ff4949;
+    font-size: 14px;
+    min-height: 32px;
+}
+.addsrv {
+    border: none;
+    background-color: white;
+    border-radius: 4px;
+    float: right;
+    height: 34px;
+    font-family: Helvetica, sans-serif;
+    font-size: 14px;
+    padding: 2px 10px;
+    cursor: pointer;
+}
+.addsrv:hover {
+    background-color: rgb(210, 210, 210);
 }
 @media only screen and (max-width: 775px) {
     #sidebar, #sidebar button.bottom {
@@ -220,14 +304,6 @@ textarea.plain {
     .extra .item {
         width: 250px;
     }
-}
-.events p {
-    text-align: center;
-    font-family: Helvetica Neue, sans-serif;
-    font-size: 18px;
-    margin: 0;
-    padding: 10px 0 0;
-    font-weight: 300;
 }
 @media only screen and (max-width: 550px) {
     #sidebar, #sidebar button.bottom {
