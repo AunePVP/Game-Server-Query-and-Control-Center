@@ -29,11 +29,15 @@ function selecttype() {
 function tab(clicked_id) {
     let x = document.getElementById("control");
     let y = document.getElementById("settings");
+    let z = document.getElementById(clicked_id);
     if (clicked_id === "tab1") {
         x.style.display = "block";
+        document.getElementById("tab2").style.textDecoration = "none";
         y.style.display = "none";
     } else if (clicked_id === "tab2") {
         x.style.display = "none";
         y.style.display = "block";
+        document.getElementById("tab1").style.textDecoration = "none";
     }
+    z.style.textDecoration = "underline";
 }
