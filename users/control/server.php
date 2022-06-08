@@ -100,6 +100,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $addid = $row['ID'];
+            echo "<script>if(alert('You alredy have access to the server!')){}else window.location.reload(); </script>";
+            exit;
         }
     } else {
         $sql = "SELECT ID FROM serverconfig ORDER BY ID DESC LIMIT 1";
