@@ -19,7 +19,8 @@ You can see the status of your game server and control it from a webpage written
 
 There are many more games that are supported. If your game is missing...
 
-## Screenshot<img width="1440" alt="Screen Shot 2022-05-30 at 23 26 12" src="https://user-images.githubusercontent.com/67545895/171106895-df23d899-bee7-4fa0-9e2c-17e741af81d0.png">
+<img width="1440" alt="Screen Shot 2022-06-05 at 21 26 15" src="https://user-images.githubusercontent.com/67545895/172096411-86b8529c-653a-4669-a845-540178679375.png">
+
 
 
 
