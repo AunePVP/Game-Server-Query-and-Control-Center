@@ -10,21 +10,11 @@ if ($type == "arkse") {
         $maplink = "html/img/map/modmap.webp";
     }
     $modlink = '<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=';
-    function convertmodlistark($mod)
-    {
-        include ('html/type/arkse/modlist.php');
-        return $modlist['ArkModName'][$mod];
-    }
 } elseif ($type == "minecraft") {
     $display['IV'] = "block";
 } elseif ($type == "csgo") {
     $display['IV'] = "block";
     $officialmaps = array("ar_baggage", "ar_dizzy", "ar_lunacy", "ar_monastery", "ar_shoots", "cs_agency", "cs_assault", "cs_climb", "cs_italy", "cs_militia", "cs_office", "de_ancient", "de_bank", "de_cache", "de_canals", "de_cbble", "de_crete", "de_dust2", "de_hive", "de_inferno", "de_iris", "de_lake", "de_mirage", "de_nuke", "de_overpass", "de_safehouse", "de_shortdust", "de_shortnuke", "de_stmarc", "de_sugarcane", "de_train", "de_vertigo", "dz_blacksite", "dz_ember", "dz_sirocco", "dz_vineyard", "ze_Bathroom_v2_5");
-    function convertcsgomapname($mapname)
-    {
-        include ('html/type/csgo/maplist.php');
-        return $mapname['CsgoMapName'][$mapname];
-    }
     if (in_array($map, $officialmaps)) {
         $maplink = "html/img/map/$map.webp";
         $mapname = convertcsgomapname($map) ?? $map;

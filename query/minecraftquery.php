@@ -25,7 +25,6 @@ if ($qport == 0) {
         $queryresult["players"] = ($Query->GetPlayers());
         $queryresult = json_encode($queryresult);
     } catch (MinecraftQueryException $e) {
-        echo $e->getMessage();
     }
 }
 ?>

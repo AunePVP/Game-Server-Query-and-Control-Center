@@ -8,6 +8,7 @@
     <meta name="theme-color" content="#1D1D1F" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#1D1D1F" media="(prefers-color-scheme: dark)">
     <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
     <title>Gamserver Query</title>
     <link rel="stylesheet" href="css/style.php">
     <link rel="stylesheet" href="<?php

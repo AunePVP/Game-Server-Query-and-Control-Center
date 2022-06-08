@@ -43,7 +43,6 @@ function calc_uptime($filename, $lines, $status) {
         $uptime = ($uptime/$lines) * 100;
         $uptime = (round($uptime,3));
         fclose($handle);
-        //file_put_contents('cron/uptime/'.$id, $uptime);
     }
     return $uptime ?? 0;
 }
@@ -143,7 +142,7 @@ if (mysqli_num_rows($result) > 0) {
                     if ($lines >  1100) {
                         read_and_delete_first_line($file);
                     }
-                } // Check if an erropr occured
+                } // Check if an error occured
                 catch (Exception $e) {
                     // If there's an error display server as offline and show players 0
                     $lines = count(file($file));
