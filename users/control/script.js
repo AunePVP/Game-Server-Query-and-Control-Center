@@ -26,10 +26,14 @@ function selecttype() {
     }
     document.getElementById("notes").innerHTML = text;
 }
-function validateForm() {
-    let x = document.forms["myForm"]["fname"].value;
-    if (x == "") {
-        alert("Name must be filled out");
-        return false;
+function tab(clicked_id) {
+    let x = document.getElementById("control");
+    let y = document.getElementById("settings");
+    if (clicked_id === "tab1") {
+        x.style.display = "block";
+        y.style.display = "none";
+    } else if (clicked_id === "tab2") {
+        x.style.display = "none";
+        y.style.display = "block";
     }
 }

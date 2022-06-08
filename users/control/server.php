@@ -265,20 +265,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div id="settings">dsfs</div>
         </div>
     </div>
-    <script>
-        function tab(clicked_id) {
-            let x = document.getElementById("control");
-            let y = document.getElementById("settings");
-            if (clicked_id === "tab1") {
-                x.style.display = "block";
-                y.style.display = "none";
-            } else if (clicked_id === "tab2") {
-                x.style.display = "none";
-                y.style.display = "block";
-            }
-        }
-
-    </script>
     <?php
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     //-------------_Add Server_-------------//
