@@ -49,8 +49,7 @@ require "functions.php";
             </tbody>
         </table>
         <?php
-        //$url.= dirname($_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'])."/server.php";
-        // First DB Connection
+        // DB Connection
         $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
@@ -67,12 +66,10 @@ require "functions.php";
         } else {
             echo "Query failed! Talk to your server administrator.";
         }
-        //mysqli_close($conn);
         if (isset($serverjson)) {
             foreach ($serverjson as $ServerID) :
                 unset($queryresult);
                 if (!empty($ServerID)) {
-                    //$conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
                     if (!$conn) {
                         die("Connection failed: " . mysqli_connect_error());
                     }
