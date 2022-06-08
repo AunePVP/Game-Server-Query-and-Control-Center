@@ -307,7 +307,9 @@ label #type {
 #tab1 {
     text-decoration: underline;
 }
-
+#serverinf table {
+    width: 100%;
+}
 #serverinf table td, #serverinf table th {
     text-align: center;
     font-family: Helvetica, serif;
@@ -315,7 +317,7 @@ label #type {
     font-size: 17px;
     letter-spacing: 1px;
 }
-#serverinf table td input {
+#serverinf table td {
     text-align: center;
     background-color: #5a5d72;
     color: white;

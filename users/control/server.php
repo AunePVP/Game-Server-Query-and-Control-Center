@@ -215,6 +215,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
+                    $ServerID = $row["ID"];
                     $ip = $row["IP"];
                     $type = $row["type"];
                     $qport = $row["QueryPort"];
@@ -267,6 +268,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div id="serverinf">
                     <table>
                         <tr>
+                            <th>ID</th>
                             <th>Type</th>
                             <th>IP</th>
                             <th>Game Port</th>
@@ -274,11 +276,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <th>Rcon Port</th>
                         </tr>
                         <tr>
-                            <td><input type="text" readonly="readonly" size="15" value="<?php echo $type?>"></td>
-                            <td><input type="text" readonly="readonly" size="32" value="<?php echo $ip?>"></td>
-                            <td><input type="text" readonly="readonly" size="13" value="<?php echo $gport?>"></td>
-                            <td><input type="text" readonly="readonly" size="13" value="<?php echo $qport?>"></td>
-                            <td><input type="text" readonly="readonly" size="13" value="<?php echo $rport?>"></td>
+                            <td><?php echo $ServerID?></td>
+                            <td><?php echo $type?></td>
+                            <td><?php echo $ip?></td>
+                            <td><?php echo $gport?></td>
+                            <td><?php echo $qport?></td>
+                            <td><?php echo $rport?></td>
                         </tr>
                     </table>
                 </div>
