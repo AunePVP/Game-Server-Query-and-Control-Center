@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $addid = $row['ID'];
-            echo "<script>if(alert('You alredy have access to the server!')){}else window.location.reload(); </script>";
+            echo "<script>alert('You alredy have access to the server!');window.location.reload();</script>";
             exit;
         }
     } else {
@@ -287,7 +287,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="centeraddserverdiv">
             <div class="addserverdiv">
                 <div class="padding25">
-                    <h2 style="margin: 0 0 10px;font-family: Helvetica;">Add a server</h2>
+                    <h2 style="margin: 0 0 10px;font-family: Helvetica,sans-serif;">Add a server</h2>
                     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                     <div class="cAx">Game:</div>
                     <label>
@@ -305,13 +305,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <label for="input-domain-ip">IP/Domain:</label><input id="input-domain-ip" name="ip" type="text" required="required" minlength="4" maxlength="30" placeholder="xxx.xxx.xxx.xx" autocomplete="off">
                         </div>
                         <div id="input">
-                            <label for="input-domain-ip">Game Port:</label><input id="input-gport" name="gport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
+                            <label for="input-gport">Game Port:</label><input id="input-gport" name="gport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
                         </div>
                         <div id="input">
-                            <label for="input-domain-ip">Query Port:</label><input id="input-qport" name="qport" type="text" minlength="1" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
+                            <label for="input-qport">Query Port:</label><input id="input-qport" name="qport" type="text" minlength="1" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
                         </div>
                         <div id="input">
-                            <label for="input-domain-ip">Rcon Port:</label><input id="input-rport" name="rport" type="text" minlength="1" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
+                            <label for="input-rport">Rcon Port:</label><input id="input-rport" name="rport" type="text" minlength="1" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
                         </div>
                         <div>
                             <div id="notes"></div>
