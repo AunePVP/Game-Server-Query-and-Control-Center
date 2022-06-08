@@ -96,12 +96,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     // Set Server ID
     $sql = "SELECT ID FROM serverconfig WHERE IP='$addip' AND type='$addtype' AND QueryPort='$addqport' AND GamePort='$addgport' AND RconPort='$addrport'";
-    echo $sql;
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $addid = $row['ID'];
-            echo $addid."<br>";
         }
     } else {
         $sql = "SELECT ID FROM serverconfig ORDER BY ID DESC LIMIT 1";
