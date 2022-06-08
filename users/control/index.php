@@ -7,6 +7,7 @@ require '../../query/minecraft/src/MinecraftQuery.php';
 require '../../query/minecraft/src/MinecraftQueryException.php';
 require '../../html/type/minecraft/jsonconversion.php';
 require '../../html/type/minecraft/minecraftcolor.php';
+$controlpanel = true;
 use xPaw\SourceQuery\SourceQuery;
 const SQ_TIMEOUT = 1;
 const SQ_ENGINE = SourceQuery::SOURCE;
@@ -14,32 +15,14 @@ session_start();
 if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You have to log in first";
     header('location: ../login.php');
+    exit;
 }
-if ($_SESSION['username'] != "admin") {
-    header("location: ../login.php");
-}
-function tailCustom($filepath, $lines = 1, $adaptive = true)
-{
-    $f = @fopen($filepath, "rb");
-    if ($f === false) return false;
-    if (!$adaptive) $buffer = 4096;
-    else $buffer = ($lines < 2 ? 64 : ($lines < 10 ? 512 : 4096));
-    fseek($f, -1, SEEK_END);
-    if (fread($f, 1) != "\n") $lines -= 1;
-    $output = '';
-    $chunk = '';
-    while (ftell($f) > 0 && $lines >= 0) {
-        $seek = min(ftell($f), $buffer);
-        fseek($f, -$seek, SEEK_CUR);
-        $output = ($chunk = fread($f, $seek)) . $output;
-        fseek($f, -mb_strlen($chunk, '8bit'), SEEK_CUR);
-        $lines -= substr_count($chunk, "\n");
-    }
-    while ($lines++ < 0) {
-        $output = substr($output, strpos($output, "\n") + 1);
-    }
-    fclose($f);
-    return trim($output);
+include "../../html/tailcustom.php";
+$username = $_SESSION['username'];
+if ($username == "admin") {
+    $title = "Admin panel";
+} else {
+    $title = "Control panel";
 }
 ?>
 <!doctype html>
@@ -51,7 +34,7 @@ function tailCustom($filepath, $lines = 1, $adaptive = true)
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
-    <title>Admin panel</title>
+    <title><?php echo $title ?></title>
 </head>
 <body>
 <nav>
@@ -69,61 +52,11 @@ function tailCustom($filepath, $lines = 1, $adaptive = true)
 </nav>
 <main>
     <div class="padding15">
-        <div id="myNav" class="overlay" style="width: 0;">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-            <div class="overlay-content">
-                <button class="selected" onclick="window.location.href='index.php';">Overview</button>
-                <button onclick="window.location.href='server.php';">Server</button>
-                <button onclick="window.location.href='user.php';">User</button>
-                <button onclick="window.location.href='settings.php';">Settings</button>
-                <button onclick="window.location.href='../../index.php';">Home</button>
-                <button class="bottom" onclick="window.open('https://github.com/AunePVP/Game-Server-Query-and-Control-Center');">Github</button>
-            </div>
-        </div>
+        <?php include 'overlaynav.php'?>
         <div class="server inlineflex flex-wrap">
             <?php
-            // Display Get Server from DB and Display Server
-            $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
-            $sql = "SELECT * FROM serverconfig";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    unset($queryresult);
-                    $id = $row["ID"];
-                    $ip = $row["IP"];
-                    $type = $row["type"];
-                    $qport = $row["QueryPort"];
-                    $gport = $row["GamePort"];
-                    $rport = $row["RconPort"];
-                    $name = $row["Name"];
-                    $enabled = $row["enabled"];
-                    switch ($type) {
-                        case "csgo":
-                        case "valheim":
-                        case "protocol-valve":
-                        case "arkse":
-                            include '../../query/sourcequery.php';
-                            break;
-                        case "minecraft":
-                            include '../../query/minecraftquery.php';
-                            break;
-                    }
-                    $serverstatus = json_decode($queryresult ?? false);
-                    include '../../html/type/query.php';
-                    // Correct image link if necessary
-                    $imgcheck = $rest = substr($img, 0 ,5);
-                    if ($imgcheck == "html/") {
-                        $img = "../../$img";
-                    }
-                    echo "<div class='serversnippet flex' ".'onclick="'."location.href='server.php?id=$id';".'"'."><div class='status $status'></div><div class='content'><div class='name'>$name</div><div class='logo flex'><img src='$img' width='85px' height='85px'></div><div class='player'>$countplayers/$maxplayers</div></div></div>";
-                }
-            } else {
-                echo "0 results";
-            }
-            mysqli_close($conn);
+            require_once 'smallserver.php';
+            if ($username == "admin") :
             ?>
         </div>
         <div class="extra inlineflex flex-wrap">
@@ -197,6 +130,7 @@ function tailCustom($filepath, $lines = 1, $adaptive = true)
 </main>
 <textarea class="plain"><?php echo $markdown ?></textarea>
 <?php
+endif;
 if($emarkdown):
 ?>
     <script type="text/javascript" src="drawdown.js"></script>
@@ -211,7 +145,6 @@ if($emarkdown):
     </script>
 <?php
 endif;
-file_put_contents("text.txt", "1" . "\n", FILE_APPEND);
 ?>
 </body>
 </html>
