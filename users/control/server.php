@@ -153,8 +153,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="theme-color" content="#151f34" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#151f34" media="(prefers-color-scheme: dark)">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
@@ -280,7 +281,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div id="serverinf">
                     <table>
                         <tr>
-                            <th>ID</th>
+                            <th class="tableid">ID</th>
                             <th>Type</th>
                             <th>IP</th>
                             <th>Game Port</th>
@@ -288,7 +289,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <th>Rcon Port</th>
                         </tr>
                         <tr>
-                            <td><?php echo $ServerID?></td>
+                            <td class="tableid"><?php echo $ServerID?></td>
                             <td><?php echo $type?></td>
                             <td><?php echo $ip?></td>
                             <td><?php echo $gport?></td>

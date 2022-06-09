@@ -361,6 +361,19 @@ label #type {
     main {
         padding-left: 140px;
     }
+    .padding30 {
+        padding: 12px 0 30px;
+    }
+    #Hostname {
+        width: 90%;
+        margin: auto;
+    }
+    #control, #settings {
+        padding: 15px 10px;
+    }
+    .tableid {
+        display: none;
+    }
 }
 @media only screen and (max-width: 420px) {
     #sidebar, #sidebar button.bottom {
@@ -373,7 +386,7 @@ label #type {
         display: block;
     }
     .serversnippet {
-        width: 320px;
+        width: 340px;
     }
     .server {
         padding-top: 45px
