@@ -291,6 +291,7 @@ label #type {
     font-size: 14px;
     padding: 2px 10px;
     cursor: pointer;
+    color: black;
 }
 .addsrv:hover {
     background-color: rgb(210, 210, 210);
