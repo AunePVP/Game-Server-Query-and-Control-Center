@@ -1,8 +1,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
-    <meta name="apple-mobile-web-app-title" content="GSQ">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js" integrity="sha384-3bN2hgHqRqV/M1bIAjiKFhqppgax2R0S7GnMJUwzS70pMc6rnpKaA7oJPCX5mb8w" crossorigin="anonymous"></script>    <meta name="apple-mobile-web-app-title" content="GSQ">
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="theme-color" content="#1D1D1F" media="(prefers-color-scheme: light)">
