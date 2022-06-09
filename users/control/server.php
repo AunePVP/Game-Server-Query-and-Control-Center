@@ -22,6 +22,15 @@ if (!isset($_SESSION['username'])) {
     header('location: ../login.php');
     exit;
 }
+function convertos($Os)
+{
+    $Opers = array(
+        'l' => 'Linux',
+        'w' => 'Windows',
+        'm' => 'Mac'
+    );
+    return $Opers[$Os];
+}
 include "../../html/tailcustom.php";
 $username = $_SESSION['username'];
 if ($username == "admin") {
@@ -215,6 +224,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
+                    $ServerID = $row["ID"];
                     $ip = $row["IP"];
                     $type = $row["type"];
                     $qport = $row["QueryPort"];
@@ -267,6 +277,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div id="serverinf">
                     <table>
                         <tr>
+                            <th>ID</th>
                             <th>Type</th>
                             <th>IP</th>
                             <th>Game Port</th>
@@ -274,13 +285,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <th>Rcon Port</th>
                         </tr>
                         <tr>
-                            <td><input type="text" readonly="readonly" size="15" value="<?php echo $type?>"></td>
-                            <td><input type="text" readonly="readonly" size="32" value="<?php echo $ip?>"></td>
-                            <td><input type="text" readonly="readonly" size="13" value="<?php echo $gport?>"></td>
-                            <td><input type="text" readonly="readonly" size="13" value="<?php echo $qport?>"></td>
-                            <td><input type="text" readonly="readonly" size="13" value="<?php echo $rport?>"></td>
+                            <td><?php echo $ServerID?></td>
+                            <td><?php echo $type?></td>
+                            <td><?php echo $ip?></td>
+                            <td><?php echo $gport?></td>
+                            <td><?php echo $qport?></td>
+                            <td><?php echo $rport?></td>
                         </tr>
                     </table>
+                    <div><?php
+                        switch ($type) {
+                        case "csgo":
+                        case "valheim":
+                        case "vrising":
+                        case "protocol-valve":
+                        case "rust":
+                        case "arkse":
+                            echo '<span style="font-weight: 500;">System:</span>'.$Os.'<br>';
+                            break;
+                        case "minecraft":
+                            break;
+                        }?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -307,16 +333,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="rust">Rust</option>
                         </select>
                     </label>
-                        <div id="input">
+                        <div class="input">
                             <label for="input-domain-ip">IP/Domain:</label><input id="input-domain-ip" name="ip" type="text" required="required" minlength="4" maxlength="30" placeholder="xxx.xxx.xxx.xx" autocomplete="off">
                         </div>
-                        <div id="input">
+                        <div class="input">
                             <label for="input-gport">Game Port:</label><input id="input-gport" name="gport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
                         </div>
-                        <div id="input">
+                        <div class="input">
                             <label for="input-qport">Query Port:</label><input id="input-qport" name="qport" type="text" minlength="1" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
                         </div>
-                        <div id="input">
+                        <div class="input">
                             <label for="input-rport">Rcon Port:</label><input id="input-rport" name="rport" type="text" minlength="1" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
                         </div>
                         <div>
