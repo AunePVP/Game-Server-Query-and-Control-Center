@@ -24,6 +24,7 @@ if ($username == "admin") {
 } else {
     $title = "Control panel";
 }
+$Index_selected = 'class="selected"';
 ?>
 <!doctype html>
 <html lang="en">

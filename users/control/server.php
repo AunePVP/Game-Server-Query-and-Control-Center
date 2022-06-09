@@ -38,7 +38,7 @@ if ($username == "admin") {
 } else {
     $title = "Control panel";
 }
-
+$Server_selected = 'class="selected"';
 //--// Add server //--//
 function test_input($data) {
     $data = trim($data);
