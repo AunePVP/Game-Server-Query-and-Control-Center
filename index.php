@@ -19,8 +19,9 @@ const SQ_ENGINE = SourceQuery::SOURCE;
 
 require "html/tailcustom.php";
 require "functions.php";
-
-
+if (!isset($install)) {
+    header("Location: /html/install.php");
+}
 ?>
     <!doctype html>
     <html lang="<?php
