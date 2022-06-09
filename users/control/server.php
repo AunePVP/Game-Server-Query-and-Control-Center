@@ -199,10 +199,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="serversnippet flex" onclick="location.href='server.php?id=addserver';">
                     <div class="content">
                         <div class="name" style="font-size: 32px;padding-top: 25px;">Add a server</div>
-                        <svg class="svg-circleplus" viewBox="0 0 100 100">
-                            <line x1="32.5" y1="50" x2="67.5" y2="50" stroke-width="5"></line>
-                            <line x1="50" y1="32.5" x2="50" y2="67.5" stroke-width="5"></line>
-                        </svg>
+                        <div style="height: 111px;justify-content: center;display: flex;">
+                            <svg class="svg-circleplus" viewBox="0 0 100 100">
+                                <line x1="22.5" y1="50" x2="77.5" y2="50" stroke-width="7"></line>
+                                <line x1="50" y1="22.5" x2="50" y2="77.5" stroke-width="7"></line>
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>
