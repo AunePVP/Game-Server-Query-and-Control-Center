@@ -15,6 +15,7 @@ input:invalid {
     border: 2px dashed red;
     background-color: #ffc3c3;
 }
+.svg-circleplus { height: 120px; stroke: white; }
 #topbar {
     display: none;
 }
