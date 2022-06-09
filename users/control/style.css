@@ -260,7 +260,7 @@ label #type {
     font-family: Helvetica,sans-serif;
     font-size: 20px;
 }
-#input {
+.input {
     margin: 0 0 10px 0;
 }
 #input-domain-ip, #input-gport, #input-qport, #input-rport{
