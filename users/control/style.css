@@ -7,7 +7,7 @@ html, body {
     color: white;
 }
 main {
-    min-height: calc(100vh - 30px);
+    min-height: 100vh;
     background-color: #151f34;
     padding-left: 225px;
 }
@@ -163,6 +163,7 @@ textarea.plain {
 }
 .padding30 {
     padding: 12px 30px 30px;
+    min-height: calc(100vh - 42px);
 }
 .width40 {
     width: 40%;
