@@ -7,7 +7,7 @@ html, body {
     color: white;
 }
 main {
-    min-height: calc(100vh - 30px);
+    min-height: 100vh;
     background-color: #151f34;
     padding-left: 225px;
 }
@@ -163,6 +163,7 @@ textarea.plain {
 }
 .padding30 {
     padding: 12px 30px 30px;
+    min-height: calc(100vh - 42px);
 }
 .width40 {
     width: 40%;
@@ -259,7 +260,7 @@ label #type {
     font-family: Helvetica,sans-serif;
     font-size: 20px;
 }
-#input {
+.input {
     margin: 0 0 10px 0;
 }
 #input-domain-ip, #input-gport, #input-qport, #input-rport{
@@ -293,6 +294,9 @@ label #type {
 .addsrv:hover {
     background-color: rgb(210, 210, 210);
 }
+.padding25 .input {
+    margin: 0 0 10px 0;
+}
 #controlsettingsparent {
     height: 80vh;
     background-color: #383B4F;
@@ -307,7 +311,9 @@ label #type {
 #tab1 {
     text-decoration: underline;
 }
-
+#serverinf table {
+    width: 100%;
+}
 #serverinf table td, #serverinf table th {
     text-align: center;
     font-family: Helvetica, serif;
@@ -315,7 +321,7 @@ label #type {
     font-size: 17px;
     letter-spacing: 1px;
 }
-#serverinf table td input {
+#serverinf table td {
     text-align: center;
     background-color: #5a5d72;
     color: white;
