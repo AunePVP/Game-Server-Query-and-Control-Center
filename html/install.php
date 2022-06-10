@@ -1,12 +1,4 @@
 <?php
-// TODO Remove this usercheck before publishing the Website. Why? Because this page is meant for the installation. When people install the Website, they have no Admin account and will create one.
-//session_start();
-//if (!isset($_SESSION['username'])) {
-//    $_SESSION['backURI'] = $_SERVER['REQUEST_URI'];
-//    echo $_SESSION['backURI'];
-//    header('location: ../users/login.php');
-//}
-//
 $configfile = 'config.php';
 require_once $configfile;
 if (isset($install) && !$install) {
@@ -73,7 +65,7 @@ if (array_key_exists('submit', $_POST)) {
     $myfile = fopen($configfile, "w") or die("Unable to open file!");
     $write = "<?php" . "\n" .
         'include ("langconf.php");' . "\n" .
-        '$install = 1;' . "\n" .
+        '$install = 0;' . "\n" .
         '$STEAMWEBAPI_KEY = "' . $STEAMWEBAPI_KEYI . '";' . "\n\n" .
         '$DB_SERVER = "' . $DB_SERVERI . '";' . "\n" .
         '$DB_USERNAME = "' . $DB_USERNAMEI . '";' . "\n" .
