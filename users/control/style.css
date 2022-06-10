@@ -306,6 +306,7 @@ label #type {
 }
 #control, #settings {
     padding: 30px 40px;
+    display: flex;
 }
 #settings {
     display: none;

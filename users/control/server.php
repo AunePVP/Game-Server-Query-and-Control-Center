@@ -275,7 +275,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a class="settings" onclick="tab(this.id)" id="tab2">Settings</a>
         </div>
         <div id="controlsettingsparent">
-            <div id="control">ff</div>
+            <div id="control">
+                <div style="width:65%">left</div>
+                <div style="width:35%">right</div>
+            </div>
             <div id="settings">
                 <!-- Display server information -->
                 <div id="serverinf">
