@@ -27,11 +27,11 @@ if (array_key_exists('validate', $_POST)) {
     $displaysubmit = "block";
     try {
         $conn = mysqli_connect($DB_SERVERI, $DB_USERNAMEI, $DB_PASSWORDI, $DB_NAMEI);
+        mysqli_close($conn);
     } catch(mysqli_sql_exception $e) {
         $sqlvalidatemessage = "Connection failed!";
         $displaysubmit = "none";
     }
-    mysqli_close($conn);
 }
 // Write the data into the config file and create the server table
 if (array_key_exists('submit', $_POST)) {
@@ -177,7 +177,7 @@ if (array_key_exists('submit', $_POST)) {
                         // Password encryption to increase data security
                         $password = hash('sha256', $password_1);
                         // Inserting data into table
-                        $query = "INSERT INTO users (username, password, server) VALUES('$username', '$password', '{0:0}')";
+                        $query = "INSERT INTO users (username, password, server) VALUES('$username', '$password', '{\"0\":0}')";
                         mysqli_query($db, $query);
                         // Storing username of the logged-in user,
                         // in the session variable
@@ -189,7 +189,7 @@ if (array_key_exists('submit', $_POST)) {
                         unset($_SESSION['backURI']);
                         //header("location:".$backURL);
                         echo "You created the user ".$username."!";
-                        echo "<script>setTimeout(function(){window.location.href = '../../users/control/index.php';}, 1000)</script>";
+                        echo "<script>setTimeout(function(){window.location.href = '../users/control/index.php';}, 1000)</script>";
                     }
                 }
                 ?>
