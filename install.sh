@@ -64,7 +64,7 @@ sudo mysql -e "USE ${dbname}; CREATE TABLE users (id INT auto_increment PRIMARY 
 
 echo "<?php" > html/config.php
 echo "\$DB_SERVER = localhost;" >> html/config.php
-echo "\$DB_USUERNAME = ${user};" >> html/config.php
+echo "\$DB_USERNAME = ${user};" >> html/config.php
 echo "\$DB_NAME = ${dbname};" >> html/config.php
 sudo chown ${wsuname}:${user} html/config.php
 sudo chmod 600 html/config.php
