@@ -24,13 +24,8 @@ fi
 webserver=$(whiptail --separate-output --radiolist --title "Installation" "Select your webserver" 10 60 2 \
   "Nginx" "Select this if you're running Nginx" ON \
   "Apache" "Select this if you're running Apache" OFF  3>&1 1>&2 2>&3)
-
-echo $webserver
-if [ -z "$webserver" ]; then
-  echo "No option was chosen (user hit Cancel)"
-else
-  echo "The user chose $webserver"
-fi
+exitstatus=$?
+[[ "$exitstatus" = 1 ]] && exit 0;
 #Get Project files
 LOCATION=$(curl -s https://api.github.com/repos/AunePVP/Game-Server-Query-and-Control-Center/releases/latest \
 | grep "zipball_url" \
@@ -43,6 +38,8 @@ rm download.zip
 namedir=$(ls -d */)
 user=$(whoami)
 wsuname=$(whiptail --inputbox --title "Installation" "Please enter your webserver username (most likely www-data)" 10 60 3>&1 1>&2 2>&3)
+exitstatus=$?
+[[ "$exitstatus" = 1 ]] && exit 0;
 #Set file permissions
 find $namedir -type d -exec chmod 770 {} \;
 find $namedir -type f -exec chmod 640 {} \;
@@ -53,7 +50,11 @@ rm -r $namedir
 
 mysqlucheck="$(sudo mysql -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$user')")"
 dbname=$(whiptail --inputbox --title "Create Database" "Please enter a name for your database" 10 100 3>&1 1>&2 2>&3)
+exitstatus=$?
+[[ "$exitstatus" = 1 ]] && exit 0;
 mysqlpasswd=$(whiptail --passwordbox --title "Create Database" "Please set a password" 10 100 3>&1 1>&2 2>&3)
+exitstatus=$?
+[[ "$exitstatus" = 1 ]] && exit 0;
 sudo mysql -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
 if ! [ "$mysqlucheck" = 1 ]; then
   sudo mysql -e "CREATE USER ${user}@localhost IDENTIFIED BY '${mysqlpasswd}';"
@@ -68,7 +69,7 @@ echo "\$DB_USERNAME = '${user}';" >> html/config.php
 echo "\$DB_NAME = '${dbname}';" >> html/config.php
 sudo chown ${wsuname}:${user} html/config.php
 sudo chmod 600 html/config.php
-clear
+#clear
 printf "\n"
 base64 -d <<<"H4sIAAAAAAAAA8WWza3EIAyE71sF0hbAPbUg0UiU2t/yYxiwJ8DpcVgl/rA9GMPm62DENJwxGIjx
 lZyEKuDzBYsP6TfoqQz462LkNFQDqIjGZ+Bn5+QsFALQRDMwkO2cnIQaQRdFUzBQ7Zzsh5pAE5XM
@@ -79,15 +80,17 @@ YJRzVgRzyTkXS1I6CO0jlGPVCTkqdnfOqbE5KJCcl62ociTbmvp9rRplcjHKEV5F8VDvstpfm2oK
 twJ6c9717BaqfwLQBDxz2RyzS+0W29AEH0pq75egnEMn1/FSz8s9pgB+VQa2bOtmacL6RbzjsQ2G
 D3A62G3inufU4xTsCfyf8fkD1YkCfk4NAAA=" | gunzip
 printf "\n"
-sleep 2 &
-pid=$!
-while kill -0 $pid 2&>1 > /dev/null;
+sleep 2 & pid=$!
+frames="< >"
+while kill -0 $pid > /dev/null 2>&1;
 do
-    printf "\r< Loading..."
-    sleep 0.5
-    printf "\r> Loading..."
-    sleep 0.5
+    for frame in $frames;
+    do
+        printf "\r$frame Loading..."
+        sleep 0.5
+    done
 done
+printf "\n"
 printf "\n"
 echo "Game Server Query installed!"
 echo "Go to your browser, open the webpage (https://<ip/domain/localhost>/index.php) and start the setup"
