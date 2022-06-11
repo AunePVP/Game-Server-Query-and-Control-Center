@@ -66,6 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } // If error occured, send back to add server
             catch (Exception $e) {
                 echo "<script>alert('ERROR! Server doesn\'t respond to query. Please try adding the server again.');window.location.href = window.location.href + '?id=addserver';</script>";
+                exit();
             } // Disconnect from Server
             finally {
                 $Query->Disconnect();
@@ -81,6 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } // If error occured, send back to add server
                 catch (MinecraftPingException $e) {
                     echo "<script>alert('ERROR! Server doesn\'t respond to query. Please try adding the server again.');window.location.href = window.location.href + '?id=addserver';</script>";
+                    exit();
                 } // Disconnect from Server
                 finally {
                     $Query->Close();
@@ -94,6 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } // Check if an error occurred
                 catch (MinecraftQueryException $e) {
                     echo "<script>alert('ERROR! Server doesn\'t respond to query. Please try adding the server again.');window.location.href = window.location.href + '?id=addserver';</script>";
+                    exit();
                 }
             }
             break;
