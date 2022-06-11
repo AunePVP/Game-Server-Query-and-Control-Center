@@ -127,6 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $serverjson = json_decode($row["server"], TRUE);
+            $serverjson[$addid] = array();
             $serverjson[$addid] = $addid;
             $serverjson = json_encode($serverjson);
         }
