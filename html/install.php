@@ -177,7 +177,7 @@ if (array_key_exists('submit', $_POST)) {
                         // Password encryption to increase data security
                         $password = hash('sha256', $password_1);
                         // Inserting data into table
-                        $query = "INSERT INTO users (username, password, server) VALUES('$username', '$password', '{\"0\":\"0\"}')";
+                        $query = "INSERT INTO users (username, password, server) VALUES('$username', '$password', '{\"0\":0}')";
                         mysqli_query($db, $query);
                         // Storing username of the logged-in user,
                         // in the session variable

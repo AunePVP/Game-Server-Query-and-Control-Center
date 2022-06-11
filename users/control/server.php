@@ -122,6 +122,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     // Add server ID to user
+    if (empty($addid)) {
+        $addid = 1;
+    }
     $sql = "SELECT server FROM users WHERE username='$username'";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
