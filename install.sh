@@ -91,6 +91,5 @@ do
     done
 done
 printf "\n"
-printf "\n"
 echo "Game Server Query installed!"
 echo "Go to your browser, open the webpage (https://<ip/domain/localhost>/index.php) and start the setup"
