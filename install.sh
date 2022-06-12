@@ -36,6 +36,8 @@ LOCATION=$(curl -s https://api.github.com/repos/AunePVP/Game-Server-Query-and-Co
 unzip download.zip
 rm download.zip
 namedir=$(ls -d */)
+mkdir ${namedir}query/cron
+mkdir ${namedir}query/cron/cache
 user=$(whoami)
 wsuname=$(whiptail --inputbox --title "Installation" "Please enter your webserver username (most likely www-data)" 10 60 3>&1 1>&2 2>&3)
 exitstatus=$?
@@ -68,8 +70,9 @@ echo "\$DB_SERVER = 'localhost';" >> html/config.php
 echo "\$DB_USERNAME = '${user}';" >> html/config.php
 echo "\$DB_NAME = '${dbname}';" >> html/config.php
 sudo chown ${wsuname}:${user} html/config.php
-sudo chmod 600 html/config.php
-#clear
+sudo chmod 640 html/config.php
+sudo apt install php-mbstring -y
+clear
 printf "\n"
 base64 -d <<<"H4sIAAAAAAAAA8WWza3EIAyE71sF0hbAPbUg0UiU2t/yYxiwJ8DpcVgl/rA9GMPm62DENJwxGIjx
 lZyEKuDzBYsP6TfoqQz462LkNFQDqIjGZ+Bn5+QsFALQRDMwkO2cnIQaQRdFUzBQ7Zzsh5pAE5XM
