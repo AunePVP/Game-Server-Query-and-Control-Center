@@ -65,7 +65,7 @@ if (mysqli_num_rows($result) > 0) {
             $status = "online";
         } else {
             $status = "offline";}
-        echo "<div class='serversnippet flex' ".'onclick="'."location.href='server.php?id=$ServerID';".'"'."><div class='status $status'></div><div class='content'><div class='name'>$name</div><div class='logo flex'><img src='$img' width='85px' height='85px'></div><div class='player'>$countplayers/$maxplayers</div></div></div>";
+        echo "<div class='serversnippet flex' ".'onclick="'."location.href='server.php?id=$ServerID';".'"'."><div class='status $status'></div><div class='content'><div class='name'>$title</div><div class='logo flex'><img src='$img' width='85px' height='85px'></div><div class='player'>$countplayers/$maxplayers</div></div></div>";
     }
 } else {
     echo "0 results";
