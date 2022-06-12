@@ -36,9 +36,11 @@ $font['banner'] = "Helvetica, sans-serif";
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Lato:400,900|IBM+Plex+Mono');
 @import url('https://fonts.cdnfonts.com/css/helvetica-neue-9');
-<style>
     body {
         background-color: <?php echo $background ?>;
+    }
+    th {
+        color: white;
     }
     /* link hover start */
     a.white-hover {
@@ -435,4 +437,3 @@ $font['banner'] = "Helvetica, sans-serif";
         .vchartdiv {width: auto}
         .container {padding-top: 20px;}
     }
-</style>
