@@ -130,20 +130,17 @@ $Index_selected = 'class="selected"';
         </div>
     </div>
 </main>
-<textarea class="plain"><?php echo $markdown ?></textarea>
+<textarea id="markdownsource"><?php echo $markdown ?></textarea>
 <?php
 endif;
 if($emarkdown):
 ?>
-    <script type="text/javascript" src="drawdown.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js" integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript">
-        var ein = document.querySelector(".plain");
-        var eout = document.querySelector("#markdown");
-        function update() {
-            eout.innerHTML = markdown(ein.value);
-        }
-        ein.addEventListener("input", update);
-        update();
+        let converter = new showdown.Converter(),
+            text      = document.getElementById('markdownsource').value,
+            html      = converter.makeHtml(text);
+        document.getElementById('markdown').innerHTML = html;
     </script>
 <?php
 endif;

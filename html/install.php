@@ -194,6 +194,7 @@ if (array_key_exists('submit', $_POST)) {
                 }
                 ?>
                 <div style="margin: auto;">
+                    <h2 style="margin: 0 0 10px;font-family: Helvetica,sans-serif;">Create Admin User</h2>
                     <form method="post" action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>>
                         <div class="input">
                             <label for="username">Username</label><input type="text" class="inputstyle" readonly="readonly" name="username" id="username" value="admin">
