@@ -104,10 +104,11 @@ $Index_selected = 'class="selected"';
                     $github = json_decode(file_get_contents('https://api.github.com/repos/AunePVP/Game-Server-Query-and-Control-Center/releases/latest', false, $context));
                     $releasename = $github->name;
                     $markdown = $github->body;
-                    #$markdown = preg_replace("/\r\n|\r|\n/", '\r\n', $markdown);
                     $versionfile = fopen("../../version.txt", "r") or die("Unable to open file!");
                     $version = fgets($versionfile);
                     fclose($versionfile);
+                    $version = preg_replace('/\s+/', '', $version);
+                    $releasename = preg_replace('/\s+/', '', $releasename);
                     if ($version == $releasename) {
                         echo "<div style='margin: auto;font-family: Helvetica Neue,sans-serif;font-size: 22px;}'>No new release found</div>";
                     } else {
