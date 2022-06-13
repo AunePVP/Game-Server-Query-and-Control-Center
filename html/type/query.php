@@ -1,8 +1,6 @@
 <?php
 use AunePVP\jsonconversion;
 use Spirit55555\Minecraft\MinecraftColors;
-//require 'html/type/minecraft/jsonconversion.php';
-//require 'html/type/minecraft/minecraftcolor.php';
 if (isset($controlpanel)) {
     $controlpanellink = "../../";
 } else {
