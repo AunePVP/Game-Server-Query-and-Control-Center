@@ -6,38 +6,21 @@
 # Website: https://tracker.iguaserver.de
 
 if whiptail --yesno "Apt Update?" 10 35; then
-  sudo apt update -y
-else
-  echo "No update"
+  sudo apt-get update -y
 fi
-#Check if curl is installed
-if ! command -v curl &> /dev/null
+#Check if git and mysql are installed
+if ! command -v git &> /dev/null
 then
-    sudo apt-get install curl -y
-    exit
+    sudo apt-get install git -y
 fi
 if ! command -v mysql &> /dev/null
 then
     echo "Please install mysql"
     exit 0
 fi
-webserver=$(whiptail --separate-output --radiolist --title "Installation" "Select your webserver" 10 60 2 \
-  "Nginx" "Select this if you're running Nginx" ON \
-  "Apache" "Select this if you're running Apache" OFF  3>&1 1>&2 2>&3)
-exitstatus=$?
-[[ "$exitstatus" = 1 ]] && exit 0;
-#Get Project files
-LOCATION=$(curl -s https://api.github.com/repos/AunePVP/Game-Server-Query-and-Control-Center/releases/latest \
-| grep "zipball_url" \
-| awk '{ print $2 }' \
-| sed 's/,$//'       \
-| sed 's/"//g' )     \
-; curl -L -o download.zip $LOCATION
-unzip download.zip
-rm download.zip
-namedir=$(ls -d */)
-mkdir ${namedir}query/cron
-mkdir ${namedir}query/cron/cache
+# Download Source code with git
+git clone https://github.com/AunePVP/Game-Server-Query-and-Control-Center
+namedir=Game-Server-Query-and-Control-Center/
 user=$(whoami)
 wsuname=$(whiptail --inputbox --title "Installation" "Please enter your webserver username (most likely www-data)" 10 60 3>&1 1>&2 2>&3)
 exitstatus=$?
@@ -47,7 +30,7 @@ find $namedir -type d -exec chmod 770 {} \;
 find $namedir -type f -exec chmod 640 {} \;
 find ${namedir}html/type/arkse/ -type f -exec chmod 660 {} \;
 sudo chown -R ${user}:${wsuname} $namedir
-mv ${namedir}/* .
+mv ${namedir}{.,}* .
 rm -r $namedir
 
 mysqlucheck="$(sudo mysql -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$user')")"
