@@ -194,7 +194,7 @@ switch ($type) {
         $ingameday = $serverstatus->rules->{'days-running'} ?? '';
         // Get the game tags
         $GameTags = $serverstatus->info->GameTags;
-        $GameTags =  preg_replace("/,/", ", ", $GameTags);
+        $GameTags =  str_replace(",", ", ", $GameTags);
         break;
     case "rust":
         // Get the seed and world size
