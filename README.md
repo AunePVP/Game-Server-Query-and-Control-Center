@@ -34,4 +34,3 @@ Check out the [Wiki]( https://github.com/AunePVP/Game-Server-Query-and-Control-C
 -[PHP Source Query](https://github.com/xPaw/PHP-Source-Query)<br />
 -[PHP Minecraft Query](https://github.com/xPaw/PHP-Minecraft-Query)<br />
 -[PHP Minecraft](https://github.com/Spirit55555/PHP-Minecraft)<br />
--[Drawdown](https://github.com/adamvleggett/drawdown)<br />
