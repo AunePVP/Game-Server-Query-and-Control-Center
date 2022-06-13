@@ -328,8 +328,20 @@ label #type {
     border-radius: 6px;
 }
 #control, #settings {
-    padding: 30px 40px;
     display: flex;
+}
+#control {
+    height: 100%;
+}
+#control .left {
+    width:65%;
+    border-right: solid;
+}
+#control .right {
+    width:35%
+}
+#control .right, #control .left {
+    padding: 30px 40px;
 }
 #settings {
     display: none;

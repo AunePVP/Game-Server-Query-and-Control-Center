@@ -283,8 +283,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div id="controlsettingsparent">
             <div id="control">
-                <div style="width:65%">left</div>
-                <div style="width:35%">right</div>
+                <div class='left'>left</div>
+                <div class='right'>
+                    right
+                </div>
             </div>
             <div id="settings">
                 <!-- Display server information -->
