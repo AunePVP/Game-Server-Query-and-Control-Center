@@ -19,7 +19,7 @@ You can also see the historical player count and the uptime of the server. If th
 
 If there is a game server not currently supported, please create an Issue and I will add the server as soon as possible.
 
-### You can find more screenshots [here]( https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Screenshots )
+### You can find more screenshots [here.]( https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Screenshots )
 <img width="1440" alt="Screen Shot 2022-06-05 at 21 26 15" src="https://user-images.githubusercontent.com/67545895/172096411-86b8529c-653a-4669-a845-540178679375.png">
 
 

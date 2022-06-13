@@ -3,7 +3,6 @@
  * (c) Adam Leggett
  */
 
-
 ;function markdown(src) {
 
     var rx_lt = /</g;
