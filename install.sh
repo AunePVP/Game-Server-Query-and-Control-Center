@@ -18,20 +18,21 @@ then
     echo "Please install mysql"
     exit 0
 fi
-# Download Source code with git
-git clone https://github.com/AunePVP/Game-Server-Query-and-Control-Center
-namedir=Game-Server-Query-and-Control-Center/
 user=$(whoami)
 wsuname=$(whiptail --inputbox --title "Installation" "Please enter your webserver username (most likely www-data)" 10 60 3>&1 1>&2 2>&3)
 exitstatus=$?
 [[ "$exitstatus" = 1 ]] && exit 0;
-#Set file permissions
+# Download Source code with git
+git clone https://github.com/AunePVP/Game-Server-Query-and-Control-Center
+# Set file permissions
+namedir=Game-Server-Query-and-Control-Center/
+user=$(whoami)
 find $namedir -type d -exec chmod 770 {} \;
 find $namedir -type f -exec chmod 640 {} \;
 find ${namedir}html/type/arkse/ -type f -exec chmod 660 {} \;
 sudo chown -R ${user}:${wsuname} $namedir
-mv ${namedir}{.,}* .
-rm -r $namedir
+sudo mv -f ${namedir}{.,}* .
+sudo rm -r $namedir
 
 mysqlucheck="$(sudo mysql -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$user')")"
 dbname=$(whiptail --inputbox --title "Create Database" "Please enter a name for your database" 10 100 3>&1 1>&2 2>&3)
