@@ -10,12 +10,6 @@
     <meta name="format-detection" content="telephone=no">
     <title>Gamserver Query</title>
     <link rel="stylesheet" href="css/style.php">
-    <link rel="stylesheet" href="<?php
-    if ($css_template == "light") {
-        echo "css/light.css";
-    } elseif ($css_template == "dark") {
-        echo "css/dark.css";
-    } ?>">
     <link rel="apple-touch-icon" sizes="57x57" href="ico/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="ico/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="ico/apple-icon-72x72.png">
