@@ -228,6 +228,7 @@ textarea.plain {
 #Hostname {
     font-family: Helvetica Neue, sans-serif;
     font-size: 31px;
+    padding-top: 10px;
 }
 #tab1, #tab2 {
     cursor: pointer;
@@ -342,6 +343,23 @@ label #type {
 }
 #control .right, #control .left {
     padding: 30px 40px;
+}
+#servercontrol {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+#servercontrol .button {
+    width: 20%;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 0;
+    font-size: 20px;
+    font-family: "Helvetica", sans-serif;
+}
+#servercontrol .button.disabled {
+    cursor: not-allowed;
+    color: #a4a4a4;
 }
 #settings {
     display: none;

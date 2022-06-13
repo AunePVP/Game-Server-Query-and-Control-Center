@@ -46,6 +46,7 @@ function test_input($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
+if (array_key_exists('submit', $_POST)) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $addtype = test_input($_POST["type"]);
     $addip = test_input($_POST["ip"]);
@@ -285,7 +286,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div id="control">
                 <div class='left'>left</div>
                 <div class='right'>
-                    right
+                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                        <div id="servercontrol">
+                            <button class="button disabled" type="submit" value="start" disabled>Start</button>
+                            <button class="button" type="submit" value="stop">Stop</button>
+                            <button class="button" type="submit" value="restart">Restart</button>
+                            <button class="button" type="submit" value="backup">Backup</button>
+                        </div>
                 </div>
             </div>
             <div id="settings">
@@ -365,7 +372,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div id="notes"></div>
                         </div>
                         <div style="display:flex;justify-content: flex-end;">
-                            <input class="addsrv" type="submit" name="submit" value="Add Server">
+                            <input class="addsrv" type="submit" name="submit" value="AddServer">
                         </div>
                 </div>
             </div>
