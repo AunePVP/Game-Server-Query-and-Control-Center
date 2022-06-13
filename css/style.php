@@ -36,6 +36,7 @@ $font['banner'] = "Helvetica, sans-serif";
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Lato:400,900|IBM+Plex+Mono');
 @import url('https://fonts.cdnfonts.com/css/helvetica-neue-9');
+<style>
     body {
         background-color: <?php echo $background ?>;
     }
@@ -115,7 +116,6 @@ $font['banner'] = "Helvetica, sans-serif";
         font-size: 25px;
         position: sticky;
         top: 0;
-        overflow: auto;
         height:58px;
         z-index: 10;
     }
@@ -151,6 +151,29 @@ $font['banner'] = "Helvetica, sans-serif";
     .user-avater {
         border: 5px solid <?php echo $server['color']?>;
         height: calc(100% - 10px);
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        z-index: 1;
+        right: 0;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 10px 13px;
+        text-decoration: none;
+        display: block;
+        font-family: Montserrat, sans-serif;
+        font-size: 17px;
+        text-align: right;
+    }
+
+    .dropdown-content a:hover {background-color: #dcdcdc;}
+
+    .dropdown:hover .dropdown-content {
+        display: block;
     }
     .white-inftext {
         color: white;
@@ -437,3 +460,4 @@ $font['banner'] = "Helvetica, sans-serif";
         .vchartdiv {width: auto}
         .container {padding-top: 20px;}
     }
+</style>
