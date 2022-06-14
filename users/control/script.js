@@ -31,7 +31,7 @@ function tab(clicked_id) {
     let y = document.getElementById("settings");
     let z = document.getElementById(clicked_id);
     if (clicked_id === "tab1") {
-        x.style.display = "block";
+        x.style.display = "flex";
         document.getElementById("tab2").style.textDecoration = "none";
         y.style.display = "none";
     } else if (clicked_id === "tab2") {
