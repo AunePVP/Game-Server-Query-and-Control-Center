@@ -288,6 +288,16 @@ label #type {
 .input {
     margin: 0 0 10px 0;
 }
+.settingsinput {
+    border-radius: 4px;
+    border: none;
+    font-size: 14px;
+    padding: 4px 8px;
+}
+.settings-inputline a img {
+    margin: 4px 2px;
+    cursor: pointer;
+}
 #input-domain-ip, #input-gport, #input-qport, #input-rport{
     width: -webkit-fill-available;
     padding: 0 5px;
@@ -328,21 +338,18 @@ label #type {
     background-color: #383B4F;
     border-radius: 6px;
 }
-#control, #settings {
-    display: flex;
-}
 #control {
     height: 100%;
+    display: flex;
 }
 #control .left {
     width:65%;
     border-right: solid;
+    padding: 30px 40px;
 }
 #control .right {
-    width:35%
-}
-#control .right, #control .left {
-    padding: 30px 40px;
+    width:35%;
+    padding: 30px 20px;
 }
 #servercontrol {
     display: flex;
@@ -350,19 +357,28 @@ label #type {
     justify-content: space-around;
 }
 #servercontrol .button {
-    width: 20%;
+    width: 23%;
     border: none;
     border-radius: 8px;
     padding: 8px 0;
     font-size: 20px;
     font-family: "Helvetica", sans-serif;
+    cursor: pointer;
+    background-color: white;
+}
+#servercontrol .button:hover {
+    background-color: #cdcdcd;
 }
 #servercontrol .button.disabled {
     cursor: not-allowed;
-    color: #a4a4a4;
+    color: #878787;
+}
+#servercontrol .button.disabled:hover {
+    background-color: white;
 }
 #settings {
     display: none;
+    padding: 20px 30px;
 }
 #tab1 {
     text-decoration: underline;
@@ -385,6 +401,13 @@ label #type {
     border-radius: 4px;
     font-size: 14px;
     padding: 5px 0;
+}
+.settings-inputline {
+    display: flex;
+    padding: 10px 0 0;
+}
+.settings-inputline label {
+    margin: auto 4px auto 0;
 }
 @media only screen and (max-width: 775px) {
     #sidebar, #sidebar button.bottom {

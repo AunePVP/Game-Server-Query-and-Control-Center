@@ -46,8 +46,8 @@ function test_input($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
-if (array_key_exists('submit', $_POST)) {
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Form Add Server
+if (array_key_exists('AddServer', $_POST)) {
     $addtype = test_input($_POST["type"]);
     $addip = test_input($_POST["ip"]);
     $addgport = test_input($_POST["gport"]);
@@ -156,6 +156,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $conn->close();
 }
+// Control Server
+if (array_key_exists('control', $_POST)) {
+    $command = $_POST['control'];
+    $ServerID = (int)$_GET['id'];
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -192,8 +197,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "style='padding:0!important'";
         }
     }?>>
-        <?php
-        include 'overlaynav.php' ?>
+        <?php include 'overlaynav.php' ?>
 
         <!-- __%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%__ -->
         <!-- _------------_ Display Servers_------------_ -->
@@ -286,12 +290,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div id="control">
                 <div class='left'>left</div>
                 <div class='right'>
-                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>">
                         <div id="servercontrol">
-                            <button class="button disabled" type="submit" value="start" disabled>Start</button>
-                            <button class="button" type="submit" value="stop">Stop</button>
-                            <button class="button" type="submit" value="restart">Restart</button>
-                            <button class="button" type="submit" value="backup">Backup</button>
+                            <?php
+                            if ($status){
+                                $startdisabled = " disabled";
+                            }
+                            if (!$status){
+                                $stopdisabled = " disabled";
+                                $restartdisabled = " disabled";
+                            }
+                            ?>
+                            <button class="button<?php echo $startdisabled ?? ''?>" type="submit" value="start" name="control"<?php echo $startdisabled ?? ''?>>Start</button>
+                            <button class="button<?php echo $stopdisabled ?? ''?>" type="submit" value="stop" name="control"<?php echo $stopdisabled ?? ''?>>Stop</button>
+                            <button class="button<?php echo $restartdisabled ?? ''?>" type="submit" value="restart" name="control<?php echo $restartdisabled ?? ''?>">Restart</button>
+                            <button class="button<?php echo $backupdisabled ?? ''?>" type="submit" value="backup" name="control"<?php echo $backupdisabled ?? ''?>>Backup</button>
                         </div>
                 </div>
             </div>
@@ -316,6 +329,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <td><?php echo $rport?></td>
                         </tr>
                     </table>
+                    <div class="settings-inputline">
+                        <label for="control-path">Server control path</label><input id="control-path" class="settingsinput" type="text"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#server-control-path" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
+                    </div>
                     <div><?php
                         switch ($type) {
                         case "csgo":
@@ -329,6 +345,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         case "minecraft":
                             break;
                         }?>
+                        <a href="#0" class="cd-popup-trigger">Delete this server</a>
                     </div>
                 </div>
             </div>
@@ -372,7 +389,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div id="notes"></div>
                         </div>
                         <div style="display:flex;justify-content: flex-end;">
-                            <input class="addsrv" type="submit" name="submit" value="AddServer">
+                            <input class="addsrv" type="submit" name="AddServer" value="AddServer">
                         </div>
                 </div>
             </div>
