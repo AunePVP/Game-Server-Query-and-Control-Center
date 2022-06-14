@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Lato:400,900|IBM+Plex+Mono');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
 html, body {
     margin: 0;
     padding: 0;
@@ -288,12 +289,19 @@ label #type {
 .input {
     margin: 0 0 10px 0;
 }
+#confpopup p strong {
+    -ms-user-select: None;
+    -moz-user-select: None;
+    -webkit-user-select: None;
+    user-select: None;
+}
 #confpopup {
     margin: auto;
     width: 450px;
     height: 210px;
     background-color: white;
     border-radius: 6px;
+    color: black;
 }
 #confpopup ul {
     list-style: none;
@@ -327,15 +335,17 @@ label #type {
     color: rgb(203, 203, 203);
     cursor: not-allowed;
 }
-#confpopup p strong {
-    -ms-user-select: None;
-    -moz-user-select: None;
-    -webkit-user-select: None;
-    user-select: None;
-}
 #confpopup p {
     font-family: Helvetica, sans-serif;
     margin:0
+}
+#deleteinput {
+    border: 1px solid;
+    border-radius: 6px;
+    padding: 5px;
+    width: -webkit-fill-available;
+    font-family: Helvetica, sans-serif;
+    font-size: 16px;
 }
 #deleteinput {
     border: 1px solid;

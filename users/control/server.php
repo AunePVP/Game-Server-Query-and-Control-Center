@@ -309,6 +309,41 @@ if (array_key_exists('control', $_POST)) {
                 </div>
             </div>
             <div id="settings">
+                <div id="confpopup">
+                    <div class="areyousure">Are you sure you want to delete this Server?</div>
+                    <div style="padding: 10px 10px 0;height:106px">
+                        <p style="padding-bottom: 15px;overflow: auto;">This action <strong>cannot</strong> be undone. This will permanently delete the server and all historical data from the database.</p>
+                        <p>Please type <strong>Delete-Server-1</strong> to confirm.</p>
+                        <input id="deleteinput" type="text" onkeyup="checkpattern()" required="required" autocomplete="off" pattern="[dD][eE][lL][eE][tT][eE]-[sS][eE][rR][vV][eE][rR]-[1]">
+                    </div>
+                    <div class="yesno">
+                        <button id="submitdelete" type="submit" disabled>Delete</button>
+                    </div>
+                </div>
+                <button id="popup-trigger">Click for popup</button>
+                <script>
+                    function checkpattern() {
+                        let checkinput = document.getElementById("deleteinput");
+                        if (!checkinput.checkValidity()) {
+                            document.getElementById("submitdelete").disabled = true;
+                        } else {
+                            document.getElementById("submitdelete").disabled = false;
+                        }
+                    }
+                    const popupQuerySelector = "#confpopup";
+                    const popupEl = document.querySelector(popupQuerySelector);
+                    const popupBttn = document.querySelector("#popup-trigger");
+                    document.addEventListener("click", (e) => {
+                        // Check if the filter list parent element exist
+                        const isClosest = e.target.closest(popupQuerySelector);
+
+                        // If `isClosest` equals falsy & popup has the class `show`
+                        // then hide the popup
+                        if (!isClosest && popupEl.classList.contains("show")) {
+                            popupEl.classList.remove("show");
+                        }
+                    });
+                </script>
                 <!-- Display server information -->
                 <div id="serverinf">
                     <table>
