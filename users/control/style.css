@@ -288,6 +288,63 @@ label #type {
 .input {
     margin: 0 0 10px 0;
 }
+#confpopup {
+    margin: auto;
+    width: 450px;
+    height: 210px;
+    background-color: white;
+    border-radius: 6px;
+}
+#confpopup ul {
+    list-style: none;
+}
+#confpopup .areyousure {
+    font-family: "JetBrains Mono";
+    padding: 10px;
+    border-bottom: solid;
+}
+#confpopup .yesno {
+    height: 50px;
+    margin:0;
+    padding: 0;
+}
+#confpopup .yesno button {
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    border: none;
+    background-color: #f33636;
+    border-radius: 0 0 6px 6px;
+    padding: 0;
+    margin: 0;
+    font-family: Helvetica;
+    font-size: 20px;
+    cursor: pointer;
+}
+#confpopup .yesno button:disabled {
+    background-color: #5e5e5e;
+    color: rgb(203, 203, 203);
+    cursor: not-allowed;
+}
+#confpopup p strong {
+    -ms-user-select: None;
+    -moz-user-select: None;
+    -webkit-user-select: None;
+    user-select: None;
+}
+#confpopup p {
+    font-family: Helvetica, sans-serif;
+    margin:0
+}
+#deleteinput {
+    border: 1px solid;
+    border-radius: 6px;
+    padding: 5px;
+    width: -webkit-fill-available;
+    font-family: Helvetica, sans-serif;
+    font-size: 16px;
+}
 .settingsinput {
     border-radius: 4px;
     border: none;
