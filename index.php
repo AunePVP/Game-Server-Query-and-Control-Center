@@ -84,15 +84,12 @@ if (!isset($install)) {
                             $gport = $row["GamePort"];
                             $rport = $row["RconPort"];
                             $name = $row["Name"];
-                            $enabled = $row["enabled"];
                         }
                     } else {
                         echo "0 results";
                     }
                 }
-                if ($enabled == 1) {
-                    require 'server.php';
-                }
+                require 'server.php';
             endforeach;
             $conn->close();
         }

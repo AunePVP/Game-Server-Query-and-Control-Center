@@ -189,7 +189,7 @@ if (array_key_exists('AddServer', $_POST)) {
         }
     }
     // Add server data to serverconfig table
-    $sql = "INSERT INTO serverconfig (ID, IP, type, QueryPort, GamePort, RconPort, enabled, Name) VALUES ('$addid', '$addip', '$addtype', '$addqport', '$addgport', '$addrport', '1', '0')";
+    $sql = "INSERT INTO serverconfig (ID, IP, type, QueryPort, GamePort, RconPort, Name) VALUES ('$addid', '$addip', '$addtype', '$addqport', '$addgport', '$addrport', '0')";
     if (mysqli_query($conn, $sql)) {
         echo "<script>console.log('Record updated successfully')</script>";
     } else {
