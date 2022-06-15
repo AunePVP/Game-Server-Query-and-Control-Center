@@ -289,6 +289,15 @@ label #type {
 .input {
     margin: 0 0 10px 0;
 }
+#confpopupparent {
+    height: 100vh;
+    position: fixed;
+    width: 100%;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.57);
+    z-index: 10;
+    display:none
+}
 #confpopup p strong {
     -ms-user-select: None;
     -moz-user-select: None;
@@ -298,10 +307,11 @@ label #type {
 #confpopup {
     margin: auto;
     width: 450px;
-    height: 210px;
+    height: 205px;
     background-color: white;
     border-radius: 6px;
     color: black;
+    z-index: 1;
 }
 #confpopup ul {
     list-style: none;
@@ -312,14 +322,14 @@ label #type {
     border-bottom: solid;
 }
 #confpopup .yesno {
-    height: 50px;
+    height: 45px;
     margin:0;
     padding: 0;
 }
 #confpopup .yesno button {
     width: 100%;
     text-align: center;
-    line-height: 50px;
+    line-height: 45px;
     color: white;
     border: none;
     background-color: #f33636;
@@ -329,6 +339,7 @@ label #type {
     font-family: Helvetica;
     font-size: 20px;
     cursor: pointer;
+    letter-spacing: 1
 }
 #confpopup .yesno button:disabled {
     background-color: #5e5e5e;
@@ -338,6 +349,26 @@ label #type {
 #confpopup p {
     font-family: Helvetica, sans-serif;
     margin:0
+}
+#deletebtn {
+    margin: 0;
+    border-radius: 4px;
+    padding: 5px 7px;
+    font-family: Helvetica, serif;
+    font-size: 16px;
+    color: #ff433b;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background-color: #56596e;
+    border: 2px solid #6f7182;
+    font-smooth: always;
+    -webkit-font-smoothing: antialiased;
+    cursor: pointer;
+}
+#deletebtn:hover {
+    background-color: #ff433b;
+    border: 2px solid #ff433b;
+    color: white;
 }
 #deleteinput {
     border: 1px solid;

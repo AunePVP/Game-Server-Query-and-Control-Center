@@ -46,6 +46,48 @@ function test_input($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
+// Delete Server
+function deleteserver($id, $arrayresult) {
+    global $DB_SERVER;
+    global $DB_USERNAME;
+    global $DB_PASSWORD;
+    global $DB_NAME;
+    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+    $sql = "UPDATE users SET server='$arrayresult' WHERE id=$id";
+    if (!$conn->query($sql) === TRUE) {
+        echo "Error updating record: " . $conn->error;
+    }
+    $conn->close();
+}
+if (array_key_exists('delete', $_POST)) {
+    $deleteid = $_GET['id'];
+    $deletearray = '['.$deleteid.']';
+    if (file_exists("../../query/cron/".$deleteid.".json")){
+        unlink("../../query/cron/".$deleteid.".json");
+    }
+    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    $sql = "DELETE FROM serverconfig WHERE id=$deleteid";
+    if (!$conn->query($sql) === TRUE) {
+        echo "Error deleting record: " . $conn->error;
+    }
+    $sql = "SELECT id, server FROM users";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+            unset($arrayresultdec, $arrayresult, $array);
+            $array = json_decode($row["server"], TRUE);
+            $deletearraydec = json_decode($deletearray, TRUE);
+            $array = array_diff($array, $deletearraydec);
+            foreach ($array as $key){$arrayresult[] = $key;}
+            $arrayresultdec = json_encode($arrayresult ?? [0]);
+            deleteserver($row["id"], $arrayresultdec);
+        }
+    }
+    $conn->close();
+}
 // Form Add Server
 if (array_key_exists('AddServer', $_POST)) {
     $addtype = test_input($_POST["type"]);
@@ -134,8 +176,7 @@ if (array_key_exists('AddServer', $_POST)) {
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $serverjson = json_decode($row["server"], TRUE);
-            $serverjson[$addid] = array();
-            $serverjson[$addid] = $addid;
+            $serverjson[] = $addid;
             $serverjson = json_encode($serverjson);
         }
     }
@@ -175,6 +216,22 @@ if (array_key_exists('control', $_POST)) {
     <title>Admin panel</title>
 </head>
 <body>
+<div id="confpopupparent">
+    <div onclick="exitdelete()" style="height: 100vh;width: 100%;position: fixed;z-index: 0;"></div>
+    <div id="confpopup">
+        <div class="areyousure">Are you sure you want to delete this Server?</div>
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>">
+            <div style="padding: 10px 10px 0;height:106px">
+                <p style="padding-bottom: 15px;overflow: auto;">This action <strong>cannot</strong> be undone. This will permanently delete the server and all historical data from the database.</p>
+                <p>Please type <strong>Delete-Server-<?php echo $_GET['id']?></strong> to confirm.</p>
+                <input id="deleteinput" type="text" onkeyup="checkpattern()" required="required" autocomplete="off" pattern="[dD][eE][lL][eE][tT][eE]-[sS][eE][rR][vV][eE][rR]-<?php echo $_GET['id']?>">
+            </div>
+            <div class="yesno">
+                <button id="submitdelete" type="submit" name="delete" disabled>Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
 <nav>
     <div id="sidebar">
         <button onclick="window.location.href='index.php';">Overview</button>
@@ -309,19 +366,13 @@ if (array_key_exists('control', $_POST)) {
                 </div>
             </div>
             <div id="settings">
-                <div id="confpopup">
-                    <div class="areyousure">Are you sure you want to delete this Server?</div>
-                    <div style="padding: 10px 10px 0;height:106px">
-                        <p style="padding-bottom: 15px;overflow: auto;">This action <strong>cannot</strong> be undone. This will permanently delete the server and all historical data from the database.</p>
-                        <p>Please type <strong>Delete-Server-1</strong> to confirm.</p>
-                        <input id="deleteinput" type="text" onkeyup="checkpattern()" required="required" autocomplete="off" pattern="[dD][eE][lL][eE][tT][eE]-[sS][eE][rR][vV][eE][rR]-[1]">
-                    </div>
-                    <div class="yesno">
-                        <button id="submitdelete" type="submit" disabled>Delete</button>
-                    </div>
-                </div>
-                <button id="popup-trigger">Click for popup</button>
                 <script>
+                    function confirmdelete() {
+                        document.getElementById("confpopupparent").style.display = "flex";
+                    };
+                    function exitdelete() {
+                        document.getElementById("confpopupparent").style.display = "none";
+                    };
                     function checkpattern() {
                         let checkinput = document.getElementById("deleteinput");
                         if (!checkinput.checkValidity()) {
@@ -330,19 +381,6 @@ if (array_key_exists('control', $_POST)) {
                             document.getElementById("submitdelete").disabled = false;
                         }
                     }
-                    const popupQuerySelector = "#confpopup";
-                    const popupEl = document.querySelector(popupQuerySelector);
-                    const popupBttn = document.querySelector("#popup-trigger");
-                    document.addEventListener("click", (e) => {
-                        // Check if the filter list parent element exist
-                        const isClosest = e.target.closest(popupQuerySelector);
-
-                        // If `isClosest` equals falsy & popup has the class `show`
-                        // then hide the popup
-                        if (!isClosest && popupEl.classList.contains("show")) {
-                            popupEl.classList.remove("show");
-                        }
-                    });
                 </script>
                 <!-- Display server information -->
                 <div id="serverinf">
@@ -380,7 +418,7 @@ if (array_key_exists('control', $_POST)) {
                         case "minecraft":
                             break;
                         }?>
-                        <a href="#0" class="cd-popup-trigger">Delete this server</a>
+                        <button type='button' id="deletebtn" onclick="confirmdelete()">Delete this server</button>
                     </div>
                 </div>
             </div>
