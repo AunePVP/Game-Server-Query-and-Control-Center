@@ -28,7 +28,8 @@ If there is a game server not currently supported, please create an Issue and I 
 Check out the [Wiki]( https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki) to install it on your own device.
 <br>
 
-
+## Contributing
+Pull Requests are greatly encouraged, please submit all Pull Requests to the development branch.
 <h2>Used repos</h2>
 
 -[PHP Source Query](https://github.com/xPaw/PHP-Source-Query)<br />
