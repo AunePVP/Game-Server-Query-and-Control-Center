@@ -502,10 +502,11 @@ label #type {
 }
 .settings-inputline {
     display: flex;
-    padding: 10px 0 0;
+    padding: 3px 0 0;
+    width: 400px;
 }
 .settings-inputline label {
-    margin: auto 4px auto 0;
+    margin: auto auto auto 0;
 }
 @media only screen and (max-width: 775px) {
     #sidebar, #sidebar button.bottom {

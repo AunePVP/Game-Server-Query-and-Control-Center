@@ -363,6 +363,7 @@ if (array_key_exists('control', $_POST)) {
                             <button class="button<?php echo $restartdisabled ?? ''?>" type="submit" value="restart" name="control<?php echo $restartdisabled ?? ''?>">Restart</button>
                             <button class="button<?php echo $backupdisabled ?? ''?>" type="submit" value="backup" name="control"<?php echo $backupdisabled ?? ''?>>Backup</button>
                         </div>
+                    </form>
                 </div>
             </div>
             <div id="settings">
@@ -402,9 +403,29 @@ if (array_key_exists('control', $_POST)) {
                             <td><?php echo $rport?></td>
                         </tr>
                     </table>
-                    <div class="settings-inputline">
-                        <label for="control-path">Server control path</label><input id="control-path" class="settingsinput" type="text"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#server-control-path" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
-                    </div>
+                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>" spellcheck="false">
+                        <div class="settings-inputline">
+                            <label for="control-path">Server control path</label><input id="control-path" class="settingsinput" type="text" autocomplete="off"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#server-control-path" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
+                        </div>
+                        <div class="settings-inputline">
+                            <label for="command-start">Start Command</label><input id="command-start" class="settingsinput" type="text" autocomplete="off"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#start-command" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
+                        </div>
+                        <div class="settings-inputline">
+                            <label for="command-stop">Stop Command</label><input id="command-stop" class="settingsinput" type="text" autocomplete="off"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#stop-command" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
+                        </div>
+                        <div class="settings-inputline">
+                            <label for="command-restart">Restart Command</label><input id="command-restart" class="settingsinput" type="text" autocomplete="off"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#restart-command" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
+                        </div>
+                        <div class="settings-inputline">
+                            <label for="command-backup">Backup Command</label><input id="command-backup" class="settingsinput" type="text" autocomplete="off"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#backup-command" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
+                        </div>
+                        <div class="settings-inputline">
+                            <label for="command-update">Update Command</label><input id="command-update" class="settingsinput" type="text" autocomplete="off"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#update-command" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
+                        </div>
+                        <div style="display:flex;justify-content: flex-end;">
+                            <input class="addsrv" type="submit" name="commands" value="Update">
+                        </div>
+                    </form>
                     <div><?php
                         switch ($type) {
                         case "csgo":
@@ -434,36 +455,37 @@ if (array_key_exists('control', $_POST)) {
                 <div class="padding25">
                     <h2 style="margin: 0 0 10px;font-family: Helvetica,sans-serif;">Add a server</h2>
                     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                    <div class="cAx">Game:</div>
-                    <label>
-                        <select required="required" name="type" onchange="selecttype()" id="type">
-                            <option disabled selected value style="display:none">select a game</option>
-                            <option value="arkse">ARK Survival Evolved</option>
-                            <option value="csgo">Counter-Strike: Global Offensive</option>
-                            <option value="minecraft">Minecraft</option>
-                            <option value="valheim">Valheim</option>
-                            <option value="vrising">Vrising</option>
-                            <option value="rust">Rust</option>
-                        </select>
-                    </label>
-                        <div class="input">
-                            <label for="input-domain-ip">IP/Domain:</label><input id="input-domain-ip" name="ip" type="text" required="required" minlength="4" maxlength="30" placeholder="xxx.xxx.xxx.xx" autocomplete="off">
-                        </div>
-                        <div class="input">
-                            <label for="input-gport">Game Port:</label><input id="input-gport" name="gport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
-                        </div>
-                        <div class="input">
-                            <label for="input-qport">Query Port:</label><input id="input-qport" name="qport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
-                        </div>
-                        <div class="input">
-                            <label for="input-rport">Rcon Port:</label><input id="input-rport" name="rport" type="text" required="required" minlength="1" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
-                        </div>
-                        <div>
-                            <div id="notes"></div>
-                        </div>
-                        <div style="display:flex;justify-content: flex-end;">
-                            <input class="addsrv" type="submit" name="AddServer" value="AddServer">
-                        </div>
+                        <div class="cAx">Game:</div>
+                        <label>
+                            <select required="required" name="type" onchange="selecttype()" id="type">
+                                <option disabled selected value style="display:none">select a game</option>
+                                <option value="arkse">ARK Survival Evolved</option>
+                                <option value="csgo">Counter-Strike: Global Offensive</option>
+                                <option value="minecraft">Minecraft</option>
+                                <option value="valheim">Valheim</option>
+                                <option value="vrising">Vrising</option>
+                                <option value="rust">Rust</option>
+                            </select>
+                        </label>
+                            <div class="input">
+                                <label for="input-domain-ip">IP/Domain:</label><input id="input-domain-ip" name="ip" type="text" required="required" minlength="4" maxlength="30" placeholder="xxx.xxx.xxx.xx" autocomplete="off">
+                            </div>
+                            <div class="input">
+                                <label for="input-gport">Game Port:</label><input id="input-gport" name="gport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
+                            </div>
+                            <div class="input">
+                                <label for="input-qport">Query Port:</label><input id="input-qport" name="qport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
+                            </div>
+                            <div class="input">
+                                <label for="input-rport">Rcon Port:</label><input id="input-rport" name="rport" type="text" required="required" minlength="1" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
+                            </div>
+                            <div>
+                                <div id="notes"></div>
+                            </div>
+                            <div style="display:flex;justify-content: flex-end;">
+                                <input class="addsrv" type="submit" name="AddServer" value="AddServer">
+                            </div>
+                    </form>
                 </div>
             </div>
         </div>
