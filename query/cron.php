@@ -62,7 +62,7 @@ function uploadname($namequery, $id) {
 }
 // Connect to database and get required data of server
 $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-$sql = "SELECT ID, IP, type, QueryPort, GamePort, RconPort, Name FROM serverconfig WHERE enabled='1'";
+$sql = "SELECT ID, IP, type, QueryPort, GamePort, RconPort, Name FROM serverconfig";
 $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
