@@ -54,13 +54,7 @@ if (array_key_exists('submit', $_POST)) {
     `QueryPort` int NOT NULL,
     `GamePort` int NOT NULL,
     `RconPort` int NOT NULL,
-    `Name` text NOT NULL,
-    `controlpath` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '/',
-    `start` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '/',
-    `stop` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '/',
-    `restart` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '/',
-    `backup` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '/',
-    `commandupdate` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '/'
+    `Name` text NOT NULL
     )";
     if (!mysqli_query($conn, $sql)) {
         echo "Error creating table: " . mysqli_error($conn);

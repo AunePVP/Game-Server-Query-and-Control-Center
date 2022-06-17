@@ -32,6 +32,9 @@ function convertos($Os)
     return $Opers[$Os];
 }
 include "../../html/tailcustom.php";
+if (file_exists('../../html/server/'.$ServerID.'.php')) {
+    include '../../html/server/'.$ServerID.'.php';
+}
 $username = $_SESSION['username'];
 if ($username == "admin") {
     $title = "Admin panel";
@@ -58,21 +61,6 @@ function deleteserver($id, $arrayresult) {
         echo "Error updating record: " . $conn->error;
     }
     $conn->close();
-}
-if (array_key_exists('uploadcommands', $_POST)) {
-    $commandpath = test_input($_POST["control-path"]);
-    $commandstart = test_input($_POST["start"]);
-    $commandstop = test_input($_POST["stop"]);
-    $commandrestart = test_input($_POST["restart"]);
-    $commandbackup = test_input($_POST["backup"]);
-    $commandupdate = test_input($_POST["update"]);
-    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    $sql = "UPDATE serverconfig SET controlpath='$commandpath', start='$commandstart', stop='$commandstop', restart='$commandrestart', backup='$commandbackup', commandupdate='$commandupdate' WHERE ID='$ServerID';";
-    mysqli_query($conn, $sql);
-    mysqli_close($conn);
 }
 if (array_key_exists('delete', $_POST)) {
     $deleteid = (int)$_GET['id'];
@@ -215,6 +203,18 @@ if (array_key_exists('AddServer', $_POST)) {
 // Control Server
 if (array_key_exists('control', $_POST)) {
     $command = $_POST['control'];
+    switch ($command) {
+        case "start":$command = $sstart;break;
+        case "stop":$command = $sstop;break;
+        case "restart":$command = $srestart;break;
+        case "backup":$command = $sbackup;break;
+        case "update":$command = $supdate;break;
+    }
+    $connection = ssh2_connect($sip, $sport, array('hostkey'=>'ssh-rsa'));
+    ssh2_auth_pubkey_file($connection, $susername, $keypathpub, $keypath);
+    $stream = ssh2_exec($connection, $command);
+    stream_set_blocking($stream, true);
+    $stream_out = stream_get_contents(ssh2_fetch_stream($stream, SSH2_STREAM_STDIO));
 }
 ?>
 <!doctype html>
@@ -424,29 +424,6 @@ if (array_key_exists('control', $_POST)) {
                             <td><?php echo $rport?></td>
                         </tr>
                     </table>
-                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>" spellcheck="false">
-                        <div class="settings-inputline">
-                            <label for="control-path">Server control path</label><input id="control-path" name="control-path" class="settingsinput" type="text" value="<?php echo $commandpath?>" autocomplete="off"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#server-control-path" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
-                        </div>
-                        <div class="settings-inputline">
-                            <label for="command-start">Start Command</label><input id="command-start" name="start" class="settingsinput" type="text" value="<?php echo $commandstart?>" autocomplete="off"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#start-command" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
-                        </div>
-                        <div class="settings-inputline">
-                            <label for="command-stop">Stop Command</label><input id="command-stop" name="stop" class="settingsinput" type="text" value="<?php echo $commandstop?>" autocomplete="off"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#stop-command" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
-                        </div>
-                        <div class="settings-inputline">
-                            <label for="command-restart">Restart Command</label><input id="command-restart" name="restart" class="settingsinput" type="text" value="<?php echo $commandrestart?>" autocomplete="off"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#restart-command" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
-                        </div>
-                        <div class="settings-inputline">
-                            <label for="command-backup">Backup Command</label><input id="command-backup" name="backup" class="settingsinput" type="text" value="<?php echo $commandbackup?>" autocomplete="off"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#backup-command" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
-                        </div>
-                        <div class="settings-inputline">
-                            <label for="command-update">Update Command</label><input id="command-update" name="update" class="settingsinput" type="text" value="<?php echo $commandupdate?>" autocomplete="off"><a target="_blank" href="https://github.com/AunePVP/Game-Server-Query-and-Control-Center/wiki/Configuration#update-command" title="What does that mean? Check out the wiki!" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 4px 2px;cursor: pointer;"></a>
-                        </div>
-                        <div style="display:flex;justify-content: flex-end;">
-                            <input class="addsrv" type="submit" name="uploadcommands" value="Update">
-                        </div>
-                    </form>
                     <div><?php
                         switch ($type) {
                         case "csgo":
