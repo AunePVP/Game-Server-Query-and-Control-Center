@@ -47,7 +47,7 @@ if ! [ "$mysqlucheck" = 1 ]; then
 fi
 sudo mysql -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${user}'@'localhost';"
 sudo mysql -e "FLUSH PRIVILEGES;"
-sudo mysql -e "USE ${dbname}; CREATE TABLE users (id INT auto_increment PRIMARY KEY AUTO_INCREMENT, username VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL, server JSON NOT NULL);"
+sudo mysql -e "USE ${dbname}; CREATE TABLE users (id INT auto_increment PRIMARY KEY AUTO_INCREMENT, username VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL, server JSON NOT NULL, controlserver JSON NOT NULL);"
 
 echo "<?php" > html/config.php
 echo "\$DB_SERVER = 'localhost';" >> html/config.php
