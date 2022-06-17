@@ -62,6 +62,18 @@ function deleteserver($id, $arrayresult) {
     }
     $conn->close();
 }
+$conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+$sql = "SELECT controlserver FROM users WHERE username='$username'";
+$result = mysqli_query($conn, $sql);
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $controlserverjson = json_decode($row["controlserver"], TRUE);
+        if (in_array($ServerID, $controlserverjson)) {
+            $allowcontrol = TRUE;
+        }
+    }
+}
+$conn->close();
 if (array_key_exists('delete', $_POST)) {
     $deleteid = (int)$_GET['id'];
     $deletearray = '['.$deleteid.']';
@@ -368,7 +380,7 @@ if (array_key_exists('control', $_POST)) {
                 <div class='right'>
                 <div>
                     <?php
-                    if (!file_exists('../../html/server/'.$ServerID.'.php')):?>
+                    if (!file_exists('../../html/server/'.$ServerID.'.php') && $allowcontrol):?>
                         <div class="nocontrol">You can't control this server!</div>
                     <?php endif;?>
                     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>">
