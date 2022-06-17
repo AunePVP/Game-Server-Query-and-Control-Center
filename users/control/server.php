@@ -204,8 +204,8 @@ if (array_key_exists('AddServer', $_POST)) {
 if (array_key_exists('control', $_POST)) {
     $command = $_POST['control'];
     switch ($command) {
-        case "start":$command = $sstart;break;
-        case "stop":$command = $sstop;break;
+        case "start":$command = $sstart;$startdisabled=" disabled";break;
+        case "stop":$command = $sstop;$stopdisabled=" disabled";$restartdisabled=" disabled";break;
         case "restart":$command = $srestart;break;
         case "backup":$command = $sbackup;break;
         case "update":$command = $supdate;break;
@@ -214,7 +214,7 @@ if (array_key_exists('control', $_POST)) {
     ssh2_auth_pubkey_file($connection, $susername, $keypathpub, $keypath);
     $stream = ssh2_exec($connection, $command);
     stream_set_blocking($stream, true);
-    $stream_out = stream_get_contents(ssh2_fetch_stream($stream, SSH2_STREAM_STDIO));
+    $streamout = stream_get_contents(ssh2_fetch_stream($stream, SSH2_STREAM_STDIO));
 }
 ?>
 <!doctype html>
@@ -369,10 +369,10 @@ if (array_key_exists('control', $_POST)) {
                     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>">
                         <div id="servercontrol">
                             <?php
-                            if ($status){
+                            if ($status && !isset($startdisabled)){
                                 $startdisabled = " disabled";
                             }
-                            if (!$status){
+                            if (!$status && !isset($startdisabled)){
                                 $stopdisabled = " disabled";
                                 $restartdisabled = " disabled";
                             }
@@ -383,6 +383,9 @@ if (array_key_exists('control', $_POST)) {
                             <button class="button<?php echo $backupdisabled ?? ''?>" type="submit" value="backup" name="control"<?php echo $backupdisabled ?? ''?>>Backup</button>
                         </div>
                     </form>
+                    <div class="log">
+                        <?php echo $streamout?>
+                    </div>
                 </div>
             </div>
             <div id="settings">

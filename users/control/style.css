@@ -289,6 +289,17 @@ label #type {
 .input {
     margin: 0 0 10px 0;
 }
+.log {
+    margin: 10px auto;
+    text-align: left;
+    font-family: monospace;
+    background-color: black;
+    color: white;
+    height: 160px;
+    box-sizing: border-box;
+    padding: 5px;
+    overflow: scroll;
+}
 #confpopupparent {
     height: 100vh;
     position: fixed;
