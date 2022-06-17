@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Lato:400,900|IBM+Plex+Mono');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
 html, body {
     margin: 0;
     padding: 0;
@@ -228,6 +229,7 @@ textarea.plain {
 #Hostname {
     font-family: Helvetica Neue, sans-serif;
     font-size: 31px;
+    padding-top: 10px;
 }
 #tab1, #tab2 {
     cursor: pointer;
@@ -287,6 +289,134 @@ label #type {
 .input {
     margin: 0 0 10px 0;
 }
+.log {
+    margin: 10px auto;
+    text-align: left;
+    font-family: monospace;
+    background-color: black;
+    color: white;
+    height: 160px;
+    box-sizing: border-box;
+    padding: 5px;
+    overflow: scroll;
+}
+.nocontrol {
+    position: absolute;
+    height: 213px;
+    width: 361px;
+    background-color: rgba(20, 22, 33, 0.87);
+    text-align: center;
+    font-family: Helvetica, sans-serif;
+    font-size: 20px;
+    line-height: 213px;
+}
+#confpopupparent {
+    height: 100vh;
+    position: fixed;
+    width: 100%;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.57);
+    z-index: 10;
+    display:none
+}
+#confpopup p strong {
+    -ms-user-select: None;
+    -moz-user-select: None;
+    -webkit-user-select: None;
+    user-select: None;
+}
+#confpopup {
+    margin: auto;
+    width: 450px;
+    height: 205px;
+    background-color: white;
+    border-radius: 6px;
+    color: black;
+    z-index: 1;
+}
+#confpopup ul {
+    list-style: none;
+}
+#confpopup .areyousure {
+    font-family: "JetBrains Mono";
+    padding: 10px;
+    border-bottom: solid;
+}
+#confpopup .yesno {
+    height: 45px;
+    margin:0;
+    padding: 0;
+}
+#confpopup .yesno button {
+    width: 100%;
+    text-align: center;
+    line-height: 45px;
+    color: white;
+    border: none;
+    background-color: #f33636;
+    border-radius: 0 0 6px 6px;
+    padding: 0;
+    margin: 0;
+    font-family: Helvetica;
+    font-size: 20px;
+    cursor: pointer;
+    letter-spacing: 1
+}
+#confpopup .yesno button:disabled {
+    background-color: #5e5e5e;
+    color: rgb(203, 203, 203);
+    cursor: not-allowed;
+}
+#confpopup p {
+    font-family: Helvetica, sans-serif;
+    margin:0
+}
+#deletebtn {
+    margin: 0;
+    border-radius: 4px;
+    padding: 5px 7px;
+    font-family: Helvetica, serif;
+    font-size: 16px;
+    color: #ff433b;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background-color: #56596e;
+    border: 2px solid #6f7182;
+    font-smooth: always;
+    -webkit-font-smoothing: antialiased;
+    cursor: pointer;
+}
+#deletebtn:hover {
+    background-color: #ff433b;
+    border: 2px solid #ff433b;
+    color: white;
+}
+#deleteinput {
+    border: 1px solid;
+    border-radius: 6px;
+    padding: 5px;
+    width: -webkit-fill-available;
+    font-family: Helvetica, sans-serif;
+    font-size: 16px;
+}
+#deleteinput {
+    border: 1px solid;
+    border-radius: 6px;
+    padding: 5px;
+    width: -webkit-fill-available;
+    font-family: Helvetica, sans-serif;
+    font-size: 16px;
+}
+.settingsinput {
+    border-radius: 4px;
+    border: none;
+    font-size: 14px;
+    padding: 4px 8px;
+}
+.settings-inputline a img {
+    margin: 4px 2px;
+    cursor: pointer;
+}
 #input-domain-ip, #input-gport, #input-qport, #input-rport{
     width: -webkit-fill-available;
     padding: 0 5px;
@@ -327,12 +457,47 @@ label #type {
     background-color: #383B4F;
     border-radius: 6px;
 }
-#control, #settings {
-    padding: 30px 40px;
+#control {
+    height: 100%;
     display: flex;
+}
+#control .left {
+    width:65%;
+    border-right: solid;
+    padding: 30px 40px;
+}
+#control .right {
+    width:35%;
+    padding: 30px 20px;
+}
+#servercontrol {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+#servercontrol .button {
+    width: 23%;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 0;
+    font-size: 20px;
+    font-family: "Helvetica", sans-serif;
+    cursor: pointer;
+    background-color: white;
+}
+#servercontrol .button:hover {
+    background-color: #cdcdcd;
+}
+#servercontrol .button.disabled {
+    cursor: not-allowed;
+    color: #878787;
+}
+#servercontrol .button.disabled:hover {
+    background-color: white;
 }
 #settings {
     display: none;
+    padding: 20px 30px;
 }
 #tab1 {
     text-decoration: underline;
@@ -355,6 +520,14 @@ label #type {
     border-radius: 4px;
     font-size: 14px;
     padding: 5px 0;
+}
+.settings-inputline {
+    display: flex;
+    padding: 3px 0 0;
+    width: 400px;
+}
+.settings-inputline label {
+    margin: auto auto auto 0;
 }
 @media only screen and (max-width: 775px) {
     #sidebar, #sidebar button.bottom {

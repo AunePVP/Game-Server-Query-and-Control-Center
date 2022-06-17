@@ -54,8 +54,7 @@ if (array_key_exists('submit', $_POST)) {
     `QueryPort` int NOT NULL,
     `GamePort` int NOT NULL,
     `RconPort` int NOT NULL,
-    `Name` text NOT NULL,
-    `enabled` int NOT NULL
+    `Name` text NOT NULL
     )";
     if (!mysqli_query($conn, $sql)) {
         echo "Error creating table: " . mysqli_error($conn);

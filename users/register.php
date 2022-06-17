@@ -1,6 +1,6 @@
 <?php
 include('connection.php');
-if ($create_users == 0) {
+if ($register == 0) {
     echo "Registration is disabled.";
     echo "<meta http-equiv='refresh' content='5; URL=../'>";
     exit;

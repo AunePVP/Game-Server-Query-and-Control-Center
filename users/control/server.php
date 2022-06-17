@@ -13,7 +13,7 @@ use xPaw\MinecraftPingException;
 use xPaw\MinecraftQuery;
 use xPaw\MinecraftQueryException;
 use xPaw\SourceQuery\SourceQuery;
-
+$ServerID = (int)$_GET['id'];
 const SQ_TIMEOUT = 1;
 const SQ_ENGINE = SourceQuery::SOURCE;
 session_start();
@@ -32,6 +32,9 @@ function convertos($Os)
     return $Opers[$Os];
 }
 include "../../html/tailcustom.php";
+if (file_exists('../../html/server/'.$ServerID.'.php')) {
+    include '../../html/server/'.$ServerID.'.php';
+}
 $username = $_SESSION['username'];
 if ($username == "admin") {
     $title = "Admin panel";
@@ -46,7 +49,62 @@ function test_input($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Delete Server
+function deleteserver($id, $arrayresult) {
+    global $DB_SERVER;
+    global $DB_USERNAME;
+    global $DB_PASSWORD;
+    global $DB_NAME;
+    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+    $sql = "UPDATE users SET server='$arrayresult' WHERE id=$id";
+    if (!$conn->query($sql) === TRUE) {
+        echo "Error updating record: " . $conn->error;
+    }
+    $conn->close();
+}
+$conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+$sql = "SELECT controlserver FROM users WHERE username='$username'";
+$result = mysqli_query($conn, $sql);
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $controlserverjson = json_decode($row["controlserver"], TRUE);
+        if (in_array($ServerID, $controlserverjson)) {
+            $allowcontrol = TRUE;
+        }
+    }
+}
+$conn->close();
+if (array_key_exists('delete', $_POST)) {
+    $deleteid = (int)$_GET['id'];
+    $deletearray = '['.$deleteid.']';
+    if (file_exists("../../query/cron/".$deleteid.".json")){
+        unlink("../../query/cron/".$deleteid.".json");
+    }
+    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    $sql = "DELETE FROM serverconfig WHERE id=$deleteid";
+    if (!$conn->query($sql) === TRUE) {
+        echo "Error deleting record: " . $conn->error;
+    }
+    $sql = "SELECT id, server FROM users";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+            unset($arrayresultdec, $arrayresult, $array);
+            $array = json_decode($row["server"], TRUE);
+            $deletearraydec = json_decode($deletearray, TRUE);
+            $array = array_diff($array, $deletearraydec);
+            foreach ($array as $key){$arrayresult[] = $key;}
+            $arrayresultdec = json_encode($arrayresult ?? [0]);
+            deleteserver($row["id"], $arrayresultdec);
+        }
+    }
+    $conn->close();
+}
+// Form Add Server
+if (array_key_exists('AddServer', $_POST)) {
     $addtype = test_input($_POST["type"]);
     $addip = test_input($_POST["ip"]);
     $addgport = test_input($_POST["gport"]);
@@ -133,8 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $serverjson = json_decode($row["server"], TRUE);
-            $serverjson[$addid] = array();
-            $serverjson[$addid] = $addid;
+            $serverjson[] = $addid;
             $serverjson = json_encode($serverjson);
         }
     }
@@ -147,13 +204,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     // Add server data to serverconfig table
-    $sql = "INSERT INTO serverconfig (ID, IP, type, QueryPort, GamePort, RconPort, enabled, Name) VALUES ('$addid', '$addip', '$addtype', '$addqport', '$addgport', '$addrport', '1', '0')";
+    $sql = "INSERT INTO serverconfig (ID, IP, type, QueryPort, GamePort, RconPort, Name) VALUES ('$addid', '$addip', '$addtype', '$addqport', '$addgport', '$addrport', '0')";
     if (mysqli_query($conn, $sql)) {
         echo "<script>console.log('Record updated successfully')</script>";
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
     }
     $conn->close();
+}
+// Control Server
+if (array_key_exists('control', $_POST)) {
+    $command = $_POST['control'];
+    switch ($command) {
+        case "start":$command = $sstart;$startdisabled=" disabled";break;
+        case "stop":$command = $sstop;$stopdisabled=" disabled";$restartdisabled=" disabled";break;
+        case "restart":$command = $srestart;break;
+        case "backup":$command = $sbackup;break;
+        case "update":$command = $supdate;break;
+    }
+    $connection = ssh2_connect($sip, $sport, array('hostkey'=>'ssh-rsa'));
+    ssh2_auth_pubkey_file($connection, $susername, $keypathpub, $keypath);
+    $stream = ssh2_exec($connection, $command);
+    stream_set_blocking($stream, true);
+    $streamout = stream_get_contents(ssh2_fetch_stream($stream, SSH2_STREAM_STDIO));
 }
 ?>
 <!doctype html>
@@ -169,6 +242,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Admin panel</title>
 </head>
 <body>
+<div id="confpopupparent">
+    <div onclick="exitdelete()" style="height: 100vh;width: 100%;position: fixed;z-index: 0;"></div>
+    <div id="confpopup">
+        <div class="areyousure">Are you sure you want to delete this Server?</div>
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>">
+            <div style="padding: 10px 10px 0;height:106px">
+                <p style="padding-bottom: 15px;overflow: auto;">This action <strong>cannot</strong> be undone. This will permanently delete the server and all historical data from the database.</p>
+                <p>Please type <strong>Delete-Server-<?php echo $_GET['id']?></strong> to confirm.</p>
+                <input id="deleteinput" type="text" onkeyup="checkpattern()" required="required" autocomplete="off" pattern="[dD][eE][lL][eE][tT][eE]-[sS][eE][rR][vV][eE][rR]-<?php echo $_GET['id']?>">
+            </div>
+            <div class="yesno">
+                <button id="submitdelete" type="submit" name="delete" disabled>Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
 <nav>
     <div id="sidebar">
         <button onclick="window.location.href='index.php';">Overview</button>
@@ -191,8 +280,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "style='padding:0!important'";
         }
     }?>>
-        <?php
-        include 'overlaynav.php' ?>
+        <?php include 'overlaynav.php' ?>
 
         <!-- __%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%__ -->
         <!-- _------------_ Display Servers_------------_ -->
@@ -226,7 +314,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php
         if (!empty($_GET['id'])):
         if ($_GET['id'] != "addserver") {
-            $ServerID = (int)$_GET['id'];
             $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
             if (!$conn) {
                 die("Connection failed: " . mysqli_connect_error());
@@ -241,6 +328,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $qport = $row["QueryPort"];
                     $gport = $row["GamePort"];
                     $rport = $row["RconPort"];
+                    $commandpath = $row["controlpath"];
+                    $commandstart = $row["start"];
+                    $commandstop = $row["stop"];
+                    $commandrestart = $row["restart"];
+                    $commandbackup = $row["backup"];
+                    $commandupdate = $row["commandupdate"];
                     switch ($type) {
                         case "csgo":
                         case "valheim":
@@ -283,11 +376,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div id="controlsettingsparent">
             <div id="control">
-                <div style="width:65%">left</div>
-                <div style="width:35%">right</div>
+                <div class='left'>left</div>
+                <div class='right'>
+                <div>
+                    <?php
+                    if (!file_exists('../../html/server/'.$ServerID.'.php') && $allowcontrol):?>
+                        <div class="nocontrol">You can't control this server!</div>
+                    <?php endif;?>
+                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>">
+                        <div id="servercontrol">
+                            <?php
+                            if ($status && !isset($startdisabled)){
+                                $startdisabled = " disabled";
+                            }
+                            if (!$status && !isset($startdisabled)){
+                                $stopdisabled = " disabled";
+                                $restartdisabled = " disabled";
+                            }
+                            ?>
+                            <button class="button<?php echo $startdisabled ?? ''?>" type="submit" value="start" name="control"<?php echo $startdisabled ?? ''?>>Start</button>
+                            <button class="button<?php echo $stopdisabled ?? ''?>" type="submit" value="stop" name="control"<?php echo $stopdisabled ?? ''?>>Stop</button>
+                            <button class="button<?php echo $restartdisabled ?? ''?>" type="submit" value="restart" name="control<?php echo $restartdisabled ?? ''?>">Restart</button>
+                            <button class="button<?php echo $backupdisabled ?? ''?>" type="submit" value="backup" name="control"<?php echo $backupdisabled ?? ''?>>Backup</button>
+                        </div>
+                    </form>
+                    <div class="log">
+                        <?php echo $streamout?>
+                    </div>
+                </div>
+                </div>
             </div>
             <div id="settings">
-                <!-- Display server information -->
+                <script>
+                    function confirmdelete() {
+                        document.getElementById("confpopupparent").style.display = "flex";
+                    };
+                    function exitdelete() {
+                        document.getElementById("confpopupparent").style.display = "none";
+                    };
+                    function checkpattern() {
+                        let checkinput = document.getElementById("deleteinput");
+                        if (!checkinput.checkValidity()) {
+                            document.getElementById("submitdelete").disabled = true;
+                        } else {
+                            document.getElementById("submitdelete").disabled = false;
+                        }
+                    }
+                </script>
+                <!-- _----------‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾----------_ -->
+                <!-- _----------_Server Settings_----------_ -->
+                <!-- _----------_________________----------_ -->
                 <div id="serverinf">
                     <table>
                         <tr>
@@ -320,6 +458,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         case "minecraft":
                             break;
                         }?>
+                        <button type='button' id="deletebtn" onclick="confirmdelete()">Delete this server</button>
                     </div>
                 </div>
             </div>
@@ -335,36 +474,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="padding25">
                     <h2 style="margin: 0 0 10px;font-family: Helvetica,sans-serif;">Add a server</h2>
                     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                    <div class="cAx">Game:</div>
-                    <label>
-                        <select required="required" name="type" onchange="selecttype()" id="type">
-                            <option disabled selected value style="display:none">select a game</option>
-                            <option value="arkse">ARK Survival Evolved</option>
-                            <option value="csgo">Counter-Strike: Global Offensive</option>
-                            <option value="minecraft">Minecraft</option>
-                            <option value="valheim">Valheim</option>
-                            <option value="vrising">Vrising</option>
-                            <option value="rust">Rust</option>
-                        </select>
-                    </label>
-                        <div class="input">
-                            <label for="input-domain-ip">IP/Domain:</label><input id="input-domain-ip" name="ip" type="text" required="required" minlength="4" maxlength="30" placeholder="xxx.xxx.xxx.xx" autocomplete="off">
-                        </div>
-                        <div class="input">
-                            <label for="input-gport">Game Port:</label><input id="input-gport" name="gport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
-                        </div>
-                        <div class="input">
-                            <label for="input-qport">Query Port:</label><input id="input-qport" name="qport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
-                        </div>
-                        <div class="input">
-                            <label for="input-rport">Rcon Port:</label><input id="input-rport" name="rport" type="text" required="required" minlength="1" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
-                        </div>
-                        <div>
-                            <div id="notes"></div>
-                        </div>
-                        <div style="display:flex;justify-content: flex-end;">
-                            <input class="addsrv" type="submit" name="submit" value="Add Server">
-                        </div>
+                        <div class="cAx">Game:</div>
+                        <label>
+                            <select required="required" name="type" onchange="selecttype()" id="type">
+                                <option disabled selected value style="display:none">select a game</option>
+                                <option value="arkse">ARK Survival Evolved</option>
+                                <option value="csgo">Counter-Strike: Global Offensive</option>
+                                <option value="minecraft">Minecraft</option>
+                                <option value="valheim">Valheim</option>
+                                <option value="vrising">Vrising</option>
+                                <option value="rust">Rust</option>
+                            </select>
+                        </label>
+                            <div class="input">
+                                <label for="input-domain-ip">IP/Domain:</label><input id="input-domain-ip" name="ip" type="text" required="required" minlength="4" maxlength="30" placeholder="xxx.xxx.xxx.xx" autocomplete="off">
+                            </div>
+                            <div class="input">
+                                <label for="input-gport">Game Port:</label><input id="input-gport" name="gport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
+                            </div>
+                            <div class="input">
+                                <label for="input-qport">Query Port:</label><input id="input-qport" name="qport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
+                            </div>
+                            <div class="input">
+                                <label for="input-rport">Rcon Port:</label><input id="input-rport" name="rport" type="text" required="required" minlength="1" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
+                            </div>
+                            <div>
+                                <div id="notes"></div>
+                            </div>
+                            <div style="display:flex;justify-content: flex-end;">
+                                <input class="addsrv" type="submit" name="AddServer" value="AddServer">
+                            </div>
+                    </form>
                 </div>
             </div>
         </div>
