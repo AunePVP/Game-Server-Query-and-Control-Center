@@ -366,6 +366,11 @@ if (array_key_exists('control', $_POST)) {
             <div id="control">
                 <div class='left'>left</div>
                 <div class='right'>
+                <div>
+                    <?php
+                    if (!file_exists('../../html/server/'.$ServerID.'.php')):?>
+                        <div class="nocontrol">You can't control this server!</div>
+                    <?php endif;?>
                     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>">
                         <div id="servercontrol">
                             <?php
@@ -386,6 +391,7 @@ if (array_key_exists('control', $_POST)) {
                     <div class="log">
                         <?php echo $streamout?>
                     </div>
+                </div>
                 </div>
             </div>
             <div id="settings">

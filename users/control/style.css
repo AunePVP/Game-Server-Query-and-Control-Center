@@ -300,6 +300,16 @@ label #type {
     padding: 5px;
     overflow: scroll;
 }
+.nocontrol {
+    position: absolute;
+    height: 213px;
+    width: 361px;
+    background-color: rgba(20, 22, 33, 0.87);
+    text-align: center;
+    font-family: Helvetica, sans-serif;
+    font-size: 20px;
+    line-height: 213px;
+}
 #confpopupparent {
     height: 100vh;
     position: fixed;
