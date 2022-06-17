@@ -38,7 +38,7 @@ mysqlucheck="$(sudo mysql -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE use
 dbname=$(whiptail --inputbox --title "Create Database" "Please enter a name for your database" 10 100 3>&1 1>&2 2>&3)
 exitstatus=$?
 [[ "$exitstatus" = 1 ]] && exit 0;
-mysqlpasswd=$(whiptail --passwordbox --title "Create Database" "Please set a password" 10 100 3>&1 1>&2 2>&3)
+mysqlpasswd=$(whiptail --passwordbox --title "Create Database" "Set a new password" 10 100 3>&1 1>&2 2>&3)
 exitstatus=$?
 [[ "$exitstatus" = 1 ]] && exit 0;
 sudo mysql -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
