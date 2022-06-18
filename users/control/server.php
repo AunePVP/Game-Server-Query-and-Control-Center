@@ -266,7 +266,7 @@ endif;
     <div onclick="exitdelete()" style="height: 100vh;width: 100%;position: fixed;z-index: 0;"></div>
     <div id="confpopup">
         <div class="areyousure">Are you sure you want to delete this Server?</div>
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>">
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID"; ?>">
             <div style="padding: 10px 10px 0;height:106px">
                 <p style="padding-bottom: 15px;overflow: auto;">This action <strong>cannot</strong> be undone. This will permanently delete the server and all historical data from the database.</p>
                 <p>Please type <strong>Delete-Server-<?php echo $_GET['id']?></strong> to confirm.</p>
@@ -397,7 +397,7 @@ endif;
                     <?php if (!file_exists('../../html/server/'.$ServerID.'.php') || !$allowcontrol):?>
                         <div class="nocontrol">You can't control this server!</div>
                     <?php endif;?>
-                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>">
+                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID&page=control"; ?>">
                         <div id="servercontrol">
                             <?php
                             if ($status && !isset($startdisabled)){
@@ -531,7 +531,7 @@ endif;
                             </div>
                         </div>
                         <button id="updatecontrolperm" onclick='getusernames()'>Update</button>
-                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>" style="display:none">
+                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID&page=settings"; ?>" style="display:none">
                             <input id="responsepermitted" name="responsepermitted">
                             <button id="updatepermission" type="submit" name="updatepermission"></button>
                         </form>

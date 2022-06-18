@@ -26,6 +26,17 @@ function selecttype() {
     }
     document.getElementById("notes").innerHTML = text;
 }
+if (window.location.search.indexOf('page=settings') > -1) {
+    document.getElementById("tab1").style.textDecoration = "none";
+    document.getElementById("tab2").style.textDecoration = "underline";
+    document.getElementById("control").style.display = "none";
+    document.getElementById("settings").style.display = "block";
+} else {
+    document.getElementById("tab2").style.textDecoration = "none";
+    document.getElementById("tab1").style.textDecoration = "underline";
+    document.getElementById("control").style.display = "flex";
+    document.getElementById("settings").style.display = "none";
+}
 function tab(clicked_id) {
     let x = document.getElementById("control");
     let y = document.getElementById("settings");
