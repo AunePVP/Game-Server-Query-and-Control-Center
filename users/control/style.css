@@ -410,6 +410,61 @@ label #type {
     font-family: Helvetica, sans-serif;
     font-size: 16px;
 }
+#dragdropform {
+    display: flex;
+}
+.draggable {
+    cursor: move;
+    cursor: grab;
+}
+.draggable:active {
+    cursor: grabbing;
+}
+#dragdropform p {
+    font-family: Arial,serif;
+    margin: 0 0 0 8px;
+    color: white;
+    font-size: 20px;
+}
+#dragdropform .draggable {
+    width: fit-content;
+    padding: 10px;
+    font-family: Arial;
+    -webkit-box-shadow: 0px 0px 9px 1px rgba(0,0,0,0.4);
+    box-shadow: 0px 0px 9px 1px rgba(0,0,0,0.4);
+    border-radius: 4px;
+    background-color: #555c8b;
+    height: fit-content;
+    margin: 5px;
+}
+#dragform, #dropform  {
+    min-height: 48px;
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 6px;
+    background-color: #4a4c5b;
+    color: white;
+    display: flex;
+    flex-flow: row wrap;
+}
+#updatecontrolperm {
+    margin: 0;
+    border-radius: 4px;
+    padding: 5px 7px;
+    font-family: Helvetica, serif;
+    font-size: 16px;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background-color: #4a4c5b;
+    border: 2px solid #6f7182;
+    font-smooth: always;
+    -webkit-font-smoothing: antialiased;
+    cursor: pointer;
+}
+#updatecontrolperm:hover {
+    background-color: #555c8b;
+}
 .settingsinput {
     border-radius: 4px;
     border: none;

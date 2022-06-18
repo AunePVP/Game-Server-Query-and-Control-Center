@@ -67,6 +67,16 @@ function deleteserver($id, $arrayresult) {
     }
     $conn->close();
 }
+// Store users, database, who can control the server
+if (array_key_exists('updatepermission', $_POST)) {
+    $permittedusers = $_POST["responsepermitted"];
+    $permittedusers = json_encode(explode(",",$permittedusers));
+    // Uplaod new json to database
+    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+    $sql = "UPDATE serverconfig SET controlserver='$permittedusers' WHERE ID=$ServerID";
+    mysqli_query($conn, $sql);
+    mysqli_close($conn);
+}
 $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
 $sql = "SELECT controlserver FROM serverconfig WHERE ID='$ServerID'";
 $result = mysqli_query($conn, $sql);
@@ -405,7 +415,7 @@ endif;
                         </div>
                     </form>
                     <div class="log">
-                        <?php echo $streamout?>
+                        <?php echo $streamout ?? ""?>
                     </div>
                 </div>
                 </div>
@@ -449,7 +459,8 @@ endif;
                             <td><?php echo $rport?></td>
                         </tr>
                     </table>
-                    <div><?php
+                    <div>
+                        <?php
                         switch ($type) {
                         case "csgo":
                         case "valheim":
@@ -461,7 +472,70 @@ endif;
                             break;
                         case "minecraft":
                             break;
-                        }?>
+                        }
+                        // Select users who can control this server
+                        $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+                        $sql = "SELECT username FROM users";
+                        $result = mysqli_query($conn, $sql);
+                        if (mysqli_num_rows($result) > 0) {
+                            while($row = mysqli_fetch_assoc($result)) {
+                                $users[] = $row["username"];
+                            }
+                        }
+                        mysqli_close($conn);
+                        $notallowedyet = array_diff($users, $controlserverjson);
+                        ?>
+                        <script>
+                            function allowDrop(ev) {
+                                ev.preventDefault();
+                            }
+                            function drag(ev) {
+                                ev.dataTransfer.setData("text", ev.target.id);
+                            }
+                            function drop(ev, el) {
+                                ev.preventDefault();
+                                var data = ev.dataTransfer.getData("text");
+                                el.appendChild(document.getElementById(data));
+                            }
+                            function getusernames() {
+                                const parent = document.getElementById('dropform');
+                                const children = Array.from(parent.children);
+                                document.getElementById("responsepermitted").value = children.map(element => {
+                                    return element.id;
+                                });
+                                document.getElementById("updatepermission").click();
+                            }
+                        </script>
+                        <div id="dragdropform">
+                            <div style="width: 50%; margin-right:3px">
+                                <p>Users</p>
+                                <div id="dragform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
+                                    <?php
+                                    foreach ($notallowedyet as $maybeallowed){
+                                        if ($maybeallowed=="public")
+                                            continue;
+                                        echo '<div draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="draggable" id="'.$maybeallowed.'">'.$maybeallowed.'</div>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <div style="width: 50%; margin-left:3px">
+                                <p>Users with permission, to control this server.</p>
+                                <div id="dropform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
+                                    <?php
+                                    foreach ($controlserverjson as $allowed){
+                                    echo '<div draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="draggable" id="'.$allowed.'">'.$allowed.'</div>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="updatecontrolperm" onclick='getusernames()'>Update</button>
+                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>" style="display:none">
+                            <input id="responsepermitted" name="responsepermitted">
+                            <button id="updatepermission" type="submit" name="updatepermission"></button>
+                        </form>
+                        <!-- Delete this server-->
                         <button type='button' id="deletebtn" onclick="confirmdelete()">Delete this server</button>
                     </div>
                 </div>
