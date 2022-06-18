@@ -219,22 +219,24 @@ if (array_key_exists('AddServer', $_POST)) {
 }
 // Control Server
 if (array_key_exists('control', $_POST)) {
-    $command = $_POST['control'];
-    switch ($command) {
-        case "start":$command = $sstart;$startdisabled=" disabled";break;
-        case "stop":$command = $sstop;$stopdisabled=" disabled";$restartdisabled=" disabled";break;
-        case "restart":$command = $srestart;break;
-        case "backup":$command = $sbackup;break;
-        case "update":$command = $supdate;break;
-    }
-    $connection = ssh2_connect($sip, $sport, array('hostkey'=>'ssh-rsa'));
-    ssh2_auth_pubkey_file($connection, $susername, $keypathpub, $keypath);
-    $stream = ssh2_exec($connection, $command);
-    stream_set_blocking($stream, true);
-    $streamout = stream_get_contents(ssh2_fetch_stream($stream, SSH2_STREAM_STDIO));
-    $re = '/|\[K|\[ \.\.\.\. ] |\[\d\dm  OK  \[\dm\] | \[\d\dmOK\[\dm|\[\d\dmOK|\[|\dm|\d INFO \]/';
-    $streamout = preg_replace($re, '', $streamout);
-    file_put_contents('events.txt', $time." ".$command." ".$ServerID. "\n", FILE_APPEND);
+if (file_exists('../../html/server/' . $ServerID . '.php') && $allowcontrol):
+$command = $_POST['control'];
+switch ($command) {
+    case "start":$command = $sstart;$startdisabled=" disabled";break;
+    case "stop":$command = $sstop;$stopdisabled=" disabled";$restartdisabled=" disabled";break;
+    case "restart":$command = $srestart;break;
+    case "backup":$command = $sbackup;break;
+    case "update":$command = $supdate;break;
+}
+$connection = ssh2_connect($sip, $sport, array('hostkey'=>'ssh-rsa'));
+ssh2_auth_pubkey_file($connection, $susername, $keypathpub, $keypath);
+$stream = ssh2_exec($connection, $command);
+stream_set_blocking($stream, true);
+$streamout = stream_get_contents(ssh2_fetch_stream($stream, SSH2_STREAM_STDIO));
+$re = '/|\[K|\[ \.\.\.\. ] |\[\d\dm  OK  \[\dm\] | \[\d\dmOK\[\dm|\[\d\dmOK|\[|\dm|\d INFO \]/';
+$streamout = preg_replace($re, '', $streamout);
+file_put_contents('events.txt', $time." ".$command." ".$ServerID. "\n", FILE_APPEND);
+endif;
 }
 ?>
 <!doctype html>
@@ -382,8 +384,7 @@ if (array_key_exists('control', $_POST)) {
                 <div class='left'>left</div>
                 <div class='right'>
                 <div>
-                    <?php
-                    if (!file_exists('../../html/server/'.$ServerID.'.php') || !$allowcontrol):?>
+                    <?php if (!file_exists('../../html/server/'.$ServerID.'.php') || !$allowcontrol):?>
                         <div class="nocontrol">You can't control this server!</div>
                     <?php endif;?>
                     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>">
