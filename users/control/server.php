@@ -336,12 +336,7 @@ if (array_key_exists('control', $_POST)) {
                     $qport = $row["QueryPort"];
                     $gport = $row["GamePort"];
                     $rport = $row["RconPort"];
-                    $commandpath = $row["controlpath"];
-                    $commandstart = $row["start"];
-                    $commandstop = $row["stop"];
-                    $commandrestart = $row["restart"];
-                    $commandbackup = $row["backup"];
-                    $commandupdate = $row["commandupdate"];
+                    $name = $row["Name"];
                     switch ($type) {
                         case "csgo":
                         case "valheim":
