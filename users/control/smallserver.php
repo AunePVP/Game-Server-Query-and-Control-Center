@@ -39,7 +39,6 @@ if (mysqli_num_rows($result) > 0) {
         $gport = $row["GamePort"];
         $rport = $row["RconPort"];
         $name = $row["Name"];
-        $enabled = $row["enabled"];
         switch ($type) {
             case "csgo":
             case "valheim":
