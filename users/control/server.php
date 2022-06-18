@@ -234,7 +234,7 @@ $command = $_POST['control'];
 switch ($command) {
     case "start":$command = $sstart;$startdisabled=" disabled";break;
     case "stop":$command = $sstop;$stopdisabled=" disabled";$restartdisabled=" disabled";break;
-    case "restart":$command = $srestart;break;
+    case "restart":$command = $srestart;$startdisabled=" disabled";break;
     case "backup":$command = $sbackup;break;
     case "update":$command = $supdate;break;
 }
@@ -406,6 +406,9 @@ endif;
                             if (!$status && !isset($startdisabled)){
                                 $stopdisabled = " disabled";
                                 $restartdisabled = " disabled";
+                            } elseif (isset($restartdisabled)) {
+                                $startdisabled = " disabled";
+                                $restartdisabled = "";
                             }
                             ?>
                             <button class="button<?php echo $startdisabled ?? ''?>" type="submit" value="start" name="control"<?php echo $startdisabled ?? ''?>>Start</button>
