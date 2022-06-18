@@ -300,6 +300,9 @@ label #type {
     padding: 5px;
     overflow: scroll;
 }
+.log::-webkit-scrollbar {
+    display: none;
+}
 .nocontrol {
     position: absolute;
     height: 213px;
