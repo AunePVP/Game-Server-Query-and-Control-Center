@@ -268,8 +268,8 @@ endif;
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID"; ?>">
             <div style="padding: 10px 10px 0;height:106px">
                 <p style="padding-bottom: 15px;overflow: auto;">This action <strong>cannot</strong> be undone. This will permanently delete the server and all historical data from the database.</p>
-                <p>Please type <strong>Delete-Server-<?php echo $_GET['id']?></strong> to confirm.</p>
-                <input id="deleteinput" type="text" onkeyup="checkpattern()" required="required" autocomplete="off" pattern="[dD][eE][lL][eE][tT][eE]-[sS][eE][rR][vV][eE][rR]-<?php echo $_GET['id']?>">
+                <p>Please type <strong>Delete-Server-<?php echo $ServerID?></strong> to confirm.</p>
+                <input id="deleteinput" type="text" onkeyup="checkpattern()" required="required" autocomplete="off" pattern="[dD][eE][lL][eE][tT][eE]-[sS][eE][rR][vV][eE][rR]-<?php echo $ServerID?>">
             </div>
             <div class="yesno">
                 <button id="submitdelete" type="submit" name="delete" disabled>Delete</button>
