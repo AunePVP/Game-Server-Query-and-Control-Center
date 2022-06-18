@@ -68,12 +68,12 @@ function deleteserver($id, $arrayresult) {
     $conn->close();
 }
 $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-$sql = "SELECT controlserver FROM users WHERE username='$username'";
+$sql = "SELECT controlserver FROM serverconfig WHERE ID='$ServerID'";
 $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
         $controlserverjson = json_decode($row["controlserver"], TRUE);
-        if (in_array($ServerID, $controlserverjson)) {
+        if (in_array($username, $controlserverjson)) {
             $allowcontrol = TRUE;
         }
     }
