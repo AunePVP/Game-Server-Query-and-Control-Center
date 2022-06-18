@@ -185,8 +185,7 @@ if (array_key_exists('AddServer', $_POST)) {
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $addid = $row['ID'];
-            echo "<script>alert('You alredy have access to the server!');window.location.reload();</script>";
-            exit;
+            echo "<script>alert('Record updated successfully!');window.location.reload();</script>";
         }
     } else {
         $sql = "SELECT ID FROM serverconfig ORDER BY ID DESC LIMIT 1";
