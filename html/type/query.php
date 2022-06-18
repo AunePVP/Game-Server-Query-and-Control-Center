@@ -35,7 +35,7 @@ switch ($type) {
             $Os = convertos($Os);
         }
         // Get Players. Note Ark will use another method to get the players
-        $countplayers = $serverstatus->info->Players;
+        $countplayers = $serverstatus->info->Players ?? '0';
         // Get Maxplayers
         $maxplayers = $serverstatus->info->MaxPlayers ?? '0';
         // Get server version
