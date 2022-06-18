@@ -8,12 +8,17 @@ require '../../query/minecraft/src/MinecraftQueryException.php';
 require '../../html/type/minecraft/jsonconversion.php';
 require '../../html/type/minecraft/minecraftcolor.php';
 $controlpanel = true;
+date_default_timezone_set('Europe/Berlin');
+$timezone = date_default_timezone_get();
+$time = date('H:i', time());
 use xPaw\MinecraftPing;
 use xPaw\MinecraftPingException;
 use xPaw\MinecraftQuery;
 use xPaw\MinecraftQueryException;
 use xPaw\SourceQuery\SourceQuery;
-$ServerID = (int)$_GET['id'];
+if (!empty($_GET['id'])) {
+    $ServerID = (int)$_GET['id'];
+}
 const SQ_TIMEOUT = 1;
 const SQ_ENGINE = SourceQuery::SOURCE;
 session_start();
@@ -227,6 +232,9 @@ if (array_key_exists('control', $_POST)) {
     $stream = ssh2_exec($connection, $command);
     stream_set_blocking($stream, true);
     $streamout = stream_get_contents(ssh2_fetch_stream($stream, SSH2_STREAM_STDIO));
+    $re = '/|\[K|\[ \.\.\.\. ] |\[\d\dm  OK  \[\dm\] | \[\d\dmOK\[\dm|\[\d\dmOK|\[|\dm|\d INFO \]/';
+    $streamout = preg_replace($re, '', $streamout);
+    file_put_contents('events.txt', $time." ".$command." ".$ServerID. "\n", FILE_APPEND);
 }
 ?>
 <!doctype html>
@@ -380,7 +388,7 @@ if (array_key_exists('control', $_POST)) {
                 <div class='right'>
                 <div>
                     <?php
-                    if (!file_exists('../../html/server/'.$ServerID.'.php') && $allowcontrol):?>
+                    if (!file_exists('../../html/server/'.$ServerID.'.php') || !$allowcontrol):?>
                         <div class="nocontrol">You can't control this server!</div>
                     <?php endif;?>
                     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?'.http_build_query($_GET); ?>">
