@@ -22,6 +22,7 @@ foreach(preg_split("/((\r?\n)|(\r\n?))/", $lastplayerlines) as $playerline){
 $uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
 
 // Switch to find out game type
+unset($title);
 switch ($type) {
     case "csgo":
     case "valheim":
