@@ -168,7 +168,7 @@ textarea.plain {
     min-height: calc(100vh - 42px);
 }
 .width40 {
-    width: 40%;
+    width: 35%;
 }
 .marginauto {
     margin: auto;
@@ -181,14 +181,13 @@ textarea.plain {
     border-radius: 6px;
 }
 .extra .item {
-    width: 210px;
     height: 300px;
     border-radius: 6px;
     background-color: #383B4F;
     margin: auto;
+    overflow-y: scroll;
 }
 .itemtitle {
-    width: 210px;
     text-align: center;
     margin: auto;
     font-family: Helvetica Neue, sans-serif;
@@ -203,6 +202,10 @@ textarea.plain {
     padding: 10px 0 0;
     font-weight: 300;
 }
+.item.events, .item.news  {
+    width: 245px;
+}
+
 #markdown {
     font-family: Arial, serif;
     overflow-y: scroll;
@@ -595,7 +598,7 @@ label #type {
         padding-left: 200px;
     }
     .width40 {
-        width: 250px;
+        width: 240px;
     }
     .extra .item {
         width: 250px;

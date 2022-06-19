@@ -66,7 +66,7 @@ $Index_selected = 'class="selected"';
         <div class="extra inlineflex flex-wrap">
             <div class="itemdiv">
                 <div class="itemtitle">Users</div>
-                <div class="item">
+                <div class="item" style="width: 190px">
                     <?php
                     // Get all Users from Database
                     $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
@@ -87,8 +87,16 @@ $Index_selected = 'class="selected"';
                 </div>
             </div>
             <div class="itemdiv">
-                <div class="itemtitle">Users</div>
-                <div class="item"></div>
+                <div class="itemtitle">Events</div>
+                <div class="item events">
+                    <?php
+                    $file = file("events.txt");
+                    $file = array_reverse($file);
+                    foreach($file as $f){
+                        echo "<p>".$f."</p>";
+                    }
+                    ?>
+                </div>
             </div>
             <div class="itemdiv width40">
                 <div class="itemtitle">Releases</div>
@@ -119,15 +127,8 @@ $Index_selected = 'class="selected"';
                 </div>
             </div>
             <div class="itemdiv">
-                <div class="itemtitle">Events</div>
-                <div class="item events">
-                    <?php
-                    $file = file("events.txt");
-                    $file = array_reverse($file);
-                    foreach($file as $f){
-                        echo "<p>".$f."</p>";
-                    }
-                    ?>
+                <div class="itemtitle">News</div>
+                <div class="item news">
                 </div>
             </div>
         </div>
