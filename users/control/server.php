@@ -47,6 +47,27 @@ if ($username == "admin") {
     $title = "Control panel";
 }
 $Server_selected = 'class="selected"';
+
+///  Redirect, if server is not in account  ///
+if (!empty($_GET['id']) && $_GET['id'] != "addserver") {
+    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    if ($username != "admin") {
+        // If user is not admin, get the premitted servers and set the sql command
+        $sql = "SELECT server FROM users WHERE username='$username'";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $serverjson = json_decode($row["server"], TRUE);
+                if (!in_array($ServerID, $serverjson)) {
+                    header('location: server.php');
+                }
+            }
+        }
+    }
+}
 //--// Add server //--//
 function test_input($data) {
     $data = trim($data);
@@ -467,7 +488,7 @@ endif;
                 <!-- _----------‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾----------_ -->
                 <!-- _----------_Server Settings_----------_ -->
                 <!-- _----------_________________----------_ -->
-                <?php if($user=="admin"||$allowcontrol):?>
+                <?php if($username=="admin"||$allowcontrol):?>
                 <div id="serverinf">
                     <table>
                         <tr>
