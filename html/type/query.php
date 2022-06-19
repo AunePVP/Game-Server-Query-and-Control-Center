@@ -187,7 +187,7 @@ switch ($type) {
         $description = $serverstatus->rules->desc0 ?? '';
         // Check if bloodhound is on or off and set the matching value (On|Off)
         $bloodbound = $serverstatus->rules->{'blood-bound-enabled'} ?? false;
-        if ($bloodbound == "True") {$bloodbound = $language[$lang][14];} else {$bloodbound = [$lang][15];}
+        if ($bloodbound == "True") {$bloodbound = $language[$lang][14];} else {$bloodbound = $language[$lang][15];}
         // Check if Catle heart damage is enabled
         $castleheartdamagemode = $serverstatus->rules->{'castle-heart-damage-mode'} ?? '';
         // Get the ingame day
