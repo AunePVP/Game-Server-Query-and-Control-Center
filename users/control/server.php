@@ -118,7 +118,9 @@ if (array_key_exists('delete', $_POST)) {
     }
     $conn->close();
 }
-// Form Add Server
+//-----------------\\
+// Form Add Server \\
+//-----------------\\
 if (array_key_exists('AddServer', $_POST)) {
     $addtype = test_input($_POST["type"]);
     $addip = test_input($_POST["ip"]);
@@ -185,7 +187,7 @@ if (array_key_exists('AddServer', $_POST)) {
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $addid = $row['ID'];
-            echo "<script>alert('Record updated successfully!');window.location.reload();</script>";
+            //echo "<script>alert('You alredy have access to the server!');window.location.reload();</script>";
         }
     } else {
         $sql = "SELECT ID FROM serverconfig ORDER BY ID DESC LIMIT 1";
@@ -205,10 +207,15 @@ if (array_key_exists('AddServer', $_POST)) {
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $serverjson = json_decode($row["server"], TRUE);
+            if (in_array($addid, $serverjson)){
+                echo "<script>alert('You alredy have access to this server!');window.location.reload();</script>";
+                exit;
+            }
             $serverjson[] = $addid;
             $serverjson = json_encode($serverjson);
         }
     }
+    // Update users table
     if (!empty($serverjson)) {
         $sql = "UPDATE users SET server='$serverjson' WHERE username='$username'";
         if (mysqli_query($conn, $sql)) {
