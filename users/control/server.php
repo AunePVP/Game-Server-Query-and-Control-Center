@@ -118,6 +118,24 @@ if (array_key_exists('delete', $_POST)) {
     }
     $conn->close();
 }
+if (array_key_exists('removeserverfromaccount', $_POST)) {
+    $deletearray = '['.$ServerID.']';
+    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+    $sql = "SELECT id, server FROM users WHERE username='$username'";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+            unset($arrayresultdec, $arrayresult, $array);
+            $array = json_decode($row["server"], TRUE);
+            $deletearraydec = json_decode($deletearray, TRUE);
+            $array = array_diff($array, $deletearraydec);
+            foreach ($array as $key){$arrayresult[] = $key;}
+            $arrayresultdec = json_encode($arrayresult ?? [0]);
+            deleteserver($row["id"], $arrayresultdec);
+        }
+    }
+    $conn->close();
+}
 //-----------------\\
 // Form Add Server \\
 //-----------------\\
@@ -550,8 +568,11 @@ endif;
                     </div>
                 </div>
                 <?php
-                else:
-                    echo "<div style='text-align: center; font-family: Helvetica,serif; font-size: 20px;'>You don’t have permission to access the settings!</div>";
+                else:?>
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID"; ?>">
+                    <button type='submit' id="deletebtn" name="removeserverfromaccount">Remove server from account</button>
+                </form>
+                <?php
                 endif;
                 ?>
             </div>
