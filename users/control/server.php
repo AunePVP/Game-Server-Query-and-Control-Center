@@ -89,212 +89,203 @@ if (!empty($_GET['raw'])):
     }
     echo str_replace('#015', '', $logoutput);
 else:
-    //--// Add server //--//
-    function test_input($data) {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
+//--// Add server //--//
+function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+// Delete Server
+function deleteserver($id, $arrayresult) {
+    global $DB_SERVER;
+    global $DB_USERNAME;
+    global $DB_PASSWORD;
+    global $DB_NAME;
+    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+    $sql = "UPDATE users SET server='$arrayresult' WHERE id=$id";
+    if (!$conn->query($sql) === TRUE) {
+        echo "Error updating record: " . $conn->error;
     }
-    // Delete Server
-    function deleteserver($id, $arrayresult) {
-        global $DB_SERVER;
-        global $DB_USERNAME;
-        global $DB_PASSWORD;
-        global $DB_NAME;
-        $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-        $sql = "UPDATE users SET server='$arrayresult' WHERE id=$id";
-        if (!$conn->query($sql) === TRUE) {
-            echo "Error updating record: " . $conn->error;
+    $conn->close();
+}
+// Store users, database, who can control the server
+if (array_key_exists('updatepermission', $_POST)) {
+    $permittedusers = $_POST["responsepermitted"];
+    $permittedusers = json_encode(explode(",",$permittedusers));
+    // Uplaod new json to database
+    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+    $sql = "UPDATE serverconfig SET controlserver='$permittedusers' WHERE ID=$ServerID";
+    mysqli_query($conn, $sql);
+    mysqli_close($conn);
+}
+$conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+$sql = "SELECT controlserver FROM serverconfig WHERE ID='$ServerID'";
+$result = mysqli_query($conn, $sql);
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $controlserverjson = json_decode($row["controlserver"], TRUE);
+        if (in_array($username, $controlserverjson)) {
+            $allowcontrol = TRUE;
         }
-        $conn->close();
     }
-    // Store users, database, who can control the server
-    if (array_key_exists('updatepermission', $_POST)) {
-        $permittedusers = $_POST["responsepermitted"];
-        $permittedusers = json_encode(explode(",",$permittedusers));
-        // Uplaod new json to database
-        $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-        $sql = "UPDATE serverconfig SET controlserver='$permittedusers' WHERE ID=$ServerID";
-        mysqli_query($conn, $sql);
-        mysqli_close($conn);
+}
+$conn->close();
+if (array_key_exists('delete', $_POST)) {
+    $deleteid = (int)$_GET['id'];
+    $deletearray = '['.$deleteid.']';
+    if (file_exists("../../query/cron/".$deleteid.".json")){
+        unlink("../../query/cron/".$deleteid.".json");
     }
     $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-    $sql = "SELECT controlserver FROM serverconfig WHERE ID='$ServerID'";
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    $sql = "DELETE FROM serverconfig WHERE id=$deleteid";
+    if (!$conn->query($sql) === TRUE) {
+        echo "Error deleting record: " . $conn->error;
+    }
+    $sql = "SELECT id, server FROM users";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $controlserverjson = json_decode($row["controlserver"], TRUE);
-            if (in_array($username, $controlserverjson)) {
-                $allowcontrol = TRUE;
-            }
+        while($row = mysqli_fetch_assoc($result)) {
+            unset($arrayresultdec, $arrayresult, $array);
+            $array = json_decode($row["server"], TRUE);
+            $deletearraydec = json_decode($deletearray, TRUE);
+            $array = array_diff($array, $deletearraydec);
+            foreach ($array as $key){$arrayresult[] = $key;}
+            $arrayresultdec = json_encode($arrayresult ?? [0]);
+            deleteserver($row["id"], $arrayresultdec);
         }
     }
     $conn->close();
-    if (array_key_exists('delete', $_POST)) {
-        $deleteid = (int)$_GET['id'];
-        $deletearray = '['.$deleteid.']';
-        if (file_exists("../../query/cron/".$deleteid.".json")){
-            unlink("../../query/cron/".$deleteid.".json");
+}
+if (array_key_exists('removeserverfromaccount', $_POST)) {
+    $deletearray = '['.$ServerID.']';
+    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+    $sql = "SELECT id, server FROM users WHERE username='$username'";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+            unset($arrayresultdec, $arrayresult, $array);
+            $array = json_decode($row["server"], TRUE);
+            $deletearraydec = json_decode($deletearray, TRUE);
+            $array = array_diff($array, $deletearraydec);
+            foreach ($array as $key){$arrayresult[] = $key;}
+            $arrayresultdec = json_encode($arrayresult ?? [0]);
+            deleteserver($row["id"], $arrayresultdec);
         }
-        $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-        if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-        $sql = "DELETE FROM serverconfig WHERE id=$deleteid";
-        if (!$conn->query($sql) === TRUE) {
-            echo "Error deleting record: " . $conn->error;
-        }
-        $sql = "SELECT id, server FROM users";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_assoc($result)) {
-                unset($arrayresultdec, $arrayresult, $array);
-                $array = json_decode($row["server"], TRUE);
-                $deletearraydec = json_decode($deletearray, TRUE);
-                $array = array_diff($array, $deletearraydec);
-                foreach ($array as $key){$arrayresult[] = $key;}
-                $arrayresultdec = json_encode($arrayresult ?? [0]);
-                deleteserver($row["id"], $arrayresultdec);
+    }
+    $conn->close();
+}
+//-----------------\\
+// Form Add Server \\
+//-----------------\\
+if (array_key_exists('AddServer', $_POST)) {
+    $addtype = test_input($_POST["type"]);
+    $addip = test_input($_POST["ip"]);
+    $addgport = test_input($_POST["gport"]);
+    $addqport = test_input($_POST["qport"]) ?? "0";
+    $addrport = test_input($_POST["rport"]) ?? "0";
+    switch ($addtype) {
+        case "csgo":
+        case "valheim":
+        case "vrising":
+        case "protocol-valve":
+        case "rust":
+        case "arkse":
+            $Query = new SourceQuery();
+            try {
+                $Query->Connect($addip, $addqport, SQ_TIMEOUT, SQ_ENGINE);
+                $queryresult["info"] = $Query->GetInfo();
+            } // If error occured, send back to add server
+            catch (Exception $e) {
+                echo "<script>alert('ERROR! Server doesn\'t respond to query. Please try adding the server again.');window.location.href = window.location.href + '?id=addserver';</script>";
+                exit();
+            } // Disconnect from Server
+            finally {
+                $Query->Disconnect();
+            }
+            break;
+        case "minecraft":# Minecraft query
+        if ($addqport == 0) { // If queryprotocol is not an option
+            try {
+                $Query = new MinecraftPing($addip, $addgport);
+                $queryresult = $Query->Query();
+            } // If error occured, send back to add server
+            catch (MinecraftPingException $e) {
+                echo "<script>alert('ERROR! Server doesn\'t respond to query. Please try adding the server again.');window.location.href = window.location.href + '?id=addserver';</script>";
+                exit();
+            } // Disconnect from Server
+            finally {
+                $Query->Close();
+            }
+        } else { // If queryprotocol is an option
+            $Query = new MinecraftQuery();
+            try {
+                $Query->Connect($addip, $addqport);
+                $queryresult["info"] = ($Query->GetInfo());
+            } // Check if an error occurred
+            catch (MinecraftQueryException $e) {
+                echo "<script>alert('ERROR! Server doesn\'t respond to query. Please try adding the server again.');window.location.href = window.location.href + '?id=addserver';</script>";
+                exit();
             }
         }
-        $conn->close();
+        break;
     }
-    if (array_key_exists('removeserverfromaccount', $_POST)) {
-        $deletearray = '['.$ServerID.']';
-        $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-        $sql = "SELECT id, server FROM users WHERE username='$username'";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_assoc($result)) {
-                unset($arrayresultdec, $arrayresult, $array);
-                $array = json_decode($row["server"], TRUE);
-                $deletearraydec = json_decode($deletearray, TRUE);
-                $array = array_diff($array, $deletearraydec);
-                foreach ($array as $key){$arrayresult[] = $key;}
-                $arrayresultdec = json_encode($arrayresult ?? [0]);
-                deleteserver($row["id"], $arrayresultdec);
-            }
-        }
-        $conn->close();
+    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME); // Connect to db and upload server data
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
     }
-    //-----------------\\
-    // Form Add Server \\
-    //-----------------\\
-    if (array_key_exists('AddServer', $_POST)) {
-        $addtype = test_input($_POST["type"]);
-        $addip = test_input($_POST["ip"]);
-        $addgport = test_input($_POST["gport"]);
-        $addqport = test_input($_POST["qport"]) ?? "0";
-        $addrport = test_input($_POST["rport"]) ?? "0";
-        switch ($addtype) {
-            case "csgo":
-            case "valheim":
-            case "vrising":
-            case "protocol-valve":
-            case "rust":
-            case "arkse":
-                $Query = new SourceQuery();
-                try {
-                    $Query->Connect($addip, $addqport, SQ_TIMEOUT, SQ_ENGINE);
-                    $queryresult["info"] = $Query->GetInfo();
-                } // If error occured, send back to add server
-                catch (Exception $e) {
-                    echo "<script>alert('ERROR! Server doesn\'t respond to query. Please try adding the server again.');window.location.href = window.location.href + '?id=addserver';</script>";
-                    exit();
-                } // Disconnect from Server
-                finally {
-                    $Query->Disconnect();
-                }
-                break;
-            # Minecraft query
-            case "minecraft":
-                // If queryprotocol is not an option
-                if ($addqport == 0) {
-                    try {
-                        $Query = new MinecraftPing($addip, $addgport);
-                        $queryresult = $Query->Query();
-                    } // If error occured, send back to add server
-                    catch (MinecraftPingException $e) {
-                        echo "<script>alert('ERROR! Server doesn\'t respond to query. Please try adding the server again.');window.location.href = window.location.href + '?id=addserver';</script>";
-                        exit();
-                    } // Disconnect from Server
-                    finally {
-                        $Query->Close();
-                    }
-                } // If queryprotocol is an option
-                else {
-                    $Query = new MinecraftQuery();
-                    try {
-                        $Query->Connect($addip, $addqport);
-                        $queryresult["info"] = ($Query->GetInfo());
-                    } // Check if an error occurred
-                    catch (MinecraftQueryException $e) {
-                        echo "<script>alert('ERROR! Server doesn\'t respond to query. Please try adding the server again.');window.location.href = window.location.href + '?id=addserver';</script>";
-                        exit();
-                    }
-                }
-                break;
+    // Set Server ID
+    $sql = "SELECT ID FROM serverconfig WHERE IP='$addip' AND type='$addtype' AND QueryPort='$addqport' AND GamePort='$addgport' AND RconPort='$addrport'";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $addid = $row['ID'];
         }
-        // Connect to db and upload server data
-        $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-        if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-        // Set Server ID
-        $sql = "SELECT ID FROM serverconfig WHERE IP='$addip' AND type='$addtype' AND QueryPort='$addqport' AND GamePort='$addgport' AND RconPort='$addrport'";
+    } else {
+        $sql = "SELECT ID FROM serverconfig ORDER BY ID DESC LIMIT 1";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
-                $addid = $row['ID'];
-                //echo "<script>alert('You alredy have access to the server!');window.location.reload();</script>";
-            }
-        } else {
-            $sql = "SELECT ID FROM serverconfig ORDER BY ID DESC LIMIT 1";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $addid = $row["ID"] + 1;
-                }
+                $addid = $row["ID"] + 1;
             }
         }
-        // Add server ID to user
-        if (empty($addid)) {
-            $addid = 1;
-        }
-        $sql = "SELECT server FROM users WHERE username='$username'";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                $serverjson = json_decode($row["server"], TRUE);
-                if (in_array($addid, $serverjson)){
-                    echo "<script>alert('You alredy have access to this server!');window.location.reload();</script>";
-                    exit;
-                }
-                $serverjson[] = $addid;
-                $serverjson = json_encode($serverjson);
+    }
+    if (empty($addid)) { // Add server ID to user
+        $addid = 1;
+    }
+    $sql = "SELECT server FROM users WHERE username='$username'";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $serverjson = json_decode($row["server"], TRUE);
+            if (in_array($addid, $serverjson)){
+                echo "<script>alert('You alredy have access to this server!');window.location.reload();</script>";
+                exit;
             }
+            $serverjson[] = $addid;
+            $serverjson = json_encode($serverjson);
         }
-        // Update users table
-        if (!empty($serverjson)) {
-            $sql = "UPDATE users SET server='$serverjson' WHERE username='$username'";
-            if (mysqli_query($conn, $sql)) {
-                echo "<script>console.log('Record updated successfully')</script>";
-            } else {
-                echo "Error updating record: " . mysqli_error($conn);
-            }
-        }
-        // Add server data to serverconfig table
-        $sql = "INSERT INTO serverconfig (ID, IP, type, QueryPort, GamePort, RconPort, Name, controlserver) VALUES ('$addid', '$addip', '$addtype', '$addqport', '$addgport', '$addrport', '0', '[\"admin\"]')";
+    }
+    if (!empty($serverjson)) { // Update users table
+        $sql = "UPDATE users SET server='$serverjson' WHERE username='$username'";
         if (mysqli_query($conn, $sql)) {
             echo "<script>console.log('Record updated successfully')</script>";
         } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            echo "Error updating record: " . mysqli_error($conn);
         }
-        $conn->close();
     }
-    // Control Server
-    if (array_key_exists('control', $_POST)) {
+    $sql = "INSERT INTO serverconfig (ID, IP, type, QueryPort, GamePort, RconPort, Name, controlserver) VALUES ('$addid', '$addip', '$addtype', '$addqport', '$addgport', '$addrport', '0', '[\"admin\"]')";// Add server data to serverconfig table
+    if (mysqli_query($conn, $sql)) {
+        echo "<script>console.log('Record updated successfully')</script>";
+    } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    }
+    $conn->close();
+}
+if (array_key_exists('control', $_POST)) { // Control Server
     if (file_exists('../../html/server/' . $ServerID . '.php') && $allowcontrol):
     $command = $_POST['control'];
     switch ($command) {
@@ -311,10 +302,11 @@ else:
     $streamout = stream_get_contents(ssh2_fetch_stream($stream, SSH2_STREAM_STDIO));
     $re = '/|\[K|\[ \.\.\.\. ] |\[\d\dm  OK  \[\dm\] | \[\d\dmOK\[\dm|\[\d\dmOK|\[|\dm|\d INFO \]/';
     $streamout = preg_replace($re, '', $streamout);
+    $streamout = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $streamout);
     file_put_contents('events.txt', $time." ".$command." ".$ServerID. "\n", FILE_APPEND);
     endif;
-    }
-    ?>
+}
+?>
     <!doctype html>
     <html lang="en">
     <head>
@@ -467,61 +459,59 @@ else:
                 <div id="control">
                     <div class='left'>left</div>
                     <div class='right'>
-                    <div style="position: relative;">
-                        <?php if (!file_exists('../../html/server/'.$ServerID.'.php') || !$allowcontrol):?>
-                            <div class="nocontrol">You can't control this server!</div>
-                        <?php endif;?>
-                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID&page=control"; ?>">
-                            <div id="servercontrol">
-                                <?php
-                                if ($status && !isset($startdisabled)){
-                                    $startdisabled = " disabled";
+                        <div style="position: relative;">
+                            <?php if (!file_exists('../../html/server/'.$ServerID.'.php') || !$allowcontrol):?>
+                                <div class="nocontrol">You can't control this server!</div>
+                            <?php endif;?>
+                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID&page=control"; ?>">
+                                <div id="servercontrol">
+                                    <?php
+                                    if ($status && !isset($startdisabled)){
+                                        $startdisabled = " disabled";
+                                    }
+                                    if (!$status && !isset($startdisabled)){
+                                        $stopdisabled = " disabled";
+                                        $restartdisabled = " disabled";
+                                    } elseif (isset($restartdisabled)) {
+                                        $startdisabled = " disabled";
+                                        $restartdisabled = "";
+                                    }
+                                    ?>
+                                    <button class="button<?php echo $startdisabled ?? ''?>" type="submit" value="start" name="control"<?php echo $startdisabled ?? ''?>>Start</button>
+                                    <button class="button<?php echo $stopdisabled ?? ''?>" type="submit" value="stop" name="control"<?php echo $stopdisabled ?? ''?>>Stop</button>
+                                    <button class="button<?php echo $restartdisabled ?? ''?>" type="submit" value="restart" name="control<?php echo $restartdisabled ?? ''?>">Restart</button>
+                                    <button class="button<?php echo $backupdisabled ?? ''?>" type="submit" value="backup" name="control"<?php echo $backupdisabled ?? ''?>>Backup</button>
+                                </div>
+                            </form>
+                            <div class="log"><?php echo $streamout ?? ""?></div>
+                            <div id="console"><div onclick="consolepopup()" style="cursor: pointer;"><svg width="100%" height="100%" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><path d="M1.7,1C1.313,1 1,1.313 1,1.7L1,7L3,7L3,3L7,3L7,1L1.7,1ZM3,13L1,13L1,18.3C1,18.687 1.313,19 1.7,19L7,19L7,17L3,17L3,13ZM17,17L13,17L13,19L18.3,19C18.687,19 19,18.687 19,18.3L19,13L17,13L17,17ZM19,1.7C19,1.313 18.687,1 18.3,1L13,1L13,3L17,3L17,7L19,7L19,1.7Z" style="fill:white;"/></svg></div><div id="consolelog"></div></div>
+                            <!-- Display Server Console -->
+                            <script>
+                                function consolepopup(){
+                                    document.getElementById("consolepopupparent").style.display = "flex";
                                 }
-                                if (!$status && !isset($startdisabled)){
-                                    $stopdisabled = " disabled";
-                                    $restartdisabled = " disabled";
-                                } elseif (isset($restartdisabled)) {
-                                    $startdisabled = " disabled";
-                                    $restartdisabled = "";
+                                function exitpopuplog() {
+                                    document.getElementById("consolepopupparent").style.display = "none";
                                 }
-                                ?>
-                                <button class="button<?php echo $startdisabled ?? ''?>" type="submit" value="start" name="control"<?php echo $startdisabled ?? ''?>>Start</button>
-                                <button class="button<?php echo $stopdisabled ?? ''?>" type="submit" value="stop" name="control"<?php echo $stopdisabled ?? ''?>>Stop</button>
-                                <button class="button<?php echo $restartdisabled ?? ''?>" type="submit" value="restart" name="control<?php echo $restartdisabled ?? ''?>">Restart</button>
-                                <button class="button<?php echo $backupdisabled ?? ''?>" type="submit" value="backup" name="control"<?php echo $backupdisabled ?? ''?>>Backup</button>
-                            </div>
-                        </form>
-                        <div class="log">
-                            <?php echo $streamout ?? ""?>
+                                setInterval(readLogFile, 5000);
+                                window.onload = readLogFile;
+                                let pathname = window.location.pathname + "?id=<?php echo $ServerID?>";
+                                function readLogFile(){
+                                    $.get(pathname, {raw:"true"},function(data) {
+                                        $("#consolelog").html(data);
+                                        $("#popuplog").html(data);
+                                    });
+                                    let consolelog = $('#consolelog');
+                                    consolelog.animate({
+                                        scrollTop: consolelog[0].scrollHeight
+                                    }, 1000);
+                                    let popuplog = $('#popuplog');
+                                    popuplog.animate({
+                                        scrollTop: popuplog[0].scrollHeight
+                                    }, 1000);
+                                }
+                            </script>
                         </div>
-                        <div id="console"><div onclick="consolepopup()" style="cursor: pointer;"><svg width="100%" height="100%" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><path d="M1.7,1C1.313,1 1,1.313 1,1.7L1,7L3,7L3,3L7,3L7,1L1.7,1ZM3,13L1,13L1,18.3C1,18.687 1.313,19 1.7,19L7,19L7,17L3,17L3,13ZM17,17L13,17L13,19L18.3,19C18.687,19 19,18.687 19,18.3L19,13L17,13L17,17ZM19,1.7C19,1.313 18.687,1 18.3,1L13,1L13,3L17,3L17,7L19,7L19,1.7Z" style="fill:white;"/></svg></div><div id="consolelog"></div></div>
-                        <!-- Display Server Console -->
-                        <script>
-                            function consolepopup(){
-                                document.getElementById("consolepopupparent").style.display = "flex";
-                            }
-                            function exitpopuplog() {
-                                document.getElementById("consolepopupparent").style.display = "none";
-                            }
-                            setInterval(readLogFile, 5000);
-                            window.onload = readLogFile;
-                            let pathname = window.location.pathname + "?id=<?php echo $ServerID?>";
-                            function readLogFile(){
-                                $.get(pathname, {raw:"true"},function(data) {
-                                    $("#consolelog").html(data);
-                                    $("#popuplog").html(data);
-                                });
-                                let consolelog = $('#consolelog');
-                                consolelog.animate({
-                                    scrollTop: consolelog[0].scrollHeight
-                                }, 1000);
-                                let popuplog = $('#popuplog');
-                                popuplog.animate({
-                                    scrollTop: popuplog[0].scrollHeight
-                                }, 1000);
-                            }
-                        </script>
-                    </div>
                     </div>
                 </div>
                 <div id="settings">
@@ -541,113 +531,110 @@ else:
                     <!-- _----------_Server Settings_----------_ -->
                     <!-- _----------_________________----------_ -->
                     <?php if($username=="admin"||$allowcontrol):?>
-                    <div id="serverinf">
-                        <table>
-                            <tr>
-                                <th class="tableid">ID</th>
-                                <th>Type</th>
-                                <th>IP</th>
-                                <th>Game Port</th>
-                                <th>Query Port</th>
-                                <th>Rcon Port</th>
-                            </tr>
-                            <tr>
-                                <td class="tableid"><?php echo $ServerID?></td>
-                                <td><?php echo $type?></td>
-                                <td><?php echo $ip?></td>
-                                <td><?php echo $gport?></td>
-                                <td><?php echo $qport?></td>
-                                <td><?php echo $rport?></td>
-                            </tr>
-                        </table>
-                        <div>
-                            <?php
-                            switch ($type) {
-                            case "csgo":
-                            case "valheim":
-                            case "vrising":
-                            case "protocol-valve":
-                            case "rust":
-                            case "arkse":
-                                echo '<span style="font-weight: 500;">System:</span>'.$Os.'<br>';
-                                break;
-                            case "minecraft":
-                                break;
-                            }
-                            // Select users who can control this server
-                            $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-                            $sql = "SELECT username FROM users";
-                            $result = mysqli_query($conn, $sql);
-                            if (mysqli_num_rows($result) > 0) {
-                                while($row = mysqli_fetch_assoc($result)) {
-                                    $users[] = $row["username"];
+                        <div id="serverinf">
+                            <table>
+                                <tr>
+                                    <th class="tableid">ID</th>
+                                    <th>Type</th>
+                                    <th>IP</th>
+                                    <th>Game Port</th>
+                                    <th>Query Port</th>
+                                    <th>Rcon Port</th>
+                                </tr>
+                                <tr>
+                                    <td class="tableid"><?php echo $ServerID?></td>
+                                    <td><?php echo $type?></td>
+                                    <td><?php echo $ip?></td>
+                                    <td><?php echo $gport?></td>
+                                    <td><?php echo $qport?></td>
+                                    <td><?php echo $rport?></td>
+                                </tr>
+                            </table>
+                            <div>
+                                <?php
+                                switch ($type) {
+                                    case "csgo":
+                                    case "valheim":
+                                    case "vrising":
+                                    case "protocol-valve":
+                                    case "rust":
+                                    case "arkse":
+                                        echo '<span style="font-weight: 500;">System:</span>'.$Os.'<br>';
+                                        break;
+                                    case "minecraft":
+                                        break;
                                 }
-                            }
-                            mysqli_close($conn);
-                            $notallowedyet = array_diff($users, $controlserverjson);
-                            ?>
-                            <script>
-                                function allowDrop(ev) {
-                                    ev.preventDefault();
+                                // Select users who can control this server
+                                $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+                                $sql = "SELECT username FROM users";
+                                $result = mysqli_query($conn, $sql);
+                                if (mysqli_num_rows($result) > 0) {
+                                    while($row = mysqli_fetch_assoc($result)) {
+                                        $users[] = $row["username"];
+                                    }
                                 }
-                                function drag(ev) {
-                                    ev.dataTransfer.setData("text", ev.target.id);
-                                }
-                                function drop(ev, el) {
-                                    ev.preventDefault();
-                                    let data = ev.dataTransfer.getData("text");
-                                    el.appendChild(document.getElementById(data));
-                                }
-                                function getusernames() {
-                                    const parent = document.getElementById('dropform');
-                                    const children = Array.from(parent.children);
-                                    document.getElementById("responsepermitted").value = children.map(element => {
-                                        return element.id;
-                                    });
-                                    document.getElementById("updatepermission").click();
-                                }
-                            </script>
-                            <div id="dragdropform">
-                                <div style="width: 50%; margin-right:3px">
-                                    <p>Users</p>
-                                    <div id="dragform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
-                                        <?php
-                                        foreach ($notallowedyet as $maybeallowed){
-                                            if ($maybeallowed=="public")
-                                                continue;
-                                            echo '<div draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="draggable" id="'.$maybeallowed.'">'.$maybeallowed.'</div>';
-                                        }
-                                        ?>
+                                mysqli_close($conn);
+                                $notallowedyet = array_diff($users, $controlserverjson);
+                                ?>
+                                <script>
+                                    function allowDrop(ev) {
+                                        ev.preventDefault();
+                                    }
+                                    function drag(ev) {
+                                        ev.dataTransfer.setData("text", ev.target.id);
+                                    }
+                                    function drop(ev, el) {
+                                        ev.preventDefault();
+                                        let data = ev.dataTransfer.getData("text");
+                                        el.appendChild(document.getElementById(data));
+                                    }
+                                    function getusernames() {
+                                        const parent = document.getElementById('dropform');
+                                        const children = Array.from(parent.children);
+                                        document.getElementById("responsepermitted").value = children.map(element => {
+                                            return element.id;
+                                        });
+                                        document.getElementById("updatepermission").click();
+                                    }
+                                </script>
+                                <div id="dragdropform">
+                                    <div style="width: 50%; margin-right:3px">
+                                        <p>Users</p>
+                                        <div id="dragform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
+                                            <?php
+                                            foreach ($notallowedyet as $maybeallowed){
+                                                if ($maybeallowed=="public")
+                                                    continue;
+                                                echo '<div draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="draggable" id="'.$maybeallowed.'">'.$maybeallowed.'</div>';
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div style="width: 50%; margin-left:3px">
+                                        <p>Users with permission, to control this server.</p>
+                                        <div id="dropform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
+                                            <?php
+                                            foreach ($controlserverjson as $allowed){
+                                                echo '<div draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="draggable" id="'.$allowed.'">'.$allowed.'</div>';
+                                            }
+                                            ?>
+                                        </div>
                                     </div>
                                 </div>
-                                <div style="width: 50%; margin-left:3px">
-                                    <p>Users with permission, to control this server.</p>
-                                    <div id="dropform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
-                                        <?php
-                                        foreach ($controlserverjson as $allowed){
-                                        echo '<div draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="draggable" id="'.$allowed.'">'.$allowed.'</div>';
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
+                                <button id="updatecontrolperm" onclick='getusernames()'>Update</button>
+                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID&page=settings"; ?>" style="display:none">
+                                    <input id="responsepermitted" name="responsepermitted">
+                                    <button id="updatepermission" type="submit" name="updatepermission"></button>
+                                </form>
+                                <!-- Delete this server-->
+                                <button type='button' id="deletebtn" onclick="confirmdelete()">Delete this server</button>
                             </div>
-                            <button id="updatecontrolperm" onclick='getusernames()'>Update</button>
-                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID&page=settings"; ?>" style="display:none">
-                                <input id="responsepermitted" name="responsepermitted">
-                                <button id="updatepermission" type="submit" name="updatepermission"></button>
-                            </form>
-                            <!-- Delete this server-->
-                            <button type='button' id="deletebtn" onclick="confirmdelete()">Delete this server</button>
                         </div>
-                    </div>
-                    <?php
-                    else:?>
-                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID"; ?>">
-                        <button type='submit' id="deletebtn" name="removeserverfromaccount">Remove server from account</button>
-                    </form>
-                    <?php
-                    endif;
-                    ?>
+                    <?php else:?>
+                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID"; ?>">
+                            <button type='submit' id="deletebtn" name="removeserverfromaccount">Remove server from account</button>
+                        </form>
+                    <?php endif;?>
                 </div>
             </div>
         </div>
@@ -673,30 +660,31 @@ else:
                                     <option value="rust">Rust</option>
                                 </select>
                             </label>
-                                <div class="input">
-                                    <label for="input-domain-ip">IP/Domain:</label><input id="input-domain-ip" name="ip" type="text" required="required" minlength="4" maxlength="30" placeholder="xxx.xxx.xxx.xx" autocomplete="off">
-                                </div>
-                                <div class="input">
-                                    <label for="input-gport">Game Port:</label><input id="input-gport" name="gport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
-                                </div>
-                                <div class="input">
-                                    <label for="input-qport">Query Port:</label><input id="input-qport" name="qport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
-                                </div>
-                                <div class="input">
-                                    <label for="input-rport">Rcon Port:</label><input id="input-rport" name="rport" type="text" required="required" minlength="1" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
-                                </div>
-                                <div>
-                                    <div id="notes"></div>
-                                </div>
-                                <div style="display:flex;justify-content: flex-end;">
-                                    <input class="addsrv" type="submit" name="AddServer" value="AddServer">
-                                </div>
+                            <div class="input">
+                                <label for="input-domain-ip">IP/Domain:</label><input id="input-domain-ip" name="ip" type="text" required="required" minlength="4" maxlength="30" placeholder="xxx.xxx.xxx.xx" autocomplete="off">
+                            </div>
+                            <div class="input">
+                                <label for="input-gport">Game Port:</label><input id="input-gport" name="gport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
+                            </div>
+                            <div class="input">
+                                <label for="input-qport">Query Port:</label><input id="input-qport" name="qport" type="text" minlength="1" required="required" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
+                            </div>
+                            <div class="input">
+                                <label for="input-rport">Rcon Port:</label><input id="input-rport" name="rport" type="text" required="required" minlength="1" maxlength="5" placeholder="xxxx" autocomplete="off" pattern="^[0-9]*$">
+                            </div>
+                            <div>
+                                <div id="notes"></div>
+                            </div>
+                            <div style="display:flex;justify-content: flex-end;">
+                                <input class="addsrv" type="submit" name="AddServer" value="AddServer">
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
-        <?php
-        endif;
-        endif;
-    endif;
-    ?>
+        <?php endif;?>
+        <?php endif;?>
+    </main>
+    </body>
+</html>
+<?php endif;?>
