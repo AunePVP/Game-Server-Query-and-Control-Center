@@ -187,7 +187,7 @@ $font['banner'] = "Helvetica, sans-serif";
     .container {
         width: <?php echo $server['width']?>;
         margin: auto;
-        padding-top: 70px;
+        padding-top: 50px;
     }
     .status-letter-online, .status-letter-offline {
         writing-mode: vertical-lr;
