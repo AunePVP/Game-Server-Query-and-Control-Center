@@ -257,3 +257,6 @@ if (mysqli_num_rows($result) > 0) {
     }
 }
 $conn->close();
+// Check game-server version
+$arkversion = file_get_contents("http://arkdedicated.com/version");
+
