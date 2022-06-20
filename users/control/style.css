@@ -16,6 +16,20 @@ input:invalid {
     border: 2px dashed red;
     background-color: #ffc3c3;
 }
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #c3c3c3;
+}
 .svg-circleplus { height: 100%; stroke: white; }
 #topbar {
     display: none;
@@ -208,7 +222,6 @@ textarea.plain {
 
 #markdown {
     font-family: Arial, serif;
-    overflow-y: scroll;
     padding: 20px;
 }
 #markdown #newfeatures {
@@ -330,6 +343,9 @@ label #type {
     right: 10px;
     top: 10px;
     filter: drop-shadow(1px 1px 5px rgb(256 256 256 / 1));
+}
+#consolelog::-webkit-scrollbar {
+    display: none;
 }
 .nocontrol {
     position: absolute;
