@@ -306,17 +306,42 @@ label #type {
 .log::-webkit-scrollbar {
     display: none;
 }
+#console {
+    position: relative;
+    color: white;
+    box-sizing: border-box;
+    padding: 5px;
+    background-color: black;
+}
+#console #consolelog {
+    text-align: left;
+    font-family: monospace;
+    background-color: black;
+    overflow: scroll;
+    white-space: pre ; display: block; unicode-bidi: embed;
+    font-size: 11px;
+    height: 250px;
+    margin: 10px auto;
+}
+#console svg {
+    position: absolute;
+    height: 27px;
+    width: 27px;
+    right: 10px;
+    top: 10px;
+    filter: drop-shadow(1px 1px 5px rgb(256 256 256 / 1));
+}
 .nocontrol {
     position: absolute;
     height: 213px;
-    width: 361px;
+    width: 100%;
     background-color: rgba(20, 22, 33, 0.87);
     text-align: center;
     font-family: Helvetica, sans-serif;
     font-size: 20px;
     line-height: 213px;
 }
-#confpopupparent {
+#confpopupparent, #consolepopupparent {
     height: 100vh;
     position: fixed;
     width: 100%;
@@ -324,6 +349,25 @@ label #type {
     background-color: rgba(0, 0, 0, 0.57);
     z-index: 10;
     display:none
+}
+#consolepopup {
+    height: 90vh;
+    width: 80%;
+    background-color: #383B4F;
+    margin: auto;
+    border-radius: 6px;
+    padding: 20px;
+    z-index: 1;
+}
+#popuplog {
+    background-color: black;
+    padding: 15px;
+    overflow-y: scroll;
+    height: -webkit-fill-available;
+    white-space: pre;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 13px;
 }
 #confpopup p strong {
     -ms-user-select: None;
@@ -514,7 +558,6 @@ label #type {
     margin: 0 0 10px 0;
 }
 #controlsettingsparent {
-    height: 80vh;
     background-color: #383B4F;
     border-radius: 6px;
 }
