@@ -384,6 +384,7 @@ label #type {
     border-radius: 4px;
     font-family: monospace;
     font-size: 13px;
+    overflow-x: hidden;
 }
 #confpopup p strong {
     -ms-user-select: None;
