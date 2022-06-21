@@ -149,8 +149,9 @@ $font['banner'] = "Helvetica, sans-serif";
         color: white;
     }
     .user-avater {
-        border: 5px solid <?php echo $server['color']?>;
+        border: 4px solid <?php echo $server['color']?>;
         height: calc(100% - 10px);
+        border-radius: 4px;
     }
     .dropdown-content {
         display: none;
@@ -183,6 +184,7 @@ $font['banner'] = "Helvetica, sans-serif";
         color: <?php echo $font['color']?>;
         background-color: <?php echo $server['color']?>;
         margin-bottom: <?php echo $server['spacing']?>;
+        border-radius: 4px;
     }
     .container {
         width: <?php echo $server['width']?>;
@@ -204,7 +206,7 @@ $font['banner'] = "Helvetica, sans-serif";
     }
     .status_icon_onl {
         width: 0.8rem;
-        height: 7rem;
+        height: 112px;
         padding: 0;
         margin: 0;
         border-radius: .125rem 0 0 .125rem;
@@ -299,6 +301,7 @@ $font['banner'] = "Helvetica, sans-serif";
         border-width: 2px;
         overflow-y: scroll;
         padding: 0 7px;
+        border-radius: 4px;
     }
     .canvasparent {
         height: 120px!important;
@@ -307,6 +310,7 @@ $font['banner'] = "Helvetica, sans-serif";
         background-color: #1D1D1F;
         width: 195px;
         padding: 12px 10px 10px 10px;
+        border-radius: 4px;
     }
     .vchartdiv .servername p {
         font-family: Helvetica, serif;
