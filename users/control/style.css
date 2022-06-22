@@ -477,6 +477,15 @@ label #type {
 #dragdropform {
     display: flex;
 }
+#dragdropform .ddparent {
+    width: 50%;
+}
+#dragdropform .ddparent.left {
+    margin-right: 3px
+}
+#dragdropform .ddparent.right {
+    margin-left: 3px
+}
 .draggable {
     cursor: move;
     cursor: grab;
@@ -589,6 +598,7 @@ label #type {
 #control .right {
     width:35%;
     padding: 30px 20px;
+    min-width: 370px;
 }
 #servercontrol {
     display: flex;
@@ -649,7 +659,41 @@ label #type {
 .settings-inputline label {
     margin: auto auto auto 0;
 }
+@media only screen and (max-width: 1050px) {
+    #control .right, #control .left {
+        padding: 12px;
+    }
+}
+@media only screen and (max-width: 950px) {
+    #control .right {
+        min-width: 320px;
+    }
+}
+@media only screen and (max-width: 950px) {
+    #control .right {
+        min-width: 280px;
+    }
+    .log {
+        display: none;
+    }
+    #servercontrol {
+        display: block;
+        margin-bottom: 8px;
+    }
+    #servercontrol .button {
+        width: 100%;
+        border-radius: 4px;
+        background-color: #555c8b;
+        color: white;
+    }
+}
 @media only screen and (max-width: 775px) {
+    #control .left {
+        display: none;
+    }
+    #control .right {
+        width: 100%;
+    }
     #sidebar, #sidebar button.bottom {
         width: 200px;
     }
@@ -662,6 +706,9 @@ label #type {
     .extra .item {
         width: 250px;
     }
+    #control, #settings {
+        padding: 0!important;
+    }
 }
 @media only screen and (max-width: 550px) {
     #sidebar, #sidebar button.bottom {
@@ -669,6 +716,13 @@ label #type {
     }
     main {
         padding-left: 170px;
+    }
+    #console svg {
+        display: none;
+    }
+    #dragdropform .ddparent {
+        width: 100%;
+        margin: 0!important;
     }
 }
 @media only screen and (max-width: 500px) {
@@ -688,8 +742,11 @@ label #type {
     #control, #settings {
         padding: 15px 10px;
     }
-    .tableid {
+    .tablehide {
         display: none;
+    }
+    #dragdropform {
+        display: block;
     }
 }
 @media only screen and (max-width: 420px) {

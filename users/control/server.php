@@ -345,7 +345,6 @@ if (array_key_exists('control', $_POST)) { // Control Server
         <div onclick="exitpopuplog()" style="height: 100vh;width: 100%;position: fixed;z-index: 0;"></div>
         <div id="consolepopup">
             <div id="popuplog"></div>
-            <div id="popupsettings"></div>
         </div>
     </div>
     <nav>
@@ -497,7 +496,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                 function exitpopuplog() {
                                     document.getElementById("consolepopupparent").style.display = "none";
                                 }
-                                setInterval(readLogFile, 1000);
+                                setInterval(readLogFile, 3000);
                                 window.onload = readLogFile;
                                 let pathname = window.location.pathname + "?id=<?php echo $ServerID?>";
                                 function readLogFile(){
@@ -538,16 +537,16 @@ if (array_key_exists('control', $_POST)) { // Control Server
                         <div id="serverinf">
                             <table>
                                 <tr>
-                                    <th class="tableid">ID</th>
-                                    <th>Type</th>
+                                    <th class="tablehide">ID</th>
+                                    <th class="tablehide">Type</th>
                                     <th>IP</th>
                                     <th>Game Port</th>
                                     <th>Query Port</th>
                                     <th>Rcon Port</th>
                                 </tr>
                                 <tr>
-                                    <td class="tableid"><?php echo $ServerID?></td>
-                                    <td><?php echo $type?></td>
+                                    <td class="tablehide"><?php echo $ServerID?></td>
+                                    <td class="tablehide"><?php echo $type?></td>
                                     <td><?php echo $ip?></td>
                                     <td><?php echo $gport?></td>
                                     <td><?php echo $qport?></td>
@@ -602,7 +601,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                     }
                                 </script>
                                 <div id="dragdropform">
-                                    <div style="width: 50%; margin-right:3px">
+                                    <div class="ddparent left">
                                         <p>Users</p>
                                         <div id="dragform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                                             <?php
@@ -614,7 +613,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                             ?>
                                         </div>
                                     </div>
-                                    <div style="width: 50%; margin-left:3px">
+                                    <div class="ddparent right">
                                         <p>Users with permission, to control this server.</p>
                                         <div id="dropform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                                             <?php
