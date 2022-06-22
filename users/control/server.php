@@ -83,8 +83,12 @@ if (!empty($_GET['raw'])):
             $stream = ssh2_exec($connection, $scpcommand);
             stream_set_blocking($stream, true);
             $logoutput = stream_get_contents(ssh2_fetch_stream($stream, SSH2_STREAM_STDIO));
+        } elseif ($logtype == "rsync"){
+            exec($rsynccommand);
+            $logoutput = tailCustom($rsynclogpath, 150);
         }
     } else {
+        echo "Disabled";
         $logoutput = "There was an error retrieving the logs from the server!";
     }
     echo str_replace('#015', '', $logoutput);
@@ -493,7 +497,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                 function exitpopuplog() {
                                     document.getElementById("consolepopupparent").style.display = "none";
                                 }
-                                setInterval(readLogFile, 5000);
+                                setInterval(readLogFile, 1000);
                                 window.onload = readLogFile;
                                 let pathname = window.location.pathname + "?id=<?php echo $ServerID?>";
                                 function readLogFile(){
