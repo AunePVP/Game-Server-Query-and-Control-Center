@@ -579,7 +579,6 @@ label #type {
     border-radius: 6px;
 }
 #control {
-    height: 100%;
     display: flex;
 }
 #control .left {
