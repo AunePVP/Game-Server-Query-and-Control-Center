@@ -761,6 +761,7 @@ label #type {
     }
     .serversnippet {
         width: 340px;
+        margin: 7px auto;
     }
     .server {
         padding-top: 45px

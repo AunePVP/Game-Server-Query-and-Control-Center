@@ -349,8 +349,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
     </div>
     <nav>
         <div id="sidebar">
-            <button onclick="window.location.href='index.php';">Overview</button>
-            <button onclick="window.location.href='server.php';" class="selected">Server</button>
+            <button onclick="window.location.href='server.php';" class="selected">Overview</button>
             <button onclick="window.location.href='user.php';">User</button>
             <button onclick="window.location.href='settings.php';">Settings</button>
             <button onclick="window.location.href='../../index.php';">Home</button>
@@ -379,8 +378,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
             if (empty($_GET['id'])):
                 ?>
                 <div class="server inlineflex flex-wrap">
-                    <?php
-                    require_once 'smallserver.php' ?>
+                    <?php require_once 'smallserver.php' ?>
                     <div class="serversnippet flex" onclick="location.href='server.php?id=addserver';">
                         <div class="content">
                             <div class="name" style="font-size: 32px;padding-top: 25px;">Add a server</div>
@@ -393,14 +391,88 @@ if (array_key_exists('control', $_POST)) { // Control Server
                         </div>
                     </div>
                 </div>
-            <?php
-            endif; ?>
-
+                <div class="extra inlineflex flex-wrap">
+                    <div class="itemdiv">
+                        <div class="itemtitle">Users</div>
+                        <div class="item" style="width: 190px">
+                            <?php
+                            // Get all Users from Database
+                            $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+                            if (!$conn) {
+                                die("Connection failed: " . mysqli_connect_error());
+                            }
+                            $sql = "SELECT username FROM users";
+                            $result = mysqli_query($conn, $sql);
+                            if (mysqli_num_rows($result) > 0) {
+                                while($row = mysqli_fetch_assoc($result)) {
+                                    echo "<p>".$row["username"]."</p>";
+                                }
+                            } else {
+                                echo "0 results";
+                            }
+                            mysqli_close($conn);
+                            ?>
+                        </div>
+                    </div>
+                    <div class="itemdiv">
+                        <div class="itemtitle">Events</div>
+                        <div class="item events">
+                            <?php
+                            $file = file("events.txt");
+                            $file = array_reverse($file);
+                            foreach($file as $f){
+                                echo "<p>".$f."</p>";
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="itemdiv width40">
+                        <div class="itemtitle">Releases</div>
+                        <div class="item" style="width: auto; display: flex;">
+                            <?php
+                            $context = stream_context_create(
+                                array(
+                                    "http" => array(
+                                        "header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+                                    )
+                                )
+                            );
+                            $github = json_decode(file_get_contents('https://api.github.com/repos/AunePVP/Game-Server-Query-and-Control-Center/releases/latest', false, $context));
+                            $releasename = $github->name;
+                            $markdown = $github->body;
+                            $versionfile = fopen("../../version.txt", "r") or die("Unable to open file!");
+                            $version = fgets($versionfile);
+                            fclose($versionfile);
+                            $version = preg_replace('/\s+/', '', $version);
+                            $releasename = preg_replace('/\s+/', '', $releasename);
+                            if ($version == $releasename) {
+                                echo "<div style='margin: auto;font-family: Helvetica Neue,sans-serif;font-size: 22px;}'>No new release found</div>";
+                            } else {
+                                echo "<div id='markdown'></div>";
+                                $emarkdown = TRUE;
+                            }
+                            ?>
+                        </div>
+                    </div>
+                <div class="itemdiv">
+                    <div class="itemtitle">News</div>
+                    <div class="item news"></div>
+                </div>
+                <textarea id="markdownsource"><?php echo $markdown ?></textarea>
+                    <?php if($emarkdown):?>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js" integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                        <script type="text/javascript">
+                            let converter = new showdown.Converter(),
+                                text      = document.getElementById('markdownsource').value,
+                                html      = converter.makeHtml(text);
+                            document.getElementById('markdown').innerHTML = html;
+                        </script>
+                    <?php endif;?>
             <!-- __%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%__ -->
             <!-- _------------_Specific Server_------------_ -->
             <!-- __%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%__ -->
-
             <?php
+            endif;
             if (!empty($_GET['id'])):
             if ($_GET['id'] != "addserver") {
                 $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
@@ -688,6 +760,20 @@ if (array_key_exists('control', $_POST)) { // Control Server
         <?php endif;?>
         <?php endif;?>
     </main>
+    <textarea id="markdownsource"><?php echo $markdown ?></textarea>
+    <?php
+    if($emarkdown):
+    ?>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js" integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+        let converter = new showdown.Converter(),
+            text      = document.getElementById('markdownsource').value,
+            html      = converter.makeHtml(text);
+        document.getElementById('markdown').innerHTML = html;
+    </script>
+<?php
+endif;
+?>
     </body>
 </html>
 <?php endif;?>

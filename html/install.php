@@ -189,7 +189,7 @@ if (array_key_exists('submit', $_POST)) {
                         unset($_SESSION['backURI']);
                         //header("location:".$backURL);
                         echo "You created the user ".$username."!";
-                        echo "<script>setTimeout(function(){window.location.href = '../users/control/index.php';}, 1000)</script>";
+                        echo "<script>setTimeout(function(){window.location.href = '../users/control/server.php';}, 1000)</script>";
                     }
                 }
                 ?>

@@ -19,7 +19,7 @@ if (isset($_GET['logout'])) {
 }
 echo $_SESSION['username'];
 if ($_SESSION['username'] === "control") {
-    header("location: control/index.php");
+    header("location: control/server.php");
 }
 ?>
 <!DOCTYPE html>
