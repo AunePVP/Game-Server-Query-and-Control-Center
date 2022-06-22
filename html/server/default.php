@@ -12,6 +12,10 @@ $sbackup = "./vhserver backup"; // Command to back up the server
 $supdate = "./vhserver update"; // Command to update the server
 
 // LOG \\
-$logtype = "path"; // Choose scp or path
+# $logtype = "rsync"; // Choose scp, path or rsync
 # $logpath = ""; // Remove the #, if you get the log from a log file (/var/log/remotelogs/vhserver-console.log)
-#$scpcommand = ""; // Remove the #, if you get the log with scp (cat log/console/vhserver-console.log)
+# $scpcommand = ""; // Remove the #, if you get the log with scp (cat log/console/vhserver-console.log)
+# $rsynclogpath = ""; // Remove the #, if you get the log with rsync. (../../html/server/log/vhserver-console.log)
+# $rsyncremotelog = ""; // Remove the #, if you get the log with rsync.(/home/lgsm/log/console/vhserver-console.log)
+# $rsynclogpath = ""; // Remove the #, if you get the log with rsync.(/var/www/tracker/v3/html/server/log/vhserver-console.log)
+# $rsynccommand = "../../html/server/log/gsqconsolelog.sh $ServerID $keypath $sport $susername $sip $rsyncremotelog $rsynclogpath > /dev/null 2>/dev/null &"; // Remove the #, if you get the log with rsync.
