@@ -76,7 +76,7 @@ $font['banner'] = "Helvetica, sans-serif";
         width: 100%
     }
     /* link hover end */
-    ::marker{ display:none; } summary{ list-style: none }
+    ::marker{ display:none; }summary{ list-style: none; cursor: pointer }
     ::-webkit-scrollbar {
         width: 0;
         background: transparent;
