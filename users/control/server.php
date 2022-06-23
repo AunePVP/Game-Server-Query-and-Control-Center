@@ -390,6 +390,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                         </div>
                     </div>
                 </div>
+            <?php if ($username=='admin'):?>
                 <div class="extra inlineflex flex-wrap">
                     <div class="itemdiv users">
                         <div class="itemtitle">Users</div>
@@ -453,11 +454,11 @@ if (array_key_exists('control', $_POST)) { // Control Server
                             ?>
                         </div>
                     </div>
-                <div class="itemdiv news">
-                    <div class="itemtitle">News</div>
-                    <div class="item news"></div>
-                </div>
-                <textarea id="markdownsource"><?php echo $markdown ?></textarea>
+                    <div class="itemdiv news">
+                        <div class="itemtitle">News</div>
+                        <div class="item news"></div>
+                    </div>
+                    <textarea id="markdownsource"><?php echo $markdown ?></textarea>
                     <?php if($emarkdown):?>
                         <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js" integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                         <script type="text/javascript">
@@ -471,6 +472,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
             <!-- _------------_Specific Server_------------_ -->
             <!-- __%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%__ -->
             <?php
+            endif;
             endif;
             if (!empty($_GET['id'])):
             if ($_GET['id'] != "addserver") {
