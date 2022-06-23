@@ -88,7 +88,6 @@ if (!empty($_GET['raw'])):
             $logoutput = tailCustom($rsynclogpath, 150);
         }
     } else {
-        echo "Disabled";
         $logoutput = "There was an error retrieving the logs from the server!";
     }
     echo str_replace('#015', '', $logoutput);
@@ -392,7 +391,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                     </div>
                 </div>
                 <div class="extra inlineflex flex-wrap">
-                    <div class="itemdiv">
+                    <div class="itemdiv users">
                         <div class="itemtitle">Users</div>
                         <div class="item" style="width: 190px">
                             <?php
@@ -454,7 +453,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                             ?>
                         </div>
                     </div>
-                <div class="itemdiv">
+                <div class="itemdiv news">
                     <div class="itemtitle">News</div>
                     <div class="item news"></div>
                 </div>
@@ -559,17 +558,41 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                 </div>
                             </form>
                             <div class="log"><?php echo $streamout ?? ""?></div>
-                            <div id="console"><div onclick="consolepopup()" style="cursor: pointer;"><svg width="100%" height="100%" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><path d="M1.7,1C1.313,1 1,1.313 1,1.7L1,7L3,7L3,3L7,3L7,1L1.7,1ZM3,13L1,13L1,18.3C1,18.687 1.313,19 1.7,19L7,19L7,17L3,17L3,13ZM17,17L13,17L13,19L18.3,19C18.687,19 19,18.687 19,18.3L19,13L17,13L17,17ZM19,1.7C19,1.313 18.687,1 18.3,1L13,1L13,3L17,3L17,7L19,7L19,1.7Z" style="fill:white;"/></svg></div><div id="consolelog"></div></div>
+                            <div id="console">
+                                <div onclick="consolepopup()" style="cursor: pointer;">
+                                    <svg id="2rt" width="100%" height="100%" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><path d="M1.7,1C1.313,1 1,1.313 1,1.7L1,7L3,7L3,3L7,3L7,1L1.7,1ZM3,13L1,13L1,18.3C1,18.687 1.313,19 1.7,19L7,19L7,17L3,17L3,13ZM17,17L13,17L13,19L18.3,19C18.687,19 19,18.687 19,18.3L19,13L17,13L17,17ZM19,1.7C19,1.313 18.687,1 18.3,1L13,1L13,3L17,3L17,7L19,7L19,1.7Z" style="fill:white;"/></svg>
+                                </div>
+                                <details id="togglelog">
+                                    <summary style="font-family: 'JetBrains Mono'">Live console</summary>
+                                    <div id="consolelog"></div>
+                                </details>
+                            </div>
                             <!-- Display Server Console -->
                             <script>
+                                window.onload = readLogFile;
+                                details = document.getElementById("togglelog");
+                                $('#togglelog').on('toggle', function() {
+                                    let attr = $(this).attr('open');
+                                    if (typeof attr !== 'undefined' && attr !== false) {
+                                        startlog();
+                                    } else {
+                                        stoplog();
+                                    }
+                                });
                                 function consolepopup(){
                                     document.getElementById("consolepopupparent").style.display = "flex";
                                 }
                                 function exitpopuplog() {
                                     document.getElementById("consolepopupparent").style.display = "none";
                                 }
-                                setInterval(readLogFile, 3000);
-                                window.onload = readLogFile;
+                                function startlog() {
+                                    myInterval = setInterval(readLogFile, 3000);
+                                    document.getElementById('2rt').style.display = 'block';
+                                }
+                                function stoplog() {
+                                    clearInterval(myInterval);
+                                    document.getElementById('2rt').style.display = 'none';
+                                }
                                 let pathname = window.location.pathname + "?id=<?php echo $ServerID?>";
                                 function readLogFile(){
                                     $.get(pathname, {raw:"true"},function(data) {

@@ -315,6 +315,7 @@ label #type {
     box-sizing: border-box;
     padding: 5px;
     overflow: scroll;
+    border-radius: 4px;
 }
 .log::-webkit-scrollbar {
     display: none;
@@ -325,6 +326,7 @@ label #type {
     box-sizing: border-box;
     padding: 5px;
     background-color: black;
+    border-radius: 4px;
 }
 #console #consolelog {
     text-align: left;
@@ -343,19 +345,24 @@ label #type {
     right: 10px;
     top: 10px;
     filter: drop-shadow(1px 1px 5px rgb(256 256 256 / 1));
+    display: none;
+}
+summary{
+    outline:none;
+    cursor: pointer;
 }
 #consolelog::-webkit-scrollbar {
     display: none;
 }
 .nocontrol {
     position: absolute;
-    height: 213px;
+    height: 236px;
     width: 100%;
     background-color: rgba(20, 22, 33, 0.87);
     text-align: center;
     font-family: Helvetica, sans-serif;
     font-size: 20px;
-    line-height: 213px;
+    line-height: 236px;;
 }
 #confpopupparent, #consolepopupparent {
     height: 100vh;
@@ -659,6 +666,11 @@ label #type {
 .settings-inputline label {
     margin: auto auto auto 0;
 }
+@media only screen and (max-width: 1300px) {
+    .users {
+        display: none;
+    }
+}
 @media only screen and (max-width: 1050px) {
     #control .right, #control .left {
         padding: 12px;
@@ -701,10 +713,10 @@ label #type {
         padding-left: 200px;
     }
     .width40 {
-        width: 240px;
+        width: 100%;
     }
-    .extra .item {
-        width: 250px;
+    .itemdiv, .extra .item {
+        width: 100%!important;
     }
     #control, #settings {
         padding: 0!important;
@@ -748,6 +760,9 @@ label #type {
     #dragdropform {
         display: block;
     }
+    .itemdiv {
+        width: 260px!important;
+    }
 }
 @media only screen and (max-width: 420px) {
     #sidebar, #sidebar button.bottom {
@@ -765,5 +780,8 @@ label #type {
     }
     .server {
         padding-top: 45px
+    }
+    .itemdiv {
+        width: 340px!important;
     }
 }
