@@ -320,7 +320,8 @@ if (array_key_exists('control', $_POST)) { // Control Server
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="style.css">
         <script src="script.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>        <title>Admin panel</title>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+        <title><?php echo $title?></title>
     </head>
     <body>
     <div id="confpopupparent">
