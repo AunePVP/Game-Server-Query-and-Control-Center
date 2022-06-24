@@ -1,5 +1,5 @@
 function steamwebapikeyFuntion() {
-    var x = document.getElementById("steamwebkey");
+    let x = document.getElementById("steamwebkey");
     if (x.type === "password") {
         x.type = "text";
         x.size = "33";
@@ -11,7 +11,7 @@ function steamwebapikeyFuntion() {
     }
 }
 function passwordFunction() {
-    var x = document.getElementById("password");
+    let x = document.getElementById("password");
     if (x.type === "password") {
         x.type = "text";
     } else {
