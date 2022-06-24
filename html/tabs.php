@@ -53,7 +53,7 @@ if ($type == "arkse") {
 </style>
 <div class="tab flex">
     <!-- MAP -->
-    <div class="I" style="<?php if($type=="valheim"){echo "min-width:330px";}?>">
+    <div class="I <?php if($type=="valheim"){echo "valheim";}?>">
         <?php
         if ($type == "arkse") {
             echo '<img class="map" src="'.$maplink.'" alt="'.$maplink.'">';
@@ -166,7 +166,7 @@ if ($type == "arkse") {
         }
         ?>
     </div>
-    <div class="movediv<?php if ($type == "csgo" && isset($serverstatus->rules)){echo " csmovedivhide";} elseif ($type == "minecraft"){echo " mcmovedivhide";}?>"></div>
+    <div class="movediv<?php if ($type == "csgo" && isset($serverstatus->rules)){echo " csmovedivhide";} elseif ($type == "minecraft"){echo " mcmovedivhide";} elseif ($type == "valheim"){echo " valheim";}?>"></div>
     <!-- DIV III (Not used yet) -->
     <div class="III"></div>
     <div class="IV" style="display:<?php echo $display['IV']?>">
@@ -207,7 +207,7 @@ if ($type == "arkse") {
         </div>
     </div>
     <div class="V">
-        <div class="vchartdiv" style='<?php if($type == "valheim"){echo "width:320px";}?>'>
+        <div class="vchartdiv <?php if($type == "valheim"){echo "valheim";}?>">
             <div class="servername">
                 <p href="#"><?php if (!empty($motd)) {echo $motd;} else {echo $title;}?></p>
             </div>

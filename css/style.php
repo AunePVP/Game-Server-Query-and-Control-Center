@@ -215,6 +215,9 @@ $font['banner'] = "Helvetica, sans-serif";
     .status_cell {
         width: 7%;
     }
+    .connectlink {
+        line-height: 19px;
+    }
     .connectlink_cell {
         width: 15%;
     }
@@ -249,6 +252,9 @@ $font['banner'] = "Helvetica, sans-serif";
     }
     .I {
         height: 275px;
+    }
+    .I.valheim {
+        min-width:330px;
     }
     .II {
         text-align: left;
@@ -311,6 +317,9 @@ $font['banner'] = "Helvetica, sans-serif";
         padding: 12px 10px 10px 10px;
         border-radius: 4px;
     }
+    .vchartdiv.valheim {
+        width:320px;
+    }
     .vchartdiv .servername p {
         font-family: Helvetica, serif;
         font-size: 14px;
@@ -325,7 +334,7 @@ $font['banner'] = "Helvetica, sans-serif";
         -webkit-line-clamp: 2; /* number of lines to show */
         line-clamp: 2;
         -webkit-box-orient: vertical;
-        min-height: 32px;
+        height: 32px;
     }
     .vchartdiv .connectlink.vchart {
         display: flex;
@@ -435,15 +444,27 @@ $font['banner'] = "Helvetica, sans-serif";
     }
     @media only screen and (max-width: 1130px) {
         .II {min-width: 180px}
+        #twitter-widget-0 {width:300px!important;}
+        .I.valheim {min-width:300px!important;}
     }
     @media only screen and (max-width: 1024px) {
         .map {height: 180px}
         .IV {min-width: 165px;}
         .vchartdiv {padding: 12px 5px 10px 5px;}
+        #twitter-widget-0 {width:260px!important;}
+        .I.valheim {min-width:260px!important;}
+    }
+    @media only screen and (max-width: 1000px) {
+        .vchartdiv {padding: 12px 5px 10px 5px;}
+        #twitter-widget-0 {width:240px!important;}
+        .I.valheim {min-width:240px!important;}
+        .vchartdiv.valheim {width:310px;!important;}
     }
     @media only screen and (max-width: 950px) {
-        .II {display: none;}
+        .II, .movediv {display: none;}
         .map {height: 210px}
+        .I.valheim {width:100%!important;}
+        #twitter-widget-0 {width: calc(100% - 4px)!important;margin-right: 4px!important;}
     }
     @media only screen and (max-width: 750px) {
         .map {height: 180px}
