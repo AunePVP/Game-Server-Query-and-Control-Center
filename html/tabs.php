@@ -144,12 +144,12 @@ if ($type == "arkse") {
             echo "<span style='font-weight: 500;'>Website:</span><a href='$rustwebsite'  target='_blank' rel='noopener noreferrer'> $rustwebsite</a><br>";
             echo "<span style='font-weight: 500;'>PVP:</span> $pvp<br>";
             echo "<span style='font-weight: 500;'>FPS:</span> $rustfps<br>";
-            echo "<div style='max-width:300px'><span style='font-weight: 500;'>Tags:</span> $GameTags<br></div>";
+            echo "<div style='max-height:166px;overflow-y:scroll;'><div style='max-width:300px'><span style='font-weight: 500;'>Tags:</span> $GameTags<br></div>";
             echo "<div style='width:300px;'><span style='font-weight: 500;'>Description:</span>";
             foreach ($rustdesc as $description) {
                 echo "$description<br>";
             }
-            echo "</div>";
+            echo "</div></div>";
         } elseif ($type == "minecraft") {
             if ($qport == 0) {
                 echo '<div style="margin:auto">'.$language[$lang][13].'</div>';
