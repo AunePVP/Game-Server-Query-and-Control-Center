@@ -466,10 +466,11 @@ $font['banner'] = "Helvetica, sans-serif";
         .I.valheim {width:100%!important;}
         #twitter-widget-0 {width: calc(100% - 4px)!important;margin-right: 4px!important;}
     }
+    @media only screen and (max-width: 850px) {
+        .connectlink_cell span {display: none;}
+    }
     @media only screen and (max-width: 750px) {
         .map {height: 180px}
-    }
-    @media only screen and (max-width: 710px) {
         .I, .movediv, .connectlink_cell {display: none}
         .IV {min-width: 200px}
         .IV, .V {margin:auto;width: 100%;}
