@@ -210,6 +210,9 @@ if (array_key_exists('submit', $_POST)) {
                         </div>
                     </form>
                 </div>
-            <?php endif;?>
+            <?php
+                $str1 = file_get_contents('https://muehlhaeusler.online/version');
+                endif;
+            ?>
     </div>
 </div>
