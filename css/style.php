@@ -460,7 +460,7 @@ $font['banner'] = "Helvetica, sans-serif";
     @media only screen and (max-width: 570px) {
         .players_cell, .IV {display: none!important}
         .container, .servername_cell {width: 100%}
-        .vchartdiv {width: auto}
+        .vchartdiv {width: auto!important;}
         .container {padding-top: 20px;}
     }
 </style>
