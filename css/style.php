@@ -252,7 +252,6 @@ $font['banner'] = "Helvetica, sans-serif";
     }
     .II {
         text-align: left;
-        //min-width: -webkit-fit-content;
         width: 200%;
         padding: 4px 7px 0;
     }
