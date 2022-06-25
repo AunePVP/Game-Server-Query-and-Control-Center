@@ -1,0 +1,25 @@
+.user-avater {
+    border: 4px solid #3b3b3b;
+}
+section {
+    color: #ebebeb;
+    background-color: #3b3b3b;
+}
+.connectlink_cell a {
+    color: #0093ff;
+}
+.server_list_table {
+    color: #ebebeb;
+}
+.players_numeric {
+    color: #ff2b2b;
+}
+.II a {
+    color: #d7d7d7;
+}
+.II.csgo th {
+    color: #ebebeb;
+}
+.map {
+    border: none;
+}
