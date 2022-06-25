@@ -9,7 +9,8 @@
     <meta charset="utf-8">
     <meta name="format-detection" content="telephone=no">
     <title>Gamserver Query</title>
-    <link rel="stylesheet" href="css/style.php">
+    <link rel="stylesheet" href="css/<?php echo $css_template?>.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="apple-touch-icon" sizes="57x57" href="ico/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="ico/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="ico/apple-icon-72x72.png">
@@ -27,4 +28,13 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="ico/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
+    <style>
+        :root {
+            --server-spacing: 10px;
+            --server-width: 80%;
+            --players-weight: bold;
+            --font-normal: Montserrat, sans-serif;
+            --font-banner: Helvetica, sans-serif
+        }
+    </style>
 </head>
