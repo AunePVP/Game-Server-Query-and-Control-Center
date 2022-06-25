@@ -83,10 +83,21 @@ if (array_key_exists('submit', $_POST)) {
 // Choose a theme
 if (array_key_exists('submittheme', $_POST)) {
     $css_template = $_POST["themeinput"];
-    $notification = "<p>Theme updated<p>";
+    $notification['theme'] = "<p>Theme updated<p>";
     $themescript = "<script>$(document).ready( function () {"."$('#themesummary').click();});</script>";
     $configcontent=file_get_contents($configfile);
     $configcontent = preg_replace('/\$css_template = \"(.*?)\";/', '$css_template = "'.$css_template.'";', $configcontent);
+    file_put_contents($configfile, $configcontent);
+}
+// Edit API Keys
+if (array_key_exists('apikey', $_POST)) {
+    $steamwebapi_key = $_POST["steam-api"];
+    $rustmapsapi_key = $_POST["rustmaps-api"];
+    $notification['apikey'] = "<p>API Keys updated<p>";
+    $configcontent=file_get_contents($configfile);
+    $apikeyscript = "<script>$(document).ready( function () {"."$('#apikeysummary').click();});</script>";
+    $configcontent = preg_replace('/\$steamwebapi_key = \"(.*?)\";/', '$steamwebapi_key = "'.$steamwebapi_key.'";', $configcontent);
+    $configcontent = preg_replace('/\$rustmapsapi_key = \"(.*?)\";/', '$rustmapsapi_key = "'.$rustmapsapi_key.'";', $configcontent);
     file_put_contents($configfile, $configcontent);
 }
 ?>
@@ -198,7 +209,7 @@ if (array_key_exists('submittheme', $_POST)) {
                             <input type="text" id="themeinput" name="themeinput" style="display: none">
                             <div class="flex" style="justify-content: flex-end;line-height: 34px;">
                                 <?php
-                                if (isset($notification)) {echo $notification;}
+                                if (isset($notification['theme'])) {echo $notification['theme'];}
                                 ?>
                                 <input class="addsrv" type="submit" name="submittheme" value="Submit">
                             </div>
@@ -206,8 +217,30 @@ if (array_key_exists('submittheme', $_POST)) {
                     </div>
                 </details>
                 <details>
-                    <summary>API Keys</summary>
-                    <div class="detailscontent"></div>
+                    <summary id="apikeysummary">API Keys</summary>
+                    <?php if (isset($apikeyscript)){echo $apikeyscript;}?>
+                    <div class="detailscontent">
+                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                            <div class="flex">
+                                <div id="left">
+                                    <div class="input">
+                                        <label for="input-ip" style="display: flex">Steam Web API Key<a target="_blank" href="https://docs.iguaserver.de/settings#steam-web-api-key" title="Find out more about the Steam Web API Key" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 2px 0 0 5px;cursor: pointer;"></a></label>
+                                        <input id="input-ip" class="input" name="steam-api" type="text" minlength="32" maxlength="32" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" <?php if (isset($steamwebapi_key)){echo "value=$steamwebapi_key";}?>>
+                                    </div>
+                                </div>
+                                <div id="right">
+                                    <div class="input">
+                                        <label for="input-ip" style="display: flex">RustMaps.com API Key<a target="_blank" href="https://docs.iguaserver.de/settings#rustmaps.com-api-key" title="Find out more about the RustMaps.com API Key" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 2px 0 0 5px;cursor: pointer;"></a></label>
+                                        <input id="input-ip" class="input" name="rustmaps-api" type="text" minlength="25" maxlength="45" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off" <?php if (isset($rustmapsapi_key)){echo "value=$rustmapsapi_key";}?>>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex" style="justify-content: flex-end;margin-right: 3px;line-height: 34px;">
+                                <?php if (isset($notification['apikey'])) {echo $notification['apikey'];} ?>
+                                <input class="addsrv" type="submit" name="apikey" value="Submit">
+                            </div>
+                        </form>
+                    </div>
                 </details>
                 <details>
                     <summary>Other</summary>
@@ -215,7 +248,6 @@ if (array_key_exists('submittheme', $_POST)) {
                 </details>
             </div>
         </div>
-        <?php include 'notification.php'?>
         <!-- Information about system | right-->
         <div id="zusammenfassung">
             <div id="clock"></div>
