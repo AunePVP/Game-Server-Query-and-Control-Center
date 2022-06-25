@@ -284,7 +284,7 @@ label {
 #type {
     border-radius: 4px;
     width: 100%;
-    margin: 0 0 10px 0;
+    margin: 0 0 10px;
     padding: 5px 35px 5px 5px;
     font-size: 16px;
     height: 34px;
@@ -306,7 +306,7 @@ label {
     font-size: 20px;
 }
 .input {
-    margin: 0 0 10px 0;
+    margin: 0 0 10px;
 }
 .log {
     margin: 10px auto;
@@ -365,7 +365,7 @@ summary{
     text-align: center;
     font-family: Helvetica, sans-serif;
     font-size: 20px;
-    line-height: 236px;;
+    line-height: 236px;
 }
 #confpopupparent, #consolepopupparent {
     height: 100vh;
@@ -467,14 +467,6 @@ summary{
     background-color: #ff433b;
     border: 2px solid #ff433b;
     color: white;
-}
-#deleteinput {
-    border: 1px solid;
-    border-radius: 6px;
-    padding: 5px;
-    width: -webkit-fill-available;
-    font-family: Helvetica, sans-serif;
-    font-size: 16px;
 }
 #deleteinput {
     border: 1px solid;
@@ -591,7 +583,7 @@ summary{
     background-color: rgb(210, 210, 210);
 }
 .padding25 .input {
-    margin: 0 0 10px 0;
+    margin: 0 0 10px;
 }
 #controlsettingsparent {
     background-color: #383B4F;
@@ -690,9 +682,6 @@ summary{
     border-radius: 4px;
     border: 1px solid transparent;
 }
-#einstellungen details summary {
-    padding: 13px;
-}
 #einstellungen details:hover {
     border: 1px solid white;
 }
@@ -701,6 +690,7 @@ summary{
     -moz-user-select: None;
     -webkit-user-select: None;
     user-select: None;
+    padding: 13px;
 }
 #dropdownsettings {
     width: 100%;
