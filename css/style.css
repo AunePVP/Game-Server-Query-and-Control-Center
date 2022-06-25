@@ -54,7 +54,6 @@ details summary::-webkit-details-marker {
 }
 html, body {
     min-height: 100vh;
-    background-color: #1D1D1F;
     text-align: center;
     font-family: var(--font-normal);
     -ms-user-select: None;
