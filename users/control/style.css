@@ -669,6 +669,164 @@ summary{
 .settings-inputline label {
     margin: auto auto auto 0;
 }
+#settingsh1 {
+    margin-top: -10px;
+    font-family: Helvetica, sans-serif;
+    font-size: 50px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+#einstellungen {
+    display: flex;
+    padding: 30px;
+    min-height: calc(100vh - 60px);
+}
+#einstellungen details{
+    background-color: #383B4F;
+    margin: 11px 0;
+    font-family: Helvetica, sans-serif;
+    font-size: 18px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+}
+#einstellungen details summary {
+    padding: 13px;
+}
+#einstellungen details:hover {
+    border: 1px solid white;
+}
+#einstellungen details summary {
+    -ms-user-select: None;
+    -moz-user-select: None;
+    -webkit-user-select: None;
+    user-select: None;
+}
+#dropdownsettings {
+    width: 100%;
+    padding-right: 30px;
+}
+.detailscontent {
+    padding: 6px;
+}
+.detailscontent .input {
+    width: -webkit-fill-available;
+    padding: 0 5px;
+    border-radius: 4px;
+    border: none;
+    font-size: 16px;
+    min-height: 30px;
+    font-family: Helvetica, sans-serif;
+    outline: none;
+    margin: 4px 0 6px;
+}
+.detailscontent #left, .detailscontent #right {
+    width: 50%;
+}
+#zusammenfassung {
+    min-width: 260px;
+    max-width: 260px;
+    background-color: #383B4F;
+    border-radius: 6px;
+    font-family: Helvetica;
+}
+#zusammenfassung #clock {
+    text-align: center;
+    font-family: "JetBrains Mono", serif;
+    font-size: 65px;
+    padding: 5px 0;
+}
+#zusammenfassung .info {
+    width: 85%;
+    border-radius: 4px;
+    border: 1px solid;
+    margin: 5px auto;
+    display: flex;
+    font-size: 18px;
+    padding: 3px 5px;
+}
+#zusammenfassung .info .attribute {
+    width: 100%;
+    font-weight: 600;
+}
+.tabs-left {
+    min-width: 170px;
+    max-width: 170px;
+    background-color: #5a5d72;
+}
+.tabs-left button {
+    margin: 0;
+    font-family: Helvetica, sans-serif;
+    display: block;
+    background-color: inherit;
+    color: white;
+    padding: 12px 0;
+    width: 100%;
+    border: none;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 17px;
+}
+.tabs-left button:hover {
+    background-color: #4e5271;
+}
+.tab-pane {
+    background-color: #abb0c3;
+    color: black;
+    width: 100%;
+    height: calc(100% - 30px);
+    padding: 15px 0;
+    display: flex;
+}
+.tab-content {
+    width: 100%;
+}
+.tabs-left button.active {
+    background-color: #474c74;
+}
+#vorschauparent {
+    border-radius: 4px;
+}
+#server_list_table {
+    width: 100%;
+    text-align: center;
+}
+#themevl {
+    font-family: Montserrat, sans-serif;
+}
+.status_icon_onl {
+    width: 0.8rem;
+    height: 112px;
+    padding: 0;
+    margin: 0;
+    border-radius: .125rem 0 0 .125rem;
+    float: left;
+}
+.status-letter-online {
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    font-weight: bold;
+    font-size: 13px;
+    height: 112px
+}
+.status_cell {
+    width: 7%;
+}
+.servername_cell {
+    width: 100%;
+}
+.players_numeric {
+    color: #ff2b2b;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: Helvetica Neue, sans-serif;
+}
+.detailscontent p {
+    padding: 0 0 0 5px;
+    margin: 0;
+}
 @media only screen and (max-width: 1300px) {
     .users {
         display: none;
