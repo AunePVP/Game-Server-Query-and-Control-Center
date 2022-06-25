@@ -141,7 +141,7 @@ if (array_key_exists('submit', $_POST)) {
         <?php if (!isset($register)):?>
         <h2 style="margin: 0 0 10px;font-family: Helvetica,sans-serif;">Settings</h2>
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-            <div class="input"><label for="steamwebapi-key">Steam WebAPI Key:</label><input id="steamwebapi-key" class="inputstyle" name="steamwebapi-key" type="password" required="required" minlength="32" maxlength="32" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" <?php if (isset($STEAMWEBAPI_KEY)){echo "value=$STEAMWEBAPI_KEY";}?>></div>
+            <div class="input"><label for="steamwebapi-key">Steam Web API Key:</label><input id="steamwebapi-key" class="inputstyle" name="steamwebapi-key" type="password" required="required" minlength="32" maxlength="32" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" <?php if (isset($STEAMWEBAPI_KEY)){echo "value=$STEAMWEBAPI_KEY";}?>></div>
             <p class="cAx">Database:</p>
             <div class="input"><label for="input-ip">IP:</label><input id="input-ip" class="inputstyle" name="input-ip" type="text" minlength="3" maxlength="40" required="required" placeholder="xxx.xxx.xxx.xx" autocomplete="off" <?php if (isset($DB_SERVER)){echo "value=$DB_SERVER";}?>></div>
             <div class="input"><label for="input-username">Username:</label><input id="input-username" class="inputstyle" name="input-username" type="text" minlength="2" maxlength="15" placeholder="xxxxx" autocomplete="off" <?php if (isset($DB_USERNAME)){echo "value=$DB_USERNAME";}?>></div>
