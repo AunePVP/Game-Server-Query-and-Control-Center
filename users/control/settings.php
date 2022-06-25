@@ -100,6 +100,15 @@ if (array_key_exists('apikey', $_POST)) {
     $configcontent = preg_replace('/\$rustmapsapi_key = \"(.*?)\";/', '$rustmapsapi_key = "'.$rustmapsapi_key.'";', $configcontent);
     file_put_contents($configfile, $configcontent);
 }
+// Edit other settings
+if (array_key_exists('other', $_POST)) {
+    $register = $_POST["registration"];
+    $notification['other'] = "<p>Settings updated<p>";
+    $configcontent=file_get_contents($configfile);
+    $otherscript = "<script>$(document).ready( function () {"."$('#othersummary').click();});</script>";
+    $configcontent = preg_replace('/\$register = (.*?);/', '$register = '.$register.';', $configcontent);
+    file_put_contents($configfile, $configcontent);
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -243,8 +252,24 @@ if (array_key_exists('apikey', $_POST)) {
                     </div>
                 </details>
                 <details>
-                    <summary>Other</summary>
-                    <div class="detailscontent"></div>
+                    <summary id="othersummary">Other</summary>
+                    <?php if (isset($otherscript)){echo $otherscript;}?>
+                    <div class="detailscontent">
+                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                            <div class="flex">
+                                <label for="selectregistration">Registration:</label>
+                                <select required="required" name="registration" id="selectregistration">
+                                    <option <?php if($register){echo "selected ";}?>value="TRUE">Enable</option>
+                                    <option <?php if(!$register){echo "selected ";}?>value="FALSE">Disable</option>
+                                </select>
+                                <a target="_blank" href="https://docs.iguaserver.de/settings#registration" title="Find out more about the registration." style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 2px 0 0 5px;cursor: pointer;"></a>
+                            </div>
+                            <div class="flex" style="justify-content: flex-end;margin-right: 3px;line-height: 34px;">
+                                <?php if (isset($notification['other'])) {echo $notification['other'];} ?>
+                                <input class="addsrv" type="submit" name="other" value="Submit">
+                            </div>
+                        </form>
+                    </div>
                 </details>
             </div>
         </div>

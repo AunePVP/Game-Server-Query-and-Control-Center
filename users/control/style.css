@@ -281,7 +281,7 @@ label {
     font-family: Helvetica,sans-serif;
     font-size: 20px;
 }
-label #type {
+#type {
     border-radius: 4px;
     width: 100%;
     margin: 0 0 10px 0;
@@ -826,6 +826,14 @@ summary{
 .detailscontent p {
     padding: 0 0 0 5px;
     margin: 0;
+}
+#selectregistration {
+    border-radius: 4px;
+    width: 79px;
+    margin: 0 0 0 5px;
+    padding: 5px 35px 5px 5px;
+    font-size: 14px;
+    border: none;
 }
 @media only screen and (max-width: 1300px) {
     .users {
