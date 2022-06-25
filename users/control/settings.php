@@ -108,7 +108,7 @@ if (array_key_exists('submittheme', $_POST)) {
 <nav>
     <div id="sidebar">
         <button onclick="window.location.href='server.php';">Overview</button>
-        <button onclick="window.location.href='user.php';">User</button>
+        <!--<button onclick="window.location.href='user.php';">User</button>-->
         <button onclick="window.location.href='settings.php';" class="selected">Settings</button>
         <button onclick="window.location.href='../../index.php';">Home</button>
         <button class="bottom"

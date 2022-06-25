@@ -349,7 +349,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
     <nav>
         <div id="sidebar">
             <button onclick="window.location.href='server.php';" class="selected">Overview</button>
-            <button onclick="window.location.href='user.php';">User</button>
+            <!--<button onclick="window.location.href='user.php';">User</button>-->
             <button onclick="window.location.href='settings.php';">Settings</button>
             <button onclick="window.location.href='../../index.php';">Home</button>
             <button class="bottom"
