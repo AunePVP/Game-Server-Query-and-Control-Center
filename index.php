@@ -69,6 +69,9 @@ if (!isset($install)) {
         }
         if (isset($serverjson)) {
             foreach ($serverjson as $ServerID) :
+                if(!$ServerID){
+                    continue;
+                }
                 unset($queryresult);
                 if (!empty($ServerID)) {
                     if (!$conn) {
