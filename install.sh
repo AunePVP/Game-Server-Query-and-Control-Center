@@ -6,6 +6,7 @@
 # Website: https://tracker.iguaserver.de
 
 if whiptail --yesno "Apt Update?" 10 35; then
+  clear
   sudo apt-get update -y
 fi
 #Check if git and mysql are installed
