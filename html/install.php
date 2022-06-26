@@ -1,9 +1,9 @@
 <?php
 $configfile = 'config.php';
 require_once $configfile;
-/*if (isset($install) && !$install) {
+if (isset($install) && !$install) {
     header("Location: /");
-}*/
+}
 function test_input($data)
 {
     $data = trim($data);
