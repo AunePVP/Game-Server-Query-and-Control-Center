@@ -1,28 +1,4 @@
-<?php
-unset($Os, $img, $version, $password, $title, $motd, $connectlink, $map);
-switch ($type) {
-    case "csgo":
-    case "valheim":
-    case "vrising":
-    case "protocol-valve":
-    case "rust":
-    case "arkse":
-        include 'query/sourcequery.php';
-        break;
-    case "minecraft":
-        include 'query/minecraftquery.php';
-        break;
-}
-$serverstatus = json_decode($queryresult ?? false);
-require 'html/type/query.php';
-// Set color if server is offline or online
-if ($status == 1) {
-    $statusfarbe ='background-color: #00FF17;';
-} else {
-    $statusfarbe ='background-color: #E20401;';
-}
-?>
-<section>
+<section id="<?php echo "server_".$ServerID?>">
     <details>
         <summary>
             <table class="server_list_table">
