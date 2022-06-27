@@ -11,7 +11,8 @@
               echo '</a><div class="dropdown-content"><a href="users/control/server.php">More</a><a href="users/logout.php">Logout</a></div></div>';
           }else {
               $_SESSION['backURI'] = $_SERVER['REQUEST_URI'];
-              echo '<div class="login"><a class="button white-hover" href='."'users/control/server.php'".'">Login</a><div class="dropdown-content"></div></div>';
+              echo '<div class="login"><a class="button white-hover" href='."'users/control/server.php'".'>Login</a><div class="dropdown-content"></div></div>';
           }
           ?>
-      </div>
+          <ul>
+</div>
