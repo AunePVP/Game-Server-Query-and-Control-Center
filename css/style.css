@@ -338,6 +338,9 @@ section {
     box-sizing: border-box;
     height: 234px;
 }
+.I {
+    width: 234px;
+}
 .mcheads {
     display: flex;
     flex-wrap: wrap;
@@ -367,6 +370,11 @@ section {
     font-weight: 300;
     font-size: 14px;
 }
+.mapname {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 @media only screen and (min-width: 1700px) {
     .container {width: 75%;}
 }
@@ -380,11 +388,13 @@ section {
 
 }
 @media only screen and (max-width: 1280px) {
-    .map {height: 220px;}
+    .map {height: 220px}
+    .I {width: 220px;}
     .II.csgo td.name {max-width: 200px;}
 }
 @media only screen and (max-width: 1200px) {
     .map {height: 200px;}
+    .I {width: 200px;}
     .IV {min-width: 190px}
 }
 @media only screen and (max-width: 1130px) {
@@ -394,6 +404,7 @@ section {
 }
 @media only screen and (max-width: 1024px) {
     .map {height: 180px}
+    .I {width: 180px;}
     .IV {min-width: 165px;}
     .vchartdiv {padding: 12px 5px 10px 5px;}
     #twitter-widget-0 {width:260px!important;}
@@ -408,6 +419,7 @@ section {
 @media only screen and (max-width: 950px) {
     .II, .movediv {display: none;}
     .map {height: 210px}
+    .I {width: 210px;}
     .I.valheim {width:100%!important;}
     #twitter-widget-0 {width: calc(100% - 4px)!important;margin-right: 4px!important;}
 }
@@ -416,6 +428,7 @@ section {
 }
 @media only screen and (max-width: 750px) {
     .map {height: 180px}
+    .I {width: 180px;}
     .I, .movediv, .connectlink_cell {display: none}
     .IV {min-width: 200px}
     .IV, .V {margin:auto;width: 100%;}
