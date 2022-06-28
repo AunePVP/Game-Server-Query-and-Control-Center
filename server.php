@@ -6,15 +6,7 @@
                     <tr class="server_onl">
                         <td class="status_cell">
                             <span class="status_icon_onl" style="<?php echo $statusfarbe ?>"></span>
-                            <div class="status-letter-online"><?php
-                                if ($status == "1") {
-                                    echo "ONLINE";
-                                }
-                                else {
-                                    echo "OFFLINE";
-                                }?>
-                            </div>
-                            <div class="status-letter-offline">OFFLINE</div>
+                            <div class="status-letter-online"></div>
                         </td>
                         <td title="GAME LINK" class="connectlink_cell"><a href="<?php echo $connectlink ?>"><?php echo $ip . "<span>:" . $gport ."</span>"?></a></td>
                         <td title="<?php if (isset($title)) {echo $title;} ?>" class="servername_cell">
