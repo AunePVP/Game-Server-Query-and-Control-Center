@@ -3,17 +3,17 @@
 With this web application, written in PHP, you can query multiple game servers superfast and control your self-hosted game servers.
 You can also see the historical player count and the uptime of the server. If there is a game server not currently supported, please create an Issue and I will add the server as soon as possible.
 ## Supported Gameserver
-| Game                             | Query Protocol |    Verified     |
-|----------------------------------|----------------|:---------------:|
-| ARK: Survival Evolved            | Valve Protocol |        ✅        |
-| Counter-Strike: Global Offensive | Valve Protocol |        ✅        |
-| Minecraft                        | Ping / Query   |        ✅        |
-| Valheim                          | Valve Protocol |        ✅        |
-| Vrising                          | Valve Protocol |        ✅        |
-| Conan Exiles                     | Valve Protocol |        ❌        |
-| Rust                             | Valve Protocol |        ✅        |
-| PixARK                           | Valve Protocol |        ❌        |
-| Satisfactory                     | Valve Protocol |        ❌        |
+| Game                             | Query Protocol |          Verified          |
+|----------------------------------|----------------|:--------------------------:|
+| ARK: Survival Evolved            | Valve Protocol |             ✅              |
+| Counter-Strike: Global Offensive | Valve Protocol |             ✅              |
+| Minecraft                        | Ping / Query   |             ✅              |
+| Valheim                          | Valve Protocol |             ✅              |
+| Vrising                          | Valve Protocol |             ✅              |
+| Conan Exiles                     | Valve Protocol |             ❌              |
+| Rust                             | Valve Protocol |             ✅              |
+| PixARK                           | Valve Protocol |             ❌              |
+| Satisfactory                     | Valve Protocol |             ❌              |
 | Grand Theft Auto V - FiveM       |                | ❌ (Next to be implemented) |
 
 If there is a game server not currently supported, please create an Issue and I will add the server as soon as possible.
