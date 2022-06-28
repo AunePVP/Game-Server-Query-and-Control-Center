@@ -14,5 +14,5 @@
               echo '<div class="login"><a class="button white-hover" href='."'users/control/server.php'".'>Login</a><div class="dropdown-content"></div></div>';
           }
           ?>
-          <ul>
+      </ul>
 </div>
