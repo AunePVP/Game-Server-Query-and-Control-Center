@@ -5,14 +5,15 @@
                 <tbody>
                     <tr class="server_onl">
                         <td class="status_cell">
-                            <span class="status_icon_onl" style="<?php echo $statusfarbe ?>"></span>
+                            <span class="status_icon_onl"></span>
                             <div class="status-letter-online"></div>
                         </td>
-                        <td title="GAME LINK" class="connectlink_cell"><a href="<?php echo $connectlink ?>"><?php echo $ip . "<span>:" . $gport ."</span>"?></a></td>
-                        <td title="<?php if (isset($title)) {echo $title;} ?>" class="servername_cell">
-                            <div class="servername_nolink"><?php if (isset($title)) {echo $title;} ?></div></td>
-                        <td class="players_cell"><div class="outer_bar"><div class="inner_bar"><span class="players_numeric"><?php echo $countplayers . '/' . $maxplayers;?></span></div></div></td>
-                        <td class="img-cell"><img src="<?php echo $img ?>" width="80px" height="80px" style="float:right;margin-right: 8px;" alt="<?php echo $img ?>"></td>
+                        <td title="GAME LINK" class="connectlink_cell"><a><span></span></a></td>
+                        <td class="servername_cell">
+                            <div class="servername_nolink">Loading...</div>
+                        </td>
+                        <td class="players_cell"><div class="outer_bar"><div class="inner_bar"><span class="players_numeric">0/0</span></div></div></td>
+                        <td class="img-cell"><img width="80px" height="80px" style="float:right;margin-right: 8px;"></td>
                     </tr>
                 </tbody>
             </table>
