@@ -246,6 +246,7 @@ if (array_key_exists('AddServer', $_POST)) {
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $addid = $row['ID'];
+            $alreadyindb = TRUE;
         }
     } else {
         $sql = "SELECT ID FROM serverconfig ORDER BY ID DESC LIMIT 1";
@@ -253,6 +254,7 @@ if (array_key_exists('AddServer', $_POST)) {
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
                 $addid = $row["ID"] + 1;
+                $alreadyindb = False;
             }
         }
     }
@@ -280,11 +282,13 @@ if (array_key_exists('AddServer', $_POST)) {
             echo "Error updating record: " . mysqli_error($conn);
         }
     }
-    $sql = "INSERT INTO serverconfig (ID, IP, type, QueryPort, GamePort, RconPort, Name, controlserver) VALUES ('$addid', '$addip', '$addtype', '$addqport', '$addgport', '$addrport', '0', '[\"admin\"]')";// Add server data to serverconfig table
-    if (mysqli_query($conn, $sql)) {
-        echo "<script>console.log('Record updated successfully')</script>";
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    if (!$alreadyindb) {
+        $sql = "INSERT INTO serverconfig (ID, IP, type, QueryPort, GamePort, RconPort, Name, controlserver) VALUES ('$addid', '$addip', '$addtype', '$addqport', '$addgport', '$addrport', '0', '[\"admin\"]')";// Add server data to serverconfig table
+        if (mysqli_query($conn, $sql)) {
+            echo "<script>console.log('Record updated successfully')</script>";
+        } else {
+            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        }
     }
     $conn->close();
 }
