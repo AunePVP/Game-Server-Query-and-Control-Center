@@ -529,10 +529,9 @@ if (array_key_exists('control', $_POST)) { // Control Server
             <!-- _------------_____________________------------_ -->
             <?php
             if ($_GET['id'] != "addserver"): ?>
-            <div id="Hostname"><?php
-                if (isset($title)) {
-                    echo $title;
-                } ?></div>
+            <div id="Hostname">
+                <?php if (!empty($motd)) {echo $motd;} else {echo $title;}?>
+            </div>
             <div class="ctrlsett">
                 <a class="control" onclick="tab(this.id)" id="tab1">Control</a>
                 <a class="settings" onclick="tab(this.id)" id="tab2">Settings</a>

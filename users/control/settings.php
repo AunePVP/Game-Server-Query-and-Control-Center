@@ -146,13 +146,13 @@ if (array_key_exists('other', $_POST)) {
         <?php if ($username == "admin"):?>
         <div id="dropdownsettings">
             <h1 id="settingsh1">Settings</h1>
-            <div style="overflow-y:scroll;max-height:calc(100vh - 128px);padding-right: 5px;">
-                <details>
+            <div id="dropdownsettingschild">
+                <details id="database">
                     <summary>Database</summary>
                     <div class="detailscontent">
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                             <div class="flex">
-                                <div id="left">
+                                <div class="left">
                                     <div class="input">
                                         <label for="input-ip">IP:</label>
                                         <input id="input-ip" class="input" name="input-ip" type="text" minlength="3" maxlength="40" required="required" placeholder="xxx.xxx.xxx.xx" autocomplete="off" <?php if (isset($DB_SERVER)){echo "value=$DB_SERVER";}?>>
@@ -162,7 +162,7 @@ if (array_key_exists('other', $_POST)) {
                                         <input id="input-dbname" class="input" name="input-dbname" type="text" minlength="3" placeholder="xxxxxxx" autocomplete="off" <?php if (isset($DB_NAME)){echo "value=$DB_NAME";}?>>
                                     </div>
                                 </div>
-                                <div id="right">
+                                <div class="right">
                                     <div class="input">
                                         <label for="input-username">Username:</label>
                                         <input id="input-username" class="input" name="input-username" type="text" minlength="2" maxlength="15" placeholder="xxxxx" autocomplete="off" <?php if (isset($DB_USERNAME)){echo "value=$DB_USERNAME";}?>>
@@ -181,7 +181,7 @@ if (array_key_exists('other', $_POST)) {
                         </form>
                     </div>
                 </details>
-                <details>
+                <details id="design">
                     <summary id="themesummary" onclick="currentTheme()">Design</summary>
                     <div class="detailscontent">
                         <div class="flex">
@@ -194,7 +194,7 @@ if (array_key_exists('other', $_POST)) {
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane" id="themevl">
-                                    <div style="width:80%;margin:auto">
+                                    <div id="vorschauserver">
                                         <div id="vorschauparent">
                                             <table id="server_list_table">
                                                 <tbody>
@@ -216,7 +216,7 @@ if (array_key_exists('other', $_POST)) {
                         <?php if (isset($themescript)){echo $themescript;}?>
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" style="margin-top: 5px;">
                             <input type="text" id="themeinput" name="themeinput" style="display: none">
-                            <div class="flex" style="justify-content: flex-end;line-height: 34px;">
+                            <div style="display: flex;justify-content: flex-end;line-height: 34px;">
                                 <?php
                                 if (isset($notification['theme'])) {echo $notification['theme'];}
                                 ?>
@@ -225,26 +225,26 @@ if (array_key_exists('other', $_POST)) {
                         </form>
                     </div>
                 </details>
-                <details>
+                <details id="api">
                     <summary id="apikeysummary">API Keys</summary>
                     <?php if (isset($apikeyscript)){echo $apikeyscript;}?>
                     <div class="detailscontent">
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                             <div class="flex">
-                                <div id="left">
+                                <div class="left">
                                     <div class="input">
                                         <label for="input-ip" style="display: flex">Steam Web API Key<a target="_blank" href="https://docs.iguaserver.de/settings#steam-web-api-key" title="Find out more about the Steam Web API Key" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 2px 0 0 5px;cursor: pointer;"></a></label>
                                         <input id="input-ip" class="input" name="steam-api" type="text" minlength="32" maxlength="32" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" <?php if (isset($steamwebapi_key)){echo "value=$steamwebapi_key";}?>>
                                     </div>
                                 </div>
-                                <div id="right">
+                                <div class="right">
                                     <div class="input">
                                         <label for="input-ip" style="display: flex">RustMaps.com API Key<a target="_blank" href="https://docs.iguaserver.de/settings#rustmaps.com-api-key" title="Find out more about the RustMaps.com API Key" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 2px 0 0 5px;cursor: pointer;"></a></label>
                                         <input id="input-ip" class="input" name="rustmaps-api" type="text" minlength="25" maxlength="45" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off" <?php if (isset($rustmapsapi_key)){echo "value=$rustmapsapi_key";}?>>
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex" style="justify-content: flex-end;margin-right: 3px;line-height: 34px;">
+                            <div style="display:flex; justify-content: flex-end;margin-right: 3px;line-height: 34px;">
                                 <?php if (isset($notification['apikey'])) {echo $notification['apikey'];} ?>
                                 <input class="addsrv" type="submit" name="apikey" value="Submit">
                             </div>
