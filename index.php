@@ -17,7 +17,6 @@ if (!isset($install)) {
     <body onload="callLoadData()">
     <?php
     include('html/nav.php'); ?>
-    ?>
     <div class="container">
         <table class="server_list_table">
             <tbody>
