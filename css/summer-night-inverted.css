@@ -29,3 +29,6 @@ section {
 .map {
     border: 5px solid #888888;
 }
+.querytime {
+    color: white;
+}

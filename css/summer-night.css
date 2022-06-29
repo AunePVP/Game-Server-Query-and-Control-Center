@@ -26,3 +26,6 @@ section {
 .map {
     border: 5px solid #888888;
 }
+.countdown {
+    color: white;
+}
