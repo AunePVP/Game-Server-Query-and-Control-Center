@@ -9,6 +9,7 @@ function LoadData(id) {
         if (this.readyState === 4 && this.status === 200) {
             let data = JSON.parse(this.responseText);
             let type = data.raw.Type;
+            console.log("refresh:");
             // insert data into html
             let serverid = document.getElementById("server_"+id);
             if (data.Status === 1) {
@@ -138,6 +139,7 @@ function refresh() {
         callLoadData();
     } else {
         console.log('refresh paused');
+        clearInterval(downloadTimer);
         countdown(30);
     }
 }
