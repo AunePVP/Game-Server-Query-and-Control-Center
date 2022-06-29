@@ -183,11 +183,13 @@ switch ($type) {
             }
             // Get List of Players
             $count = 0;
-            if (!empty($serverstatus->players)) {
-                foreach ($serverstatus->players as $player) {
-                    $playerlist[$count]['Name'] = $player;
-                    $playerlist[$count]['Skin'] = "https://crafatar.com/avatars/". minecraftcache($player);
-                    $count++;
+            if (function_exists("minecraftcache")) {
+                if (!empty($serverstatus->players)) {
+                    foreach ($serverstatus->players as $player) {
+                        $playerlist[$count]['Name'] = $player;
+                        $playerlist[$count]['Skin'] = "https://crafatar.com/avatars/". minecraftcache($player);
+                        $count++;
+                    }
                 }
             }
         }
