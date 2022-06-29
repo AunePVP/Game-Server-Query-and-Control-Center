@@ -376,6 +376,13 @@ section {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.countdownbtn {
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    margin: 3px 0;
+    font-size: 12px;
+}
 @media only screen and (min-width: 1700px) {
     .container {width: 75%;}
 }

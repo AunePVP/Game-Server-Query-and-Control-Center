@@ -7,7 +7,7 @@ body {
 .server_list_table_top th {
     color: #ebebeb;
 }
-section {
+section, .countdownbtn {
     color: #ebebeb;
     background-color: rgb(0, 0, 0);
     border: 1px solid white;

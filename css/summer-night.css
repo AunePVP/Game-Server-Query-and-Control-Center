@@ -4,7 +4,7 @@ body {
 .user-avater {
     border: 4px solid #F5F5F5;
 }
-section {
+section, .countdownbtn {
     color: black;
     background-color: #F5F5F5;
 }
