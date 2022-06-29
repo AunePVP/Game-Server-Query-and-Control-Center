@@ -1,10 +1,8 @@
 <?php
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
 $Timer = MicroTime(true);
 // Get all files
 require_once 'html/config.php';
+require_once 'functions.php';
 require 'query/SourceQuery/bootstrap.php';
 require 'query/minecraft/src/MinecraftPing.php';
 require 'query/minecraft/src/MinecraftPingException.php';
@@ -49,15 +47,6 @@ if (mysqli_num_rows($result) > 0) {
     }
 }
 mysqli_close($conn);
-// Convert OS to Full OS Name
-function convertos($Os) {
-    $Opers = array(
-        'l' => 'Linux',
-        'w' => 'Windows',
-        'm' => 'Mac'
-    );
-    return $Opers[$Os];
-}
 switch ($type) {
     case "csgo":
     case "valheim":
@@ -101,19 +90,12 @@ switch ($type) {
         break;
     case "minecraft":
         $response['raw']['MOTD'] = $motd;
+        $response['raw']['Players'] = $playerlist;
         break;
 }
 switch ($type) {
     case "arkse":
         include ('html/type/arkse/modlist.php');
-        function get_title($url){
-            $str = file_get_contents($url);
-            if(strlen($str)>0){
-                $str = trim(preg_replace('/\s+/', ' ', $str)); // supports line breaks inside <title>
-                preg_match("/\<title\>(.*)\<\/title\>/i",$str,$title); // ignore case
-                return $title[1];
-            }
-        }
         $response['raw']['Players'] = $playerlist;
         $response['raw']['InGameDay'] = $ingameday;
         $response['raw']['ClusterID'] = $clusterid;

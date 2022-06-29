@@ -76,16 +76,30 @@ switch ($type) {
                 $countplayers = $countplayers + 1;
             }
         }
+        $playernames = $serverstatus->players;
+        $count = 0;
+        foreach ($playernames as $player) {
+            if(!strlen($player->Name))
+                continue;
+            $playerlist[$count]['Name'] = $player->Name;
+            $rawtime = $player->Time;
+            $playerlist[$count]['Time'] = sprintf('%02dh:%02dm:%02ds', ($rawtime/ 3600),($rawtime/ 60 % 60), $rawtime% 60);
+            $count++;
+        }
+        $count = 0;
         // Get the current game-day
         $ingameday = $serverstatus->rules->DayTime_s ?? '';
         // Get the cluster id
         $clusterid = $serverstatus->rules->ClusterId_s ?? 'Not cluster';
         // Check if server has a password
         $password = $serverstatus->rules->ServerPassword_b ?? '';
+        if ($password == "True") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
         // Check if battleye is enabled
         $battleye = $serverstatus->rules->SERVERUSESBATTLEYE_b ?? '';
+        if ($battleye) {$battleye=$language[$lang][14];}else {$battleye=$language[$lang][15];}
         // Check if pve is enabled
         $pve = $serverstatus->rules->SESSIONISPVE_i ?? '';
+        if($pve){$pvp=$language[$lang][15];}else{$pvp=$language[$lang][14];}
         // CHeck if server has mods
         $hasmods = $serverstatus->rules->HASACTIVEMODS_i ?? '';
         // If the server has mods get the mod id's and store them in an array
@@ -103,6 +117,12 @@ switch ($type) {
                 $mods[$value] = $modcontent;
             }
         }
+        $officialmaps = array("Aberration", "CrystalIsles", "Gen2", "Gen", "LostIsland", "Ragnarok", "ScorchedEarth", "TheCenter", "TheIsland", "Valguero", "Viking_P", "Valhalla", "TheVolcano");
+        if (in_array($map, $officialmaps)) {
+            $maplink = "html/img/map/$map.webp";
+        } else {
+            $maplink = "html/img/map/modmap.webp";
+        }
         break;
     case "minecraft":
         // Create connect link
@@ -114,7 +134,7 @@ switch ($type) {
             // Get Max Players
             $maxplayers = $serverstatus->players->max ?? '0';
             // Get the game logo
-            $img = $serverstatus->favicon ?? $img;
+            $img = "https://api.mcsrvstat.us/icon/".$ip;
             // Get the server version
             $version = $serverstatus->version->name ?? '0';
             // If the server is offline, the variable will be empty. That' how I check if the server is online.
@@ -161,6 +181,15 @@ switch ($type) {
             } else {
                 $status = 0;
             }
+            // Get List of Players
+            $count = 0;
+            if (!empty($serverstatus->players)) {
+                foreach ($serverstatus->players as $player) {
+                    $playerlist[$count]['Name'] = $player;
+                    $playerlist[$count]['Skin'] = "https://crafatar.com/avatars/". minecraftcache($player);
+                    $count++;
+                }
+            }
         }
         // Check if title was set if not use cached title from db
         if (empty($title)) {
@@ -168,7 +197,19 @@ switch ($type) {
         }
         break;
     case "csgo":
+        $playernames = $serverstatus->players;
+        $count = 0;
+        foreach ($playernames as $player) {
+            if(!strlen($player->Name))
+                continue;
+            $playerlist[$count]['Name'] = $player->Name;
+            $rawtime = $player->Time;
+            $playerlist[$count]['Time'] = sprintf('%02dh:%02dm:%02ds', ($rawtime/ 3600),($rawtime/ 60 % 60), $rawtime% 60);
+            $count++;
+        }
+        $count = 0;
         $password = $serverstatus->rules->ServerPassword_b ?? '';
+        if (empty($password)) {$password=$language[$lang][14];}else{$password=$language[$lang][15];}
         if (isset($serverstatus->rules)) {
             $count = 0;
             foreach ($serverstatus->rules as $rulename => $rule) {
@@ -179,8 +220,31 @@ switch ($type) {
                 if (empty($csgorule[$count][2])) {$csgorule[$count][2] = "0";}
             }
         }
+        $officialmaps = array("ar_baggage", "ar_dizzy", "ar_lunacy", "ar_monastery", "ar_shoots", "cs_agency", "cs_assault", "cs_climb", "cs_italy", "cs_militia", "cs_office", "de_ancient", "de_bank", "de_cache", "de_canals", "de_cbble", "de_crete", "de_dust2", "de_hive", "de_inferno", "de_iris", "de_lake", "de_mirage", "de_nuke", "de_overpass", "de_safehouse", "de_shortdust", "de_shortnuke", "de_stmarc", "de_sugarcane", "de_train", "de_vertigo", "dz_blacksite", "dz_ember", "dz_sirocco", "dz_vineyard", "ze_Bathroom_v2_5");
+        if (in_array($map, $officialmaps)) {
+            $maplink = "html/img/map/$map.webp";
+            $mapname = convertcsgomapname($map) ?? $map;
+        } else {
+            $substr = substr($map, 0, 3);
+            if (preg_match('/[a-zA-Z]{2}\_{1}/m', $substr)) {
+                $map = substr($map, 3);
+            }
+            $mapname = ucwords(str_replace("_"," ", $map));
+            $maplink = "html/img/map/csgo_modmap.webp";
+        }
         break;
     case "vrising":
+        $playernames = $serverstatus->players;
+        $count = 0;
+        foreach ($playernames as $player) {
+            if(!strlen($player->Name))
+                continue;
+            $playerlist[$count]['Name'] = $player->Name;
+            $rawtime = $player->Time;
+            $playerlist[$count]['Time'] = sprintf('%02dh:%02dm:%02ds', ($rawtime/ 3600),($rawtime/ 60 % 60), $rawtime% 60);
+            $count++;
+        }
+        $count = 0;
         // Check if server has a password
         $password = $serverstatus->info->Password ?? '';
         if ($password == "True") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
@@ -196,8 +260,20 @@ switch ($type) {
         // Get the game tags
         $GameTags = $serverstatus->info->GameTags;
         $GameTags =  str_replace(",", ", ", $GameTags);
+        $maplink = "html/img/map/$map.webp";
         break;
     case "rust":
+        $playernames = $serverstatus->players;
+        $count = 0;
+        foreach ($playernames as $player) {
+            if(!strlen($player->Name))
+                continue;
+            $playerlist[$count]['Name'] = $player->Name;
+            $rawtime = $player->Time;
+            $playerlist[$count]['Time'] = sprintf('%02dh:%02dm:%02ds', ($rawtime/ 3600),($rawtime/ 60 % 60), $rawtime% 60);
+            $count++;
+        }
+        $count = 0;
         // Get the seed and world size
         $seed = $serverstatus->rules->{'world.seed'};
         $worldsize = $serverstatus->rules->{'world.size'};

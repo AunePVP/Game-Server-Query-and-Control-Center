@@ -4,6 +4,7 @@
           <div style="width: 100%;"></div>
           <?php
           session_start();
+          session_write_close();
           if (isset($_SESSION['username'])) {
               $username = $_SESSION['username'];
               echo '<div class="dropdown" style="height: 58px;">';

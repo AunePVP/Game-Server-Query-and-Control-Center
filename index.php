@@ -28,25 +28,34 @@ if (!isset($install)) {
     echo $lang ?>">
     <?php
     include('html/head.php') ?>
-    <body>
+    <body onload="callLoadData()">
     <?php
     include('html/nav.php'); ?>
+    <?php if (!isset($_COOKIE["develop"])):?>
+    <script>alert('Im working on the website right now')</script>
+    <?php setcookie("develop", '1', time()+3600);  /* expire in 1 hour */;
+    endif;
+    ?>
     <div class="container">
         <table class="server_list_table">
             <tbody>
-            <tr class="server_list_table_top">
-                <th class="status_cell"><?php
-                    echo $language[$lang][6] ?></th>
-                <th class="connectlink_cell"><?php
-                    echo $language[$lang][7] ?></th>
-                <th class="servername_cell"><?php
-                    echo $language[$lang][8] ?></th>
-                <th class="players_cell"><?php
-                    echo $language[$lang][4] ?></th>
-                <th class="img-cell">
-                    <div></div>
-                </th>
-            </tr>
+                <tr class="server_list_table_top">
+                    <th class="status_cell">
+                        <?php echo $language[$lang][6] ?>
+                    </th>
+                    <th class="connectlink_cell">
+                        <?php echo $language[$lang][7] ?>
+                    </th>
+                    <th class="servername_cell">
+                        <?php echo $language[$lang][8] ?>
+                    </th>
+                    <th class="players_cell">
+                        <?php echo $language[$lang][4] ?>
+                    </th>
+                    <th class="img-cell">
+                        <div></div>
+                    </th>
+                </tr>
             </tbody>
         </table>
         <?php
@@ -67,39 +76,45 @@ if (!isset($install)) {
         } else {
             echo "Query failed! Talk to your server administrator.";
         }
+        $idimp = implode(',', $serverjson);
+        // Get server information from database
+        $sql = "SELECT ID, type FROM serverconfig WHERE ID IN ({$idimp})";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_assoc($result)) {
+                $ID = $row['ID'];
+                $typearr[$ID] = $row['type'];
+
+            }
+        }
         if (isset($serverjson)) {
-            foreach ($serverjson as $ServerID) :
-                if(!$ServerID){
+            foreach ($serverjson as $ServerID) {
+                if (!$ServerID) {
                     continue;
                 }
-                unset($queryresult);
-                if (!empty($ServerID)) {
-                    if (!$conn) {
-                        die("Connection failed: " . mysqli_connect_error());
-                    }
-                    $sql = "SELECT * FROM serverconfig WHERE ID='$ServerID'";
-                    $result = mysqli_query($conn, $sql);
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $ip = $row["IP"];
-                            $type = $row["type"];
-                            $qport = $row["QueryPort"];
-                            $gport = $row["GamePort"];
-                            $rport = $row["RconPort"];
-                            $name = $row["Name"];
-                        }
-                    } else {
-                        echo "0 results";
-                    }
-                }
+                $type = $typearr[$ServerID];
+                $sidscript[] = $ServerID;
                 require 'server.php';
-            endforeach;
+            }
             $conn->close();
         }
         if ($username == "public") {
             echo "<div class='white-inftext'>" . $language[$lang][9] . "</div>";
         }
         ?>
+        <div>
+            <button type="button" onclick="callLoadData()">Change Content</button>
+        </div>
+        <script>
+            function callLoadData() {
+                let serverid = JSON.parse('<?php echo json_encode($sidscript);?>');
+                for (const value in serverid) {
+                    let modlink = `${serverid[value]}`;
+                    LoadData(modlink);
+                }
+            }
+        </script>
+        <script src="script.js"></script>
     </div>
     </body>
     </html>

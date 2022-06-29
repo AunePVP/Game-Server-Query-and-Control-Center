@@ -3,29 +3,11 @@ include './html/langconf.php';
 // Set image, convert mods...
 if ($type == "arkse") {
     $display['IV'] = "block";
-    $officialmaps = array("Aberration", "CrystalIsles", "Gen2", "Gen", "LostIsland", "Ragnarok", "ScorchedEarth", "TheCenter", "TheIsland", "Valguero", "Viking_P", "Valhalla", "TheVolcano");
-    if (in_array($map, $officialmaps)) {
-        $maplink = "html/img/map/$map.webp";
-    } else {
-        $maplink = "html/img/map/modmap.webp";
-    }
     $modlink = '<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=';
 } elseif ($type == "minecraft") {
     $display['IV'] = "block";
 } elseif ($type == "csgo") {
     $display['IV'] = "block";
-    $officialmaps = array("ar_baggage", "ar_dizzy", "ar_lunacy", "ar_monastery", "ar_shoots", "cs_agency", "cs_assault", "cs_climb", "cs_italy", "cs_militia", "cs_office", "de_ancient", "de_bank", "de_cache", "de_canals", "de_cbble", "de_crete", "de_dust2", "de_hive", "de_inferno", "de_iris", "de_lake", "de_mirage", "de_nuke", "de_overpass", "de_safehouse", "de_shortdust", "de_shortnuke", "de_stmarc", "de_sugarcane", "de_train", "de_vertigo", "dz_blacksite", "dz_ember", "dz_sirocco", "dz_vineyard", "ze_Bathroom_v2_5");
-    if (in_array($map, $officialmaps)) {
-        $maplink = "html/img/map/$map.webp";
-        $mapname = convertcsgomapname($map) ?? $map;
-    } else {
-        $substr = substr($map, 0, 3);
-        if (preg_match('/[a-zA-Z]{2}\_{1}/m', $substr)) {
-            $map = substr($map, 3);
-        }
-        $mapname = ucwords(str_replace("_"," ", $map));
-        $maplink = "html/img/map/csgo_modmap.webp";
-    }
 } elseif ($type == "valheim") {
     $display['IV'] = "none";
 } elseif ($type == "vrising") {
@@ -33,16 +15,6 @@ if ($type == "arkse") {
     $display['IV'] = "block";
 }elseif ($type == "rust") {
     $display['IV'] = "block";
-    unset($metas,$mapurl);
-    $mapurl = "https://rustmaps.com/map/".$worldsize."_".$seed."?embed=img_i_l";
-
-    $metas = get_meta_tags($mapurl);
-    if (isset($metas['twitter:image'])) {
-        $metas = ($metas['twitter:image']);
-        $maplink = str_replace('FullMap.png', 'Thumbnail.png', $metas);
-    } else {
-        $maplink = "html/img/map/rustgenerate.webp";
-    }
 } elseif ($type == "fivem") {
     $display['IV'] = "none";
 } else {
@@ -56,24 +28,24 @@ if ($type == "arkse") {
     <div class="I <?php if($type=="valheim"){echo "valheim";}?>">
         <?php
         if ($type == "arkse") {
-            echo '<img class="map" src="'.$maplink.'" alt="'.$maplink.'">';
-            echo '<div style="text-align:left"><span style="font-weight: 500;">Map:</span> '.$map.'</div>';
-            echo '<div style="text-align:left"><span style="font-weight: 500;">'.$language[$lang][11]."</span>".$ingameday.'</div>';
+            echo '<img class="map">';
+            echo '<div class="flex"><span style="font-weight: 500;">Map:</span><div class="mapname"></div></div>';
+            echo '<div class="flex"><span style="font-weight: 500;">'.$language[$lang][11]."</span><div class='ingameday'></div></div>";
         } elseif ($type == "valheim") {
             echo('<a class="twitter-timeline" data-chrome="nofooter noheader noscrollbar" id="twitter-timeline" data-width="330" data-height="275" data-dnt="true" data-theme="dark" href="https://twitter.com/Valheimgame">Tweets by Valheimgame</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>');
         } elseif ($type == "csgo") {
-            echo '<img class="map" src="'.$maplink.'" alt="'.$maplink.'">';
-            echo '<div style="text-align:left;max-width: 234px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Map: '.$mapname.'</div>';
+            echo '<img class="map">';
+            echo '<div class="flex"><span style="font-weight: 500;">Map:</span><div class="mapname"></div></div>';
         }
         elseif ($type == "vrising") {
-            echo '<img class="map" src="'.$maplink.'" alt="'.$maplink.'">';
-            echo '<div style="text-align:left"><span style="font-weight: 500;">Map:</span> '.$map.'</div>';
-            echo '<div style="text-align:left"><span style="font-weight: 500;">'.$language[$lang][11]."</span>".$ingameday.'</div>';
+            echo '<img class="map">';
+            echo '<div class="flex" style="max-width: 234px;"><span style="font-weight: 500;">Map:</span><div class="mapname"></div></div>';
+            echo '<div class="flex"><span style="font-weight: 500;">'.$language[$lang][11]."</span><div class='ingameday'></div></div>";
         }
         elseif ($type == "rust") {
-            echo '<a href="'.$mapurl.'" target="_blank" rel="noopener noreferrer"><img class="map" src="'.$maplink.'" alt="'.$maplink.'"></a>';
-            echo '<div style="text-align:left"><span style="font-weight: 500;">Map:</span> '.$map.'</div>';
-            echo '<div style="text-align:left"><span style="font-weight: 500;">Uptime:</span> '.$rustuptime.'<br></div>';
+            echo '<a target="_blank" rel="noopener noreferrer" style="color:#888888"><img class="map"></a>';
+            echo '<div class="flex"><span style="font-weight: 500;">Map:</span><div class="mapname"></div></div>';
+            echo '<div class="flex"><span style="font-weight: 500;">Uptime:</span><div class="rustuptime"></div></div>';
         }
         ?>
     </div>
@@ -81,92 +53,61 @@ if ($type == "arkse") {
     <div class="II <?php if($type=="csgo"){echo'csgo';}elseif($type=="minecraft"&&$qport == 0) {echo "flex";}?>">
         <?php
         if ($type == "arkse") {
-            echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
-            echo "<span style='font-weight: 500;'>Cluster ID:</span> $clusterid<br>";
-            if ($pve == "true") {echo "<span style='font-weight: 500;'>PVE:</span> True<br>";} else {echo "<span style='font-weight: 500;'>PVP:</span> True<br>";}
-            if ($password == "true" ) {echo "<span style='font-weight: 500;'>".$language[$lang][12].":</span> True<br>";} else {echo "<span style='font-weight: 500;'>".$language[$lang][12].":</span> False<br>";}
-            if ($battleye == "true") {echo "<span style='font-weight: 500;'>Battleye:</span> True<br>";} else {echo "<span style='font-weight: 500;'>Battleye:</span> False<br>";}
-            if ($hasmods) {
-                echo "<span style='font-weight: 500;'>Mods:</span><br>";
-                foreach ($mods as $mod) {
-                    echo $modlink . $mod . '" target="_blank">';
-                    // convert the mod id into the mod name
-                    $convertedmod = convertmodlistark($mod);
-                    if (!empty($convertedmod)) {
-                        echo $convertedmod;
-                    } else {
-                        // If mod is not in modlist, get the mod from the steamcommunity website and store the mod in the modlist file
-                        $convertedmod = substr(get_title("https://steamcommunity.com/sharedfiles/filedetails/?id=$mod"), 16);
-                        echo $convertedmod;
-                        $convertedmod = str_replace("'", "\'", $convertedmod);
-                        $convertedmod = '$modlist[\'ArkModName\']'."[$mod] = '$convertedmod';";
-                        file_put_contents("html/type/arkse/modlist.php", $convertedmod . "\n", FILE_APPEND);
-
-                    }
-                    echo "</a><br>";
-                }
-            }
+            echo "<div class='flex'><span style='font-weight: 500;'>System:</span><div class='system'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>Cluster ID:</span><div class='clusterid'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>PVP:</span><div class='pvp'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>".$language[$lang][12].":</span><div class='password'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>Battleye:</span><div class='battleye'></div><br></div>";
+            echo "<span style='font-weight: 500;'>Mods:</span><div class='mods'></div><br>";
         } elseif ($type == "valheim") {
-            echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
-            echo "<span style='font-weight: 500;'>Map:</span> $map<br>";
-            echo "<span style='font-weight: 500;'>Max Players:</span> $maxplayers<br>";
-            echo "<span style='font-weight: 500;'>Query Port:</span> $qport<br>";
-            echo "<span style='font-weight: 500;'>Steam Page:</span> <a href='https://store.steampowered.com/appv/892970/Valheim/' target='_blank' rel='noopener noreferrer'>Link</a><br>";
-            echo "<span style='font-weight: 500;'>Wiki:</span> <a href='https://valheim.fandom.com/wiki/Valheim_Wiki' target='_blank' rel='noopener noreferrer'>Link</a><br>";
-            echo "<span style='font-weight: 500;'>Website:</span> <a href='https://www.valheimgame.com' target='_blank' rel='noopener noreferrer'>Link</a><br>";
+            echo "<div class='flex'><span style='font-weight: 500;'>System:</span><div class='system'></div><br></div>";
+            echo '<div class="flex"><span style="font-weight: 500;">Map:</span><div class="mapname"></div></div>';
+            echo '<div class="flex"><span style="font-weight: 500;">Max Players:</span><div class="maxplayers"></div></div>';
+            echo '<div class="flex"><span style="font-weight: 500;">Query Port:</span><div class="queryport"></div></div>';
+            echo '<div class="flex"><span style="font-weight: 500;">Steam Page:&nbsp;</span><a href="https://store.steampowered.com/appv/892970/Valheim/" target="_blank" rel="noopener noreferrer">Link</a></div>';
+            echo '<div class="flex"><span style="font-weight: 500;">Wiki:&nbsp;</span><a href="https://valheim.fandom.com/wiki/Valheim_Wiki" target="_blank" rel="noopener noreferrer">Link</a></div>';
+            echo '<div class="flex"><span style="font-weight: 500;">Website:&nbsp;</span><a href="https://www.valheimgame.com" target="_blank" rel="noopener noreferrer">Link</a></div>';
         } elseif ($type == "csgo") {
-            echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
-            echo "<span style='font-weight: 500;'>Version:</span> $version<br>";
-            if ($password == "true" ?? false) {echo "<span style='font-weight: 500;'>".$language[$lang][12]."</span>: True<br>";} else {echo "<span style='font-weight: 500;'>".$language[$lang][12]."</span>: False<br>";}
-            if (isset($serverstatus->rules)) {
+            echo "<div class='flex'><span style='font-weight: 500;'>System:</span><div class='system'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>Version:</span><div class='sversion'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>".$language[$lang][12].":</span><div class='password'></div><br></div>";
+            $lastplayerline = json_decode(tailCustom("query/cron/$ServerID.json", 1));
+            $csgorules = $lastplayerline->csgorules ?? "0";
+            if (isset($csgorules)) {
                 echo "<span style='font-weight: 500;'>Server Settings:<br></span>";
                 echo "<div style='height: 100%; width: 100%;'>";
                 echo "<table><thead><tr style='border-bottom: solid;border-width: 2px;'><th>Name</th><th style='text-align: right'>Value</th></tr></thead><tbody>";
-                // Print every rulename and value inside the table
-                foreach ($csgorule as $rule) {
-                    echo "<tr><td class='name'>";
-                    print_r($rule[1]);
-                    echo "</td><td class='value'>";
-                    print_r($rule[2]);
-                    echo "</td></tr>";
-                }
                 echo "</tbody></table></div>";
             }
         } elseif ($type == "vrising") {
-            echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
-            echo "<span style='font-weight: 500;'>".$language[$lang][12].":</span> $password<br>";
-            echo "<span style='font-weight: 500;'>Bloodbound:</span> $bloodbound<br>";
-            echo "<div style='max-width:300px'><span style='font-weight: 500;'>Tags:</span> $GameTags<br></div>";
-            echo "<div style='width:-webkit-min-content;'><span style='font-weight: 500;'>Description:</span> $description<br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>System:</span><div class='system'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>".$language[$lang][12].":</span><div class='password'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>Bloodbound:</span><div class='bloodbound'></div><br></div>";
+            echo "<div style='max-height:166px;overflow-y:scroll;'><div style='max-width:300px'><span style='font-weight: 500;'>Tags:</span><div class='tags'></div></div>";
+            echo "<span style='font-weight: 500;'>Description:</span><div class='description'></div><br>";
+            echo "</div>";
         } elseif ($type == "rust") {
-            echo "<span style='font-weight: 500;'>System:</span> $Os<br>";
-            echo "<span style='font-weight: 500;'>".$language[$lang][12].":</span> $password<br>";
-            echo "<span style='font-weight: 500;'>Website:</span><a href='$rustwebsite'  target='_blank' rel='noopener noreferrer'> $rustwebsite</a><br>";
-            echo "<span style='font-weight: 500;'>PVP:</span> $pvp<br>";
-            echo "<span style='font-weight: 500;'>FPS:</span> $rustfps<br>";
-            echo "<div style='max-height:166px;overflow-y:scroll;'><div style='max-width:300px'><span style='font-weight: 500;'>Tags:</span> $GameTags<br></div>";
-            echo "<div style='width:300px;'><span style='font-weight: 500;'>Description:</span>";
-            foreach ($rustdesc as $description) {
-                echo "$description<br>";
-            }
-            echo "</div></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>System:</span><div class='system'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>".$language[$lang][12].":</span><div class='password'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>Website:&nbsp;</span><a class='website' target='_blank' rel='noopener noreferrer'>Link</a><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>PVP:</span><div class='pvp'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>FPS:</span><div class='fps'></div><br></div>";
+            echo "<div style='max-height:166px;overflow-y:scroll;'><div style='max-width:300px'><span style='font-weight: 500;'>Tags:</span><div class='tags'></div></div>";
+            echo "<span style='font-weight: 500;'>Description:</span><div class='description'></div><br>";
+            echo "</div>";
         } elseif ($type == "minecraft") {
-            if ($qport == 0) {
-                echo '<div style="margin:auto">'.$language[$lang][13].'</div>';
-            } else {
-                echo "<div class='mcheads'>";
+            if (!$qport == 0) {
                 if (!empty($serverstatus->players)) {
                     foreach ($serverstatus->players as $player) {
                         $crafatar = "https://crafatar.com/avatars/". minecraftcache($player);
                         echo "<div class='mchead'><img src='$crafatar' alt='Skin from crafatar'><div class='name'>$player</div></div>";
                     }
                 }
-                echo "</div>";
             }
         }
         ?>
     </div>
-    <div class="movediv<?php if ($type == "csgo" && isset($serverstatus->rules)){echo " csmovedivhide";} elseif ($type == "minecraft"){echo " mcmovedivhide";} elseif ($type == "valheim"){echo " valheim";}?>"></div>
+    <div class="movediv<?php if ($type == "csgo" && isset($csgorules)){echo " csmovedivhide";} elseif ($type == "minecraft"){echo " mcmovedivhide";} elseif ($type == "valheim"){echo " valheim";}?>"></div>
     <!-- DIV III (Not used yet) -->
     <div class="III"></div>
     <div class="IV" style="display:<?php echo $display['IV']?>">
@@ -178,41 +119,15 @@ if ($type == "arkse") {
                 echo "Mods";
             }
             ?></p>
-        <div class="scroll">
-            <?php
-            // Display players for ARK, Csgo, Vrising
-            if ($type == "arkse" || $type == "csgo" || $type == "vrising" || $type == "rust") {
-                foreach ($serverstatus->players ?? (array) "0" as $player) {
-                    if(!strlen($player->Name ?? ''))
-                        continue;
-                    echo '<h5 class="dark">';
-                    $rawtimeconv = $player->Time;
-                    $rawtimeconv = round($rawtimeconv);
-                    $output = sprintf('%02dh:%02dm:%02ds', ($rawtimeconv/ 3600),($rawtimeconv/ 60 % 60), $rawtimeconv% 60);
-                    echo $player->Name." ".$language[$lang][5]." ".$output;
-                    echo "</h5><br>";
-                }
-                // Display mods for Minecaft
-            } elseif ($type == "minecraft") {
-                if (!empty($serverstatus->modinfo->modList)) {
-                    foreach ($serverstatus->modinfo->modList as $mods) {
-                        echo $mods->modid."<br>";
-                    }
-                } else {
-                    echo $language[$lang][10];
-                }
-            }
-
-            ?>
-        </div>
+        <div class="scroll"></div>
     </div>
     <div class="V">
         <div class="vchartdiv <?php if($type == "valheim"){echo "valheim";}?>">
             <div class="servername">
-                <p href="#"><?php if (!empty($motd)) {echo $motd;} else {echo $title;}?></p>
+                <p href="#">Loading...</p>
             </div>
             <div class="connectlink">
-                <a href="<?php echo $connectlink ?>>" title="Connect to server"><?php echo $ip . ":" . $gport ?></a>
+                <a title="Connect to server">xx.xxx.xxx:xxxx</a>
             </div>
             <div class="items flex">
                 <div class="flex width50">
@@ -222,23 +137,52 @@ if ($type == "arkse") {
                                 <path d="M26.98,2.64C41.88,2.64 53.96,14.72 53.96,29.62C53.96,44.52 41.88,56.6 26.98,56.6C12.08,56.6 0,44.52 0,29.62C0,14.72 12.08,2.64 26.98,2.64ZM26.98,13.72L41.46,31.62L32.47,31.62L32.47,41.14L21.49,41.14L21.49,31.62L12.5,31.62L26.98,13.72Z" style="fill:rgb(107,190,102);"/>
                             </g>
                         </svg>
+                    <?php
+                    $lastplayerlines = tailCustom("query/cron/$ServerID.json", 7);
+                    $playerlineexit = array();
+                    $count = 0;
+                    unset($lastplayers);
+                    foreach(preg_split("/((\r?\n)|(\r\n?))/", $lastplayerlines) as $playerline){
+                        $playerlinedecode = json_decode($playerline);
+                        $lastplayers[$count] = $playerlinedecode->players;
+                        $count = $count + 1;
+                        $uptime = $playerlinedecode->uptime;
+                        if (isset($lastplayers[6])) {
+                            if ($lastplayers[6] < 5) {
+                                $maxchart = $lastplayers[6]+1;
+                            }
+                            if ($lastplayers[6] > 5) {
+                                $maxchart = $lastplayers[6]+5;
+                            }
+                            if ($lastplayers[6] > 10) {
+                                $maxchart = $lastplayers[6]+15;
+                            }
+                            if ($lastplayers[6] > 15) {
+                                $maxchart = $lastplayers[6]+30;
+                            }
+                        } else {
+                            $maxchart = 0;
+                        }
+                    }
+                    $uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
+                    ?>
                     <p><?php echo $uptimebanner ?></p>
                 </div>
-                <div class="flex width50">
+                <div class="flex width50 players">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
                         <g>
                             <path d="M24 24c4.42 0 8-3.59 8-8 0-4.42-3.58-8-8-8s-8 3.58-8 8c0 4.41 3.58 8 8 8zm0 4c-5.33 0-16 2.67-16 8v4h32v-4c0-5.33-10.67-8-16-8z"  style="fill:white;"/>
                             <path d="M0 0h48v48h-48z" fill="none"/>
                         </g>
                     </svg>
-                    <p><?php echo $countplayers . '/' . $maxplayers;?></p>
+                    <p>0/0</p>
                 </div>
             </div>
             <p>History</p>
             <div class="canvasparent">
                 <canvas id="Chart<?php echo $ServerID ?>" class="vchart" width="190" height="120"></canvas>
             </div>
-            <script>Chart.defaults.color = 'white';let xLabels<?php echo $ServerID ?> = ['60','50','40','30','20','10','now'];let xValues<?php echo $ServerID ?> = <?php echo "[$lastplayers[0], $lastplayers[1], $lastplayers[2], $lastplayers[3], $lastplayers[4], $lastplayers[5], $lastplayers[6]];"; ?>new Chart("Chart<?php echo $ServerID ?>", {type: "line", data: {labels: xLabels<?php echo $ServerID ?>, datasets: [{label: "Players", data: xValues<?php echo $ServerID ?>, backgroundColor: "white", borderColor: "red", color: "white", borderWidth: 2, pointBorderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.4, pointBorderColor: "white",}]}, options: {scales: {x: {grid: {display:false}, ticks: {display: true}}, y: {<?php if ($lastplayers[0] < 200) {echo "beginAtZero: true, ";} if ($lastplayers[0] < 200 && $maxplayers > 500) {$maxchart = $lastplayers[0] + 30; echo "max: $maxchart, ";}?>grid:{display:true, color: 'rgb(70,70,70)',},}}, responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false,}}}});</script>
+            <script>Chart.defaults.color = 'white';let xLabels<?php echo $ServerID ?> = ['60','50','40','30','20','10','now'];let xValues<?php echo $ServerID ?> = <?php echo "[$lastplayers[0], $lastplayers[1], $lastplayers[2], $lastplayers[3], $lastplayers[4], $lastplayers[5], $lastplayers[6]];"; ?>new Chart("Chart<?php echo $ServerID ?>", {type: "line", data: {labels: xLabels<?php echo $ServerID ?>, datasets: [{label: "Players", data: xValues<?php echo $ServerID ?>, backgroundColor: "white", borderColor: "red", color: "white", borderWidth: 2, pointBorderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.4, pointBorderColor: "white",}]}, options: {scales: {x: {grid: {display:false}, ticks: {display: true}}, y: {<?php if ($lastplayers[0] < 200) {echo "beginAtZero: true, ";} if ($lastplayers[0] < 200) {echo "max: $maxchart, ";}?>grid:{display:true, color: 'rgb(70,70,70)',},}}, responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false,}}}});</script>
         </div>
     </div>
 </div>

@@ -30,11 +30,6 @@ function get_title($url){
         return $title[1];
     }
 }
-function convertmodlistark($mod)
-{
-    include ('html/type/arkse/modlist.php');
-    return $modlist['ArkModName'][$mod];
-}
 function convertcsgomapname($mapname)
 {
     include ('html/type/csgo/maplist.php');

@@ -2,7 +2,6 @@
 $modlist['ArkModName'][1517538187] = 'Ark Arena';
 $modlist['ArkModName'][2167099222] = 'I+ Structures for UndeadARK';
 $modlist['ArkModName'][1840739225] = 'Getter Component';
-$modlist['ArkModName'][2369305725] = 'UnStacks 1000-80';
 $modlist['ArkModName'][2412795047] = 'UI with commands';
 $modlist['ArkModName'][1404697612] = 'Awesome SpyGlass!';
 $modlist['ArkModName'][1808536179] = 'Spyglass';

@@ -37,11 +37,13 @@ function convertos($Os)
     return $Opers[$Os];
 }
 include "../../html/tailcustom.php";
-if (file_exists('../../html/server/'.$ServerID.'.php')) {
-    include '../../html/server/'.$ServerID.'.php';
-    $logdisabled = FALSE;
-} else {
-    $logdisabled = TRUE;
+if (isset($ServerID)) {
+    if (file_exists('../../html/server/'.$ServerID.'.php')) {
+        include '../../html/server/'.$ServerID.'.php';
+        $logdisabled = FALSE;
+    } else {
+        $logdisabled = TRUE;
+    }
 }
 $username = $_SESSION['username'];
 if ($username == "admin") {
