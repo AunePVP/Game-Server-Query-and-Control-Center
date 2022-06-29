@@ -1,22 +1,8 @@
 <?php
-$Timer = MicroTime(true);
-require 'query/SourceQuery/bootstrap.php';
-require 'query/minecraft/src/MinecraftPing.php';
-require 'query/minecraft/src/MinecraftPingException.php';
-require 'query/minecraft/src/MinecraftQuery.php';
-require 'query/minecraft/src/MinecraftQueryException.php';
-require 'html/type/minecraft/jsonconversion.php';
-require 'html/type/minecraft/minecraftcolor.php';
 require_once 'html/config.php';
 if (file_exists("query/cron/cache/minecraft.php")) {
     include 'query/cron/cache/minecraft.php';
 }
-
-use xPaw\SourceQuery\SourceQuery;
-
-const SQ_TIMEOUT = 1;
-const SQ_ENGINE = SourceQuery::SOURCE;
-
 require "html/tailcustom.php";
 require "functions.php";
 if (!isset($install)) {
@@ -102,11 +88,15 @@ if (!isset($install)) {
             echo "<div class='white-inftext'>" . $language[$lang][9] . "</div>";
         }
         ?>
-        <div>
-            <button type="button" onclick="callLoadData()">Change Content</button>
-        </div>
+        <p class="countdown"><?php echo $language[$lang][13]?> <span id="countdown"></span>s.</p>
+        <div id="countdown"></div>
+        <div><button type="button" onclick="callLoadData()">Refresh Servers</button></div>
         <script>
             function callLoadData() {
+                if (typeof downloadTimer !== 'undefined') {
+                    clearInterval(downloadTimer);
+                }
+                countdown(30);
                 let serverid = JSON.parse('<?php echo json_encode($sidscript);?>');
                 for (const value in serverid) {
                     let modlink = `${serverid[value]}`;
@@ -118,6 +108,3 @@ if (!isset($install)) {
     </div>
     </body>
     </html>
-<?php
-echo "<div class='querytime'>Queried in " . Number_Format(MicroTime(true) - $Timer, 4, '.', '') . " seconds.</div>";
-?>

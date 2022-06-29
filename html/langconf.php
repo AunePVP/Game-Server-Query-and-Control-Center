@@ -22,7 +22,7 @@ $language['de'][9] = "Du musst dich erst einloggen um eigene Server hinzuzufüge
 $language['de'][10] = "Keine Mods auf dem Server gefunden.";
 $language['de'][11] = "In-game Tag: ";
 $language['de'][12] = "Passwort";
-$language['de'][13] = "Query ist auf diesem Server deaktiviert.";
+$language['de'][13] = "Nächste Aktualisierung in";
 $language['de'][14] = "An";
 $language['de'][15] = "Aus";
 //en
@@ -38,6 +38,6 @@ $language['en'][9] = "You have to log in first to add your own servers.";
 $language['en'][10] = "There are no mods installed on this server.";
 $language['en'][11] = "In-game Day: ";
 $language['en'][12] = "Password";
-$language['en'][13] = "Query is disabled on this server.";
+$language['en'][13] = "Next refresh in";
 $language['en'][14] = "On";
 $language['en'][15] = "Off";

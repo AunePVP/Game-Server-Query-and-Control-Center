@@ -132,3 +132,20 @@ function LoadData(id) {
     xhttp.open("GET", "reload.php?id="+id, true);
     xhttp.send();
 }
+setInterval(refresh, 30000);
+function refresh() {
+    if(document.hasFocus()) {
+        callLoadData();
+    } else {
+        console.log('refresh paused');
+        countdown(30);
+    }
+}
+function countdown(time) {
+    downloadTimer = setInterval(function(){
+        time--;
+        if(time <= 0)
+            clearInterval(downloadTimer);
+        document.getElementById("countdown").textContent = time;
+    },1000);
+}

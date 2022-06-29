@@ -60,7 +60,7 @@ switch ($type) {
         include 'query/minecraftquery.php';
         break;
 }
-$serverstatus = json_decode($queryresult ?? false);
+$serverstatus = json_decode($queryresult);
 include 'html/type/query.php';
 // Clean up query result.
 $response['Username'] = $username;
