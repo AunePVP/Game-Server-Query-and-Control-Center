@@ -9,8 +9,6 @@ function LoadData(id) {
         if (this.readyState === 4 && this.status === 200) {
             let data = JSON.parse(this.responseText);
             let type = data.raw.Type;
-            console.log(data);
-
             // insert data into html
             let serverid = document.getElementById("server_"+id);
             if (data.Status === 1) {
@@ -53,7 +51,7 @@ function LoadData(id) {
                     serverid.getElementsByClassName("mods")[0].innerHTML += finalmod;
                 }
                 serverid.getElementsByClassName("servername")[0].getElementsByTagName("p")[0].innerHTML = data.raw.MOTD;
-                if (data.QueryPort == 0){
+                if (data.QueryPort === 0){
                     serverid.getElementsByClassName("II")[0].innerHTML = "<div style=\"margin:auto\">"+language[lang][1]+"</div>";
                     serverid.getElementsByClassName("I")[0].style.display = "none";
                 } else {
