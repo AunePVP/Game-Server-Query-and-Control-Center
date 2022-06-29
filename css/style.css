@@ -302,8 +302,7 @@ section {
     padding: 5px 0;
 
 }
-.vchartdiv .items svg{
-    width: 25px;
+.vchartdiv .items img {
     height: 25px;
     padding: 5px 2px 5px 5px;
 }
