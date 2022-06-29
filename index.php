@@ -104,7 +104,7 @@ if (!isset($install)) {
                 }
             }
         </script>
-        <script src="script.js"></script>
+        <script src="html/reload.js"></script>
     </div>
     </body>
     </html>
