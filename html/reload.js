@@ -51,7 +51,7 @@ function LoadData(id) {
                     serverid.getElementsByClassName("mods")[0].innerHTML += finalmod;
                 }
                 serverid.getElementsByClassName("servername")[0].getElementsByTagName("p")[0].innerHTML = data.raw.MOTD;
-                if (data.QueryPort === 0){
+                if (data.QueryPort == 0){
                     serverid.getElementsByClassName("II")[0].innerHTML = "<div style=\"margin:auto\">"+language[lang][1]+"</div>";
                     serverid.getElementsByClassName("I")[0].style.display = "none";
                 } else {
