@@ -335,7 +335,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
         <div id="confpopup">
             <div class="areyousure">Are you sure you want to delete this Server?</div>
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID"; ?>">
-                <div style="padding: 10px 10px 0;height:106px">
+                <div style="padding: 10px 10px 0">
                     <p style="padding-bottom: 15px;overflow: auto;">This action <strong>cannot</strong> be undone. This will permanently delete the server and all historical data from the database.</p>
                     <p>Please type <strong>Delete-Server-<?php echo $ServerID?></strong> to confirm.</p>
                     <input id="deleteinput" type="text" onkeyup="checkpattern()" required="required" autocomplete="off" pattern="[dD][eE][lL][eE][tT][eE]-[sS][eE][rR][vV][eE][rR]-<?php echo $ServerID?>">
