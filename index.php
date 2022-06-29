@@ -17,10 +17,6 @@ if (!isset($install)) {
     <body onload="callLoadData()">
     <?php
     include('html/nav.php'); ?>
-    <?php if (!isset($_COOKIE["develop"])):?>
-    <script>alert('Im working on the website right now')</script>
-    <?php setcookie("develop", '1', time()+3600);  /* expire in 1 hour */;
-    endif;
     ?>
     <div class="container">
         <table class="server_list_table">
