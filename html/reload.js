@@ -1,7 +1,7 @@
 // language
 const language = {};
-language['de'] = [' seit ', 'Query ist auf diesem Server deaktiviert.'];
-language['en'] = [' since ', 'Query is disabled on this server.'];
+language['de'] = [' seit ', 'Query ist auf diesem Server deaktiviert.', 'Derzeit befinden sich keine Spieler auf diesem Server.'];
+language['en'] = [' since ', 'Query is disabled on this server.', 'There are currently no players on this server.'];
 let lang = navigator.language.substring(0, 2);
 function LoadData(id) {
     let xhttp = new XMLHttpRequest();
@@ -56,15 +56,20 @@ function LoadData(id) {
                     serverid.getElementsByClassName("I")[0].style.display = "none";
                 } else {
                     let players = data.raw.Players;
-                    serverid.getElementsByClassName("II")[0].innerHTML = "<div class='mcheads'></div>";
-                    serverid.getElementsByClassName("mcheads")[0].innerHTML = "";
-                    for (const value in players) {
-                        let playername = `${players[value]['Name']}`;
-                        let skinlink = `${players[value]['Skin']}`;
-                        let finaldiv = "<div class='mchead'><img src='"+skinlink+"' alt='Skin from crafatar'><div class='name'>"+playername+"</div></div>";
-                        serverid.getElementsByClassName("mcheads")[0].innerHTML += finaldiv;
+                    if (data.Players !== 0) {
+                        serverid.getElementsByClassName("II")[0].innerHTML = "<div class='mcheads'></div>";
+                        serverid.getElementsByClassName("mcheads")[0].innerHTML = "";
+                        for (const value in players) {
+                            let playername = `${players[value]['Name']}`;
+                            let skinlink = `${players[value]['Skin']}`;
+                            let finaldiv = "<div class='mchead'><img src='"+skinlink+"' alt='Skin from crafatar'><div class='name'>"+playername+"</div></div>";
+                            serverid.getElementsByClassName("mcheads")[0].innerHTML += finaldiv;
+                        }
+                        serverid.getElementsByClassName("I")[0].style.display = "none";
+                    } else {
+                        serverid.getElementsByClassName("II")[0].innerHTML = "<div style=\"margin:auto\">"+language[lang][2]+"</div>";
+                        serverid.getElementsByClassName("I")[0].style.display = "none";
                     }
-                    serverid.getElementsByClassName("I")[0].style.display = "none";
                 }
             } else if (type === "rust") {
                 let description = data.raw.Description;

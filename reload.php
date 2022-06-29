@@ -11,6 +11,7 @@ require 'query/minecraft/src/MinecraftQueryException.php';
 require 'html/type/minecraft/jsonconversion.php';
 require 'html/type/minecraft/minecraftcolor.php';
 require 'html/tailcustom.php';
+include 'query/cron/cache/minecraft.php';
 use xPaw\SourceQuery\SourceQuery;
 const SQ_TIMEOUT = 1;
 const SQ_ENGINE = SourceQuery::SOURCE;
