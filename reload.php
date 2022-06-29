@@ -17,10 +17,10 @@ use xPaw\SourceQuery\SourceQuery;
 const SQ_TIMEOUT = 1;
 const SQ_ENGINE = SourceQuery::SOURCE;
 $ServerID = (int)$_GET['id'];
-
 // start session
 session_start();
 $username = $_SESSION['username'] ?? 'public';
+session_write_close();
 // Get the allowed servers
 $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
 $sql = "SELECT server FROM users WHERE username='$username'";
@@ -36,7 +36,6 @@ if (!in_array($ServerID, $id)) {
     var_dump(http_response_code());
     exit;
 }
-$response['QueryTime1'] = Number_Format(MicroTime(true) - $Timer, 4, '.', '');
 // Get server information from database
 $sql = "SELECT IP, type, Queryport, GamePort, Name FROM serverconfig WHERE ID='$ServerID'";
 $result = mysqli_query($conn, $sql);
