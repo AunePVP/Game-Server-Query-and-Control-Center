@@ -11,6 +11,7 @@
     <title>Gamserver Query</title>
     <link rel="stylesheet" href="css/<?php echo $css_template?>.css">
     <link rel="stylesheet" href="css/style.css">
+    <meta name="format-detection" content="telephone=no">
     <link rel="apple-touch-icon" sizes="57x57" href="ico/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="ico/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="ico/apple-icon-72x72.png">
