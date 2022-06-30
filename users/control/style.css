@@ -480,6 +480,7 @@ summary{
     width: -webkit-fill-available;
     font-family: Helvetica, sans-serif;
     font-size: 16px;
+    margin: 2px 2px 5px;
 }
 #dragdropform {
     display: flex;
