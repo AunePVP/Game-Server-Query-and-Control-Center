@@ -6,7 +6,11 @@ function minecraftcache($username) {
         $data = json_decode(file_get_contents("https://api.mojang.com/users/profiles/minecraft/$username"));
         $uuid = $data->id;
         $data = '$mcuuid[\''.$username.'\'] = "'. $uuid .'";';
-        file_put_contents("query/cron/cache/minecraft.php", $data . "\n", FILE_APPEND);
+        if (!file_exists("query/cron/cache/minecraft.php")) {
+            file_put_contents("query/cron/cache/minecraft.php", "<?php\n".$data."\n", FILE_APPEND);
+        } else {
+            file_put_contents("query/cron/cache/minecraft.php", $data . "\n", FILE_APPEND);
+        }
         return $uuid;
     } else {
         return $mcuuid[$username];
