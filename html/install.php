@@ -71,7 +71,6 @@ if (array_key_exists('submit', $_POST)) {
         '$DB_NAME = "' . $DB_NAMEI . '";' . "\n" .
         '$css_template = "summer-night";' . "\n" .
         '$steamapi = "https://api.steampowered.com/";' . "\n" .
-        '$lang = "en";' . "\n" .
         '$register = TRUE;' . "\n" .
         "?>";
     fwrite($myfile, $write);
