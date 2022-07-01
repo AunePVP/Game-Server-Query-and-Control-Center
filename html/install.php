@@ -2,7 +2,7 @@
 $configfile = 'config.php';
 require_once $configfile;
 if (isset($install) && !$install) {
-    header("Location: /");
+    header("Location: ../");
 }
 function test_input($data)
 {

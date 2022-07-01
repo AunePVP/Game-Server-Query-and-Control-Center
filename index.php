@@ -6,7 +6,7 @@ if (file_exists("query/cron/cache/minecraft.php")) {
 require "html/tailcustom.php";
 require "functions.php";
 if (!isset($install)) {
-    header("Location: /html/install.php");
+    header("Location: html/install.php");
 }
 ?>
     <!doctype html>
