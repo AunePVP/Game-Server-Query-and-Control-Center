@@ -84,7 +84,6 @@ if (!isset($install)) {
         }
         ?>
         <p class="countdown"><?php echo $language[$lang][13]?> <span id="countdown"></span>s.</p>
-        <div id="countdown"></div>
         <div><button class="countdownbtn" type="button" onclick="callLoadData()">Refresh Servers</button></div>
         <script>
             function callLoadData() {
