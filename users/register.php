@@ -19,6 +19,9 @@ if (array_key_exists('register', $_POST)) {
         if ($password1 !== $password2) {
             $errors['nomatch'] = "Those passwords didn't match. Try again.";
         }
+        if (strlen($password1) < 4) {
+            $errors['mincharacterspw'] = "Please use at least 8 characters for your password.";
+        }
     } else {
         $errors['emptyline'] = "Please fill out every line.";
     }
@@ -55,7 +58,7 @@ if (array_key_exists('register', $_POST)) {
         <?php if(isset($errors['mincharacters'])){echo $errors['mincharacters'];}elseif(isset($errors['specialuser'])){echo $errors['specialuser'];}elseif(isset($errors['userexists'])){echo $errors['userexists'];}?>
         <div class="input"><label for="password1">Password:</label><input id="password1" class="inputstyle" name="password1" type="password" minlength="8" placeholder="xxxxxxxxxxxx" autocomplete="off"></div>
         <div class="input"><label for="password2">Password:</label><input id="password2" class="inputstyle" name="password2" type="password" minlength="8" placeholder="xxxxxxxxxxxx" autocomplete="off"></div>
-        <?php if(isset($errors['nomatch'])){echo $errors['nomatch'];} ?>
+        <?php if(isset($errors['nomatch'])){echo $errors['nomatch'];}elseif(isset($errors['mincharacterspw'])){echo $errors['mincharacterspw'];} ?>
         <div style="display:flex;justify-content: flex-end;-webkit-align-items: center;align-items: center;">
             <?php
             if (isset ($errors)) {
