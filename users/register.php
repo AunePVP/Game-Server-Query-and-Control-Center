@@ -60,12 +60,7 @@ if (array_key_exists('register', $_POST)) {
         <div class="input"><label for="password2">Password:</label><input id="password2" class="inputstyle" name="password2" type="password" minlength="8" placeholder="xxxxxxxxxxxx" autocomplete="off"></div>
         <?php if(isset($errors['nomatch'])){echo $errors['nomatch'];}elseif(isset($errors['mincharacterspw'])){echo $errors['mincharacterspw'];} ?>
         <div style="display:flex;justify-content: flex-end;-webkit-align-items: center;align-items: center;">
-            <?php
-            if (isset ($errors)) {
-                foreach ($errors as $error) {
-                    echo $error;
-                }
-            }
+            <?php if (isset ($errors['emptyline'])){echo $errors['emptyline'];}
             ?>
             <input class="button" type="submit" name="register" value="Submit" style="display: <?php echo $displaysubmit?>">
         </div>
