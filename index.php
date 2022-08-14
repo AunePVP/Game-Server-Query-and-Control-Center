@@ -17,6 +17,21 @@ if (!isset($install)) {
     <body onload="callLoadData()">
     <?php
     include('html/nav.php'); ?>
+    <div id="login-popup">
+        <div id="lpopb" onclick="exitpopuplogin()" style="z-index:5"></div>
+        <div class="centerdiv">
+            <div class="padding15">
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" style="margin:0">
+                    <label for="username">Username:</label><input id="username" class="input" name="username" type="text" minlength="4" maxlength="15" placeholder="xxxxx" autocomplete="off" required="required">
+                    <label for="password">Password:</label><input id="password" class="input" name="password" type="password" minlength="8" placeholder="xxxxxxxxxxxx" autocomplete="off" required="required">
+                    <div style="display:flex;justify-content: flex-end;-webkit-align-items: center;align-items: center;">
+                        <?php if (isset($error['specialuser'])){echo $error['specialuser'];}elseif (isset($error['nomatch'])){echo $error['nomatch'];}?>
+                        <input class="button" type="submit" name="login" value="Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <table class="server_list_table">
             <tbody>
@@ -96,6 +111,9 @@ if (!isset($install)) {
                     let modlink = `${serverid[value]}`;
                     LoadData(modlink);
                 }
+            }
+            function exitpopuploginß() {
+                document.getElementById("login-popup").style.display = "none";
             }
         </script>
         <script src="html/reload.js"></script>

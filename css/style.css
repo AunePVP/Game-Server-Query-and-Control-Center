@@ -139,6 +139,30 @@ ul li a {
     color: white;
     font-size: x-large;
 }
+#login-popup {
+    display: none;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    z-index: 6;
+    width: 100%;
+}
+.centerdiv {
+    margin: auto;
+    width: 500px;
+    background-color: #2B2F43;
+    border-radius: 14px;
+    color: white;
+    z-index: 6;
+}
+#lpopb {
+    height: 100vh;
+    width: 100%;
+    z-index: 5;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.63);
+}
 section {
     margin-bottom: var(--server-spacing);
     border-radius: 4px;
