@@ -112,7 +112,7 @@ if (!isset($install)) {
                     LoadData(modlink);
                 }
             }
-            function exitpopuploginß() {
+            function exitpopuplogin() {
                 document.getElementById("login-popup").style.display = "none";
             }
         </script>

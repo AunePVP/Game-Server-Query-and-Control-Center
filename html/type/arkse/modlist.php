@@ -169,4 +169,5 @@ $modlist['ArkModName'][2007447056] = 'Automated Ark Add-on: Power Generation';
 $modlist['ArkModName'][2007441758] = 'Automated Ark Add-on: Kitchen Appliances';
 $modlist['ArkModName'][2007411835] = 'Automated Ark Add-on: Automation';
 $modlist['ArkModName'][2007430597] = 'AA Add-on: Gardening';
-$modlist['ArkModName'][2187784730] = 'Ark Chaos Creator (Twitch Streamer Integration)';
+$modlist['ArkModName'][2187784730] = 'Ark Chaos Creator (Twitch Streamer Integration)';$modlist['ArkModName'][2369305725] = 'UnStacks 1000-80';
+$modlist['ArkModName'][2369305725] = 'UnStacks 1000-80';
