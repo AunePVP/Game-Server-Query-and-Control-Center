@@ -197,6 +197,9 @@ switch ($type) {
         if (empty($title)) {
             $title = $name;
         }
+        if (empty($motd)) {
+            $motd = $title;
+        }
         break;
     case "csgo":
         $playernames = $serverstatus->players;
