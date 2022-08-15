@@ -342,7 +342,9 @@ label {
     font-family: monospace;
     background-color: black;
     overflow: scroll;
-    white-space: pre ; display: block; unicode-bidi: embed;
+    white-space: pre;
+    display: block;
+    unicode-bidi: embed;
     font-size: 11px;
     height: 250px;
     margin: 10px auto;
@@ -741,6 +743,7 @@ summary{
     display: flex;
     font-size: 18px;
     padding: 3px 5px;
+    white-space: pre;
 }
 #zusammenfassung .info .attribute {
     width: 100%;

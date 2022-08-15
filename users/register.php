@@ -49,22 +49,33 @@ if (array_key_exists('register', $_POST)) {
 <meta charset="UTF-8" >
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
     <title><?php echo $title?></title>
 </head>
 <body>
-<div class="center">
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" style="margin:0">
-        <div class="input"><label for="username">Username:</label><input id="username" class="inputstyle" name="username" type="text" minlength="4" maxlength="15" placeholder="xxxxx" autocomplete="off"></div>
-        <?php if(isset($errors['mincharacters'])){echo $errors['mincharacters'];}elseif(isset($errors['specialuser'])){echo $errors['specialuser'];}elseif(isset($errors['userexists'])){echo $errors['userexists'];}?>
-        <div class="input"><label for="password1">Password:</label><input id="password1" class="inputstyle" name="password1" type="password" minlength="8" placeholder="xxxxxxxxxxxx" autocomplete="off"></div>
-        <div class="input"><label for="password2">Password:</label><input id="password2" class="inputstyle" name="password2" type="password" minlength="8" placeholder="xxxxxxxxxxxx" autocomplete="off"></div>
-        <?php if(isset($errors['nomatch'])){echo $errors['nomatch'];}elseif(isset($errors['mincharacterspw'])){echo $errors['mincharacterspw'];} ?>
-        <div style="display:flex;justify-content: flex-end;-webkit-align-items: center;align-items: center;">
-            <?php if (isset ($errors['emptyline'])){echo $errors['emptyline'];}
-            ?>
-            <input class="button" type="submit" name="register" value="Submit" style="display: <?php echo $displaysubmit?>">
+<div id="nav">
+    <ul>
+        <li><a href="../">Gameserver</a></li>
+        <div style="width: 100%;"></div>
+    </ul>
+</div>
+<div class="login-popup">
+    <div class="centerdiv">
+        <div class="padding15">
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" style="margin:0">
+                <label for="username">Username:</label><input id="username" class="input" name="username" type="text" minlength="4" maxlength="15" placeholder="xxxxx" autocomplete="off" required="required">
+                <div class="error"><?php if(isset($errors['mincharacters'])){echo $errors['mincharacters'];}elseif(isset($errors['specialuser'])){echo $errors['specialuser'];}elseif(isset($errors['userexists'])){echo $errors['userexists'];}?></div>
+                <label for="password1">Password:</label><input id="password1" class="input" name="password1" type="password" minlength="8" placeholder="xxxxxxxxxxxx" autocomplete="off" required="required">
+                <label for="password2">Password:</label><input id="password2" class="input" name="password2" type="password" minlength="8" placeholder="xxxxxxxxxxxx" autocomplete="off" required="required">
+                <span class="error"><?php if(isset($errors['nomatch'])){echo $errors['nomatch'];}elseif(isset($errors['mincharacterspw'])){echo $errors['mincharacterspw'];}?></span>
+                <div style="display:flex;justify-content: flex-end;-webkit-align-items: center;align-items: center;">
+                    <span class="error"><?php if (isset ($errors['emptyline'])){echo $errors['emptyline'];} ?></span>
+                    <input class="button" type="submit" name="register" value="Submit" style="display: <?php echo $displaysubmit?>">
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 </body>
 </html>
+
