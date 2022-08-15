@@ -151,6 +151,7 @@ ul li a {
     z-index: 6;
     width: 100%;
     text-align:left;
+    top: 0;
 }
 #login-popup label {
     font-family: Helvetica,sans-serif;
