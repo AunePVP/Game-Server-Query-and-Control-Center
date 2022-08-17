@@ -29,6 +29,8 @@ if (!isset($install)) {
                         session_start();
                         if (!empty($_SESSION['error'])) {
                             $error = $_SESSION['error'];
+                        }
+                        if (isset($_GET['login'])) {
                             echo "<style>#login-popup{display:flex};</style>";
                         }
                         if (isset($error['specialuser'])){echo $error['specialuser'];}elseif (isset($error['nomatch'])){echo $error['nomatch'];}else {echo "<a class='button white-hover' href='users/register.php'>Register</a>";}
