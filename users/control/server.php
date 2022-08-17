@@ -247,7 +247,7 @@ if (array_key_exists('AddServer', $_POST)) {
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
-            $addid = $row['ID'];
+            $addid = $row["ID"];
             $alreadyindb = TRUE;
         }
     } else {
@@ -272,7 +272,11 @@ if (array_key_exists('AddServer', $_POST)) {
                 echo "<script>alert('You alredy have access to this server!');window.location.reload();</script>";
                 exit;
             }
-            $serverjson[] = $addid;
+            if ($serverjson == [0]) {
+                $serverjson = [$addid];
+            } else {
+                $serverjson[] = $addid;
+            }
             $serverjson = json_encode($serverjson);
         }
     }
