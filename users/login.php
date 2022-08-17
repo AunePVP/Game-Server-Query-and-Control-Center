@@ -1,8 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 include_once '../html/config.php';
 $title = "Login";
 session_start();
@@ -25,7 +21,7 @@ if (array_key_exists('login', $_POST)) {
             header('location: ../');
         } else {
             $error['nomatch'] = "Username or password doesn't match.";
-            header('location: ../');
+            header('location: ../?login=true');
         }
     }
     if (isset($error)) {
