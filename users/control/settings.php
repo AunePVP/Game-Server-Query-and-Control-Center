@@ -447,6 +447,7 @@ if (array_key_exists('other', $_POST)) {
                     <div class="detailscontent">
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                             <select required="required" id="style" class="sstyle" name="slctsprite" onchange="selectstyle()">
+                                <option disabled selected <?php if(!isset($sprite)){echo "selected ";}?> style="display:none">select a sprite</option>
                                 <option <?php if($sprite=="adventurer"){echo "selected ";}?>value="adventurer">Adventurer</option>
                                 <option <?php if($sprite=="adventurer-neutral"){echo "selected ";}?>value="adventurer-neutral">Adventurer-Neutral</option>
                                 <option <?php if($sprite=="male" || $sprite=="female"){echo "selected ";}?>value="human">Human</option>
