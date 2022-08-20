@@ -24,7 +24,7 @@ const SQ_ENGINE = SourceQuery::SOURCE;
 session_start();
 if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You have to log in first";
-    header('location: ../login.php');
+    header('location: ../../?login=true');
     exit;
 }
 function convertos($Os)
