@@ -111,5 +111,45 @@ function changetheme(theme) {
     document.getElementById('vorschauparent').style.backgroundColor = servercolor;
     document.getElementById('vorschauparent').style.border = border;
     document.getElementById('themeinput').value = themename;
-
+}
+function newseed() {
+    let seed = document.getElementById("seed").value;
+    seedslice = seed.slice(0, 4);
+    seedchar = seed.slice(-1);
+    seedchar2 = seed.slice(-2);
+    if (!isNaN(seedchar)) {
+        let a = Number(seedchar);
+        let b = 1;
+        let nseedchar = a + b;
+        newseeds = seedslice + nseedchar;
+    } else {
+        newseeds = seedslice + "0";
+    }
+    document.getElementById("seed").value = newseeds;
+    selectstyle();
+}
+function selectstyle() {
+    let type = document.getElementById("style").value;
+    if (type === "adventurer") {
+        sprite = "adventurer";
+    } else if (type === "adventurer-neutral") {
+        sprite = "adventurer-neutral";
+    } else if (type === "human") {
+        document.getElementById("selectsph").style.display = "block";
+        sprite = document.getElementById("selectsph").value;
+    } else if (type === "bottts") {
+        sprite = "bottts";
+    } else if (type === "gridy") {
+        sprite = "gridy";
+    } else if (type === "identicon") {
+        sprite = "identicon";
+    } else if (type === "pixel-art") {
+        sprite = "pixel-art";
+    } else if (type === "pixel-art-neutral") {
+        sprite = "pixel-art-neutral";
+    }
+    if (type !== "human") {document.getElementById("selectsph").style.display = "none";}
+    let seed = document.getElementById("seed").value;
+    let link = "https://avatars.dicebear.com/api/";
+    document.getElementById("ppictureimg").src = link + sprite + "/" + seed + ".svg";
 }

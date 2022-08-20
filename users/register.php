@@ -34,7 +34,7 @@ if (array_key_exists('register', $_POST)) {
         }
         if (!isset($errors)) {
             $password = hash('sha256', $password1);
-            $sql = "INSERT INTO users (username, password, server) VALUES('$username', '$password', '[0]')";
+            $sql = "INSERT INTO users (username, password, server, sprite, seed) VALUES('$username', '$password', '[0]', 'bottts', '$username')";
             mysqli_query($conn, $sql);
             $_SESSION['username'] = $username;
             header('location: ../');

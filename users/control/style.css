@@ -287,6 +287,53 @@ label {
     font-family: Helvetica,sans-serif;
     font-size: 20px;
 }
+#ppicture {
+    width: 77%;
+    border-style: solid;
+    border-radius: 13px 13px 0 0;
+    display: flex;
+    margin: 22px auto 0;
+    padding: 3px 5px;
+}
+#ppicture img {
+    width: 80%;
+    margin: auto;
+    height: 80%;
+    padding-top: 7%;
+    padding-bottom: 7%;
+}
+#customizecontent {
+    width: 77%;
+    margin: auto;
+    border-style: solid;
+    border-radius: 0 0 13px 13px;
+    border-top: none;
+    padding: 3px 5px!important;
+    text-align: center;
+}
+#customizedetails {
+    margin: 0!important;
+    border:none!important;
+}
+#customizesummary {
+    padding: 0!important;
+}
+#seed {
+    display:none;
+}
+.mk6 {
+    display: flex;
+    width: 50%;
+    line-height: 34px;
+}
+.sstyle {
+    border-radius: 4px;
+    width: 100%;
+    margin: 0 0 10px;
+    font-size: 16px;
+    height: 29px;
+    border: none;
+}
 #type {
     border-radius: 4px;
     width: 100%;

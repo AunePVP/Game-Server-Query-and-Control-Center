@@ -4,7 +4,7 @@ require_once $configfile;
 session_start();
 if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You have to log in first";
-    header('location: ../login.php');
+    header('location: ../../?login=true');
     exit;
 }
 $username = $_SESSION['username'];
@@ -36,6 +36,18 @@ if (mysqli_num_rows($result) > 0) {
         $usercount++;
     }
 }
+
+// Update profile picture
+if (array_key_exists('chpp', $_POST)) {
+    $seed = $_POST["seed"];
+    $sprite = $_POST["slctsprite"];
+    if ($sprite == "human") {
+        $sprite = $_POST["selectsph"];
+    }
+    $sql = "UPDATE users SET sprite='$sprite', seed='$seed' WHERE username='$username'";
+    mysqli_query($conn, $sql);
+}
+
 $sql = "SELECT server, sprite, seed FROM users WHERE username='$username'";
 $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
@@ -43,8 +55,11 @@ if (mysqli_num_rows($result) > 0) {
         $serverjson = $row['server'];
         $sprite = $row['sprite'];
         $seed = $row['seed'];
-        echo $serverjson;
     }
+}
+if ($username != "admin") {
+    $serverjson = json_decode($serverjson);
+    $servercount = count($serverjson);
 }
 function test_input($data)
 {
@@ -134,7 +149,7 @@ if (array_key_exists('other', $_POST)) {
     <script>
     </script>
 </head>
-<body onload="startTime()">
+<body onload="<?php if ($username=="admin"){echo"startTime()";}else{echo"selectstyle()";}?>">
 <nav>
     <div id="sidebar">
         <button onclick="window.location.href='server.php';">Overview</button>
@@ -425,7 +440,43 @@ if (array_key_exists('other', $_POST)) {
             </div>
         </div>
         <div id="zusammenfassung">
-            <div id="ppicture"></div>
+            <div id="ppicture"><?php echo "<img id='ppictureimg' src='https://avatars.dicebear.com/api/$sprite/$seed.svg'>"?></div>
+            <div id="customizecontent">
+                <details id="customizedetails">
+                    <summary id="customizesummary">Customize</summary>
+                    <div class="detailscontent">
+                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                            <select required="required" id="style" class="sstyle" name="slctsprite" onchange="selectstyle()">
+                                <option <?php if($sprite=="adventurer"){echo "selected ";}?>value="adventurer">Adventurer</option>
+                                <option <?php if($sprite=="adventurer-neutral"){echo "selected ";}?>value="adventurer-neutral">Adventurer-Neutral</option>
+                                <option <?php if($sprite=="male" || $sprite=="female"){echo "selected ";}?>value="human">Human</option>
+                                <option <?php if($sprite=="bottts"){echo "selected ";}?>value="bottts">Bottts</option>
+                                <option <?php if($sprite=="gridy"){echo "selected ";}?>value="gridy">Gridy</option>
+                                <option <?php if($sprite=="identicon"){echo "selected ";}?>value="identicon">Identicon</option>
+                                <option <?php if($sprite=="pixel-art"){echo "selected ";}?>value="pixel-art">Pixel Art</option>
+                                <option <?php if($sprite=="pixel-art-neutral"){echo "selected ";}?>value="pixel-art-neutral">Pixel Art Neutral</option>
+                            </select>
+                            <select required="required" id="selectsph" class="sstyle" name="selectsph" onchange="selectstyle()" style="display: none">
+                                <option <?php if($sprite=="male"){echo "selected ";}?>value="male">Male</option>
+                                <option <?php if($sprite=="female"){echo "selected ";}?>value="female">Female</option>
+                            </select>
+                            <input type="text" id="seed" name="seed" onkeyup="selectstyle()" value="<?php echo $seed?>">
+
+                            <div style="display:flex">
+                                <div class="mk6" style="justify-content: flex-start;">
+                                    <div id="newseed" onclick="newseed()" style="padding: 0;background-color: rgba(255, 255, 255);border: none; width: 50px;height: 32px;border-radius: 4px;cursor:pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" style="margin-top:2px"><path fill="#000" d="M9 12l-4.463 4.969-4.537-4.969h3c0-4.97 4.03-9 9-9 2.395 0 4.565.942 6.179 2.468l-2.004 2.231c-1.081-1.05-2.553-1.699-4.175-1.699-3.309 0-6 2.691-6 6h3zm10.463-4.969l-4.463 4.969h3c0 3.309-2.691 6-6 6-1.623 0-3.094-.65-4.175-1.699l-2.004 2.231c1.613 1.526 3.784 2.468 6.179 2.468 4.97 0 9-4.03 9-9h3l-4.537-4.969z"/></svg>
+                                    </div>
+                                </div>
+                                <div class="mk6" style="justify-content: flex-end;">
+                                    <input class="addsrv" type="submit" name="chpp" value="Submit">
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </details>
+            </div>
             <div class="info"><div class="attribute">Name</div><div style="word-break: keep-all;"><?php echo $username?></div></div>
             <div class="info"><div class="attribute">Game Server</div><div style="word-break: keep-all;"><?php echo $servercount?></div></div>
             <div class="info"><div class="attribute">Users</div><div style="word-break: keep-all;"><?php echo $usercount?></div></div>
