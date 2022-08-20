@@ -59,7 +59,11 @@ if (mysqli_num_rows($result) > 0) {
 }
 if ($username != "admin") {
     $serverjson = json_decode($serverjson);
-    $servercount = count($serverjson);
+    if ($serverjson[0] == 0) {
+        $servercount = 0;
+    } else {
+        $servercount = count($serverjson);
+    }
 }
 function test_input($data)
 {
@@ -313,130 +317,7 @@ if (array_key_exists('other', $_POST)) {
         <div id="dropdownsettings">
             <h1 id="settingsh1">Settings</h1>
             <div id="dropdownsettingschild">
-                <details id="database">
-                    <summary>Database</summary>
-                    <div class="detailscontent">
-                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                            <div class="flex">
-                                <div class="left">
-                                    <div class="input">
-                                        <label for="input-ip">IP:</label>
-                                        <input id="input-ip" class="input" name="input-ip" type="text" minlength="3" maxlength="40" required="required" placeholder="xxx.xxx.xxx.xx" autocomplete="off" <?php if (isset($DB_SERVER)){echo "value=$DB_SERVER";}?>>
-                                    </div>
-                                    <div class="input">
-                                        <label for="input-dbname">DB Name:</label>
-                                        <input id="input-dbname" class="input" name="input-dbname" type="text" minlength="3" placeholder="xxxxxxx" autocomplete="off" <?php if (isset($DB_NAME)){echo "value=$DB_NAME";}?>>
-                                    </div>
-                                </div>
-                                <div class="right">
-                                    <div class="input">
-                                        <label for="input-username">Username:</label>
-                                        <input id="input-username" class="input" name="input-username" type="text" minlength="2" maxlength="15" placeholder="xxxxx" autocomplete="off" <?php if (isset($DB_USERNAME)){echo "value=$DB_USERNAME";}?>>
-                                    </div>
-                                    <div class="input">
-                                        <label for="input-password">Password:</label>
-                                        <input id="input-password" class="input" name="input-password" type="password" minlength="3" placeholder="xxxxxxxxxxxx" autocomplete="off" <?php if (isset($DB_PASSWORD)){echo "value=$DB_PASSWORD";}?>>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex" style="justify-content: flex-end;margin-right: 3px;line-height: 34px;">
-                                <?php if (isset($sqlvalidatemessage)) {echo $sqlvalidatemessage;}?>
-                                <input class="addsrv" type="submit" name="validate" value="Test Connection" style="display: <?php echo $displaytestconn ?>">
-                                <input class="addsrv" type="submit" name="submit" value="Submit" style="display: <?php echo $displaysubmit ?>">
-                            </div>
-                        </form>
-                    </div>
-                </details>
-                <details id="design">
-                    <summary id="themesummary" onclick="currentTheme()">Design</summary>
-                    <div class="detailscontent">
-                        <div class="flex">
-                            <div class="tabs-left">
-                                <button class="tablinks active" onclick="changetheme('btndark')" id="btndark">Dark</button>
-                                <button class="tablinks" onclick="changetheme('btnlight')" id="btnlight">Light</button>
-                                <button class="tablinks" onclick="changetheme('btnsnight')" id="btnsnight">Summer Night</button>
-                                <button class="tablinks" onclick="changetheme('btnsnightinv')" id="btnsnightinv">Summer Night inv.</button>
-                                <button class="tablinks" onclick="changetheme('btnmidnight')" id="btnmidnight">Midight</button>
-                            </div>
-                            <div class="tab-content">
-                                <div class="tab-pane" id="themevl">
-                                    <div id="vorschauserver">
-                                        <div id="vorschauparent">
-                                            <table id="server_list_table">
-                                                <tbody>
-                                                <tr class="server_onl">
-                                                    <td class="status_cell">
-                                                        <span class="status_icon_onl" style="background-color: #00FF17;"></span>
-                                                    </td>
-                                                    <td title="Iguaserver" class="servername_cell"><div class="servername_nolink">Iguaserver - (v346.16)</div></td>
-                                                    <td class="players_cell"><div class="outer_bar"><div class="inner_bar"><span class="players_numeric">43/70</span></div></div></td>
-                                                    <td class="img-cell"><img src="../../html/img/logo/arkse.webp" width="80px" height="80px" style="float:right;margin-right: 8px;" alt="Ark Game Logo"></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php if (isset($themescript)){echo $themescript;}?>
-                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" style="margin-top: 5px;">
-                            <input type="text" id="themeinput" name="themeinput" style="display: none">
-                            <div style="display: flex;justify-content: flex-end;line-height: 34px;">
-                                <?php
-                                if (isset($notification['theme'])) {echo $notification['theme'];}
-                                ?>
-                                <input class="addsrv" type="submit" name="submittheme" value="Submit">
-                            </div>
-                        </form>
-                    </div>
-                </details>
-                <details id="api">
-                    <summary id="apikeysummary">API Keys</summary>
-                    <?php if (isset($apikeyscript)){echo $apikeyscript;}?>
-                    <div class="detailscontent">
-                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                            <div class="flex">
-                                <div class="left">
-                                    <div class="input">
-                                        <label for="input-ip" style="display: flex">Steam Web API Key<a target="_blank" href="https://docs.iguaserver.de/settings#steam-web-api-key" title="Find out more about the Steam Web API Key" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 2px 0 0 5px;cursor: pointer;"></a></label>
-                                        <input id="input-ip" class="input" name="steam-api" type="text" minlength="32" maxlength="32" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" <?php if (isset($steamwebapi_key)){echo "value=$steamwebapi_key";}?>>
-                                    </div>
-                                </div>
-                                <div class="right">
-                                    <div class="input">
-                                        <label for="input-ip" style="display: flex">RustMaps.com API Key<a target="_blank" href="https://docs.iguaserver.de/settings#rustmaps.com-api-key" title="Find out more about the RustMaps.com API Key" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 2px 0 0 5px;cursor: pointer;"></a></label>
-                                        <input id="input-ip" class="input" name="rustmaps-api" type="text" minlength="25" maxlength="45" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off" <?php if (isset($rustmapsapi_key)){echo "value=$rustmapsapi_key";}?>>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="display:flex; justify-content: flex-end;margin-right: 3px;line-height: 34px;">
-                                <?php if (isset($notification['apikey'])) {echo $notification['apikey'];} ?>
-                                <input class="addsrv" type="submit" name="apikey" value="Submit">
-                            </div>
-                        </form>
-                    </div>
-                </details>
-                <details>
-                    <summary id="othersummary">Other</summary>
-                    <?php if (isset($otherscript)){echo $otherscript;}?>
-                    <div class="detailscontent">
-                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                            <div class="flex">
-                                <label for="selectregistration">Registration:</label>
-                                <select required="required" name="registration" id="selectregistration">
-                                    <option <?php if($register){echo "selected ";}?>value="TRUE">Enable</option>
-                                    <option <?php if(!$register){echo "selected ";}?>value="FALSE">Disable</option>
-                                </select>
-                                <a target="_blank" href="https://docs.iguaserver.de/settings#registration" title="Find out more about the registration." style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 2px 0 0 5px;cursor: pointer;"></a>
-                            </div>
-                            <div class="flex" style="justify-content: flex-end;margin-right: 3px;line-height: 34px;">
-                                <?php if (isset($notification['other'])) {echo $notification['other'];} ?>
-                                <input class="addsrv" type="submit" name="other" value="Submit">
-                            </div>
-                        </form>
-                    </div>
-                </details>
+
             </div>
         </div>
         <div id="zusammenfassung">
