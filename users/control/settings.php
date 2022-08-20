@@ -95,6 +95,7 @@ if (array_key_exists('validate', $_POST)) {
         $displaysubmit = "none";
         $displaytestconn = "block";
     }
+    $dbscript = "<script>$(document).ready( function () {"."$('#dbsummary').click();});</script>";
 }
 // Edit Database Configuration
 if (array_key_exists('submit', $_POST)) {
@@ -108,6 +109,7 @@ if (array_key_exists('submit', $_POST)) {
     $configcontent = preg_replace('/\$DB_PASSWORD = \"(.*?)\";/', '$DB_PASSWORD = "'.$DB_PASSWORD.'";', $configcontent);
     $configcontent = preg_replace('/\$DB_NAME = \"(.*?)\";/', '$DB_NAME = "'.$DB_NAME.'";', $configcontent);
     file_put_contents($configfile, $configcontent);
+    $dbscript = "<script>$(document).ready( function () {"."$('#dbsummary').click();});</script>";
 }
 // Choose a theme
 if (array_key_exists('submittheme', $_POST)) {
@@ -177,7 +179,8 @@ if (array_key_exists('other', $_POST)) {
             <h1 id="settingsh1">Settings</h1>
             <div id="dropdownsettingschild">
                 <details id="database">
-                    <summary>Database</summary>
+                    <summary id="dbsummary">Database</summary>
+                    <?php if (isset($dbscript)){echo $dbscript;}?>
                     <div class="detailscontent">
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                             <div class="flex">
