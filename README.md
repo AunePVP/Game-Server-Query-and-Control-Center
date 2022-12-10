@@ -13,7 +13,6 @@ You can also see the historical player count and the uptime of the server. If th
 | Conan Exiles                     | Valve Protocol |             ❌              |
 | Rust                             | Valve Protocol |             ✅              |
 | PixARK                           | Valve Protocol |             ❌              |
-| Satisfactory                     | Valve Protocol |             ❌              |
 | Grand Theft Auto V - FiveM       |                | ❌ (Next to be implemented) |
 
 If there is a game server not currently supported, please create an Issue and I will add the server as soon as possible.
