@@ -8,6 +8,23 @@ require "functions.php";
 if (!isset($install)) {
     header("Location: html/install.php");
 }
+session_start();
+session_write_close();
+$username = $_SESSION['username'] ?? "public";
+$conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+$sql = "SELECT server, sprite, seed FROM users WHERE username='$username'";
+$result = mysqli_query($conn, $sql);
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $serverjson = $row['server'];
+        $sprite = $row['sprite'];
+        $seed = $row['seed'];
+    }
+}
+if ($username == "admin") {
+    $seed = "d";
+    $sprite = "bottts";
+}
 ?>
     <!doctype html>
     <html lang="<?php
@@ -29,6 +46,8 @@ if (!isset($install)) {
                         session_start();
                         if (!empty($_SESSION['error'])) {
                             $error = $_SESSION['error'];
+                        }
+                        if (isset($_GET['login'])) {
                             echo "<style>#login-popup{display:flex};</style>";
                         }
                         if (isset($error['specialuser'])){echo $error['specialuser'];}elseif (isset($error['nomatch'])){echo $error['nomatch'];}else {echo "<a class='button white-hover' href='users/register.php'>Register</a>";}
@@ -63,14 +82,6 @@ if (!isset($install)) {
             </tbody>
         </table>
         <?php
-        // DB Connection
-        $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-        if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-        if (!isset($username)) {
-            $username = "public";
-        }
         $sql = "SELECT server FROM users WHERE username='$username'";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {

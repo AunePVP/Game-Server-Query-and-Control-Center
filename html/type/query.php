@@ -93,7 +93,7 @@ switch ($type) {
         $clusterid = $serverstatus->rules->ClusterId_s ?? 'Not cluster';
         // Check if server has a password
         $password = $serverstatus->rules->ServerPassword_b ?? '';
-        if ($password == "True") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
+        if ($password == "True" || $password == "true") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
         // Check if battleye is enabled
         $battleye = $serverstatus->rules->SERVERUSESBATTLEYE_b ?? '';
         if ($battleye) {$battleye=$language[$lang][14];}else {$battleye=$language[$lang][15];}
@@ -117,7 +117,7 @@ switch ($type) {
                 $mods[$value] = $modcontent;
             }
         }
-        $officialmaps = array("Aberration", "CrystalIsles", "Gen2", "Gen", "LostIsland", "Ragnarok", "ScorchedEarth", "TheCenter", "TheIsland", "Valguero", "Viking_P", "Valhalla", "TheVolcano");
+        $officialmaps = array("Aberration", "CrystalIsles", "Gen2", "Gen", "LostIsland", "Ragnarok", "ScorchedEarth", "TheCenter", "TheIsland", "Valguero", "Fjordur", "Valhalla", "TheVolcano");
         if (in_array($map, $officialmaps)) {
             $maplink = "html/img/map/$map.webp";
         } else {

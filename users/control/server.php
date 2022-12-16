@@ -24,7 +24,7 @@ const SQ_ENGINE = SourceQuery::SOURCE;
 session_start();
 if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You have to log in first";
-    header('location: ../login.php');
+    header('location: ../../?login=true');
     exit;
 }
 function convertos($Os)
@@ -247,7 +247,7 @@ if (array_key_exists('AddServer', $_POST)) {
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
-            $addid = $row['ID'];
+            $addid = $row["ID"];
             $alreadyindb = TRUE;
         }
     } else {
@@ -272,7 +272,11 @@ if (array_key_exists('AddServer', $_POST)) {
                 echo "<script>alert('You alredy have access to this server!');window.location.reload();</script>";
                 exit;
             }
-            $serverjson[] = $addid;
+            if ($serverjson == [0]) {
+                $serverjson = [$addid];
+            } else {
+                $serverjson[] = $addid;
+            }
             $serverjson = json_encode($serverjson);
         }
     }
@@ -703,6 +707,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                     }
                                 </script>
                                 <div id="dragdropform">
+                                    <?php if($username=="admin"):?>
                                     <div class="ddparent left">
                                         <p>Users</p>
                                         <div id="dragform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
@@ -715,6 +720,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                             ?>
                                         </div>
                                     </div>
+                                    <?php endif;?>
                                     <div class="ddparent right">
                                         <p>Users with permission, to control this server.</p>
                                         <div id="dropform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
@@ -726,11 +732,13 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                         </div>
                                     </div>
                                 </div>
+                                <?php if($username=="admin"):?>
                                 <button id="updatecontrolperm" onclick='getusernames()'>Update</button>
                                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID&page=settings"; ?>" style="display:none">
                                     <input id="responsepermitted" name="responsepermitted">
                                     <button id="updatepermission" type="submit" name="updatepermission"></button>
                                 </form>
+                                <?php endif;?>
                                 <!-- Delete this server-->
                                 <button type='button' id="deletebtn" onclick="confirmdelete()">Delete this server</button>
                             </div>
