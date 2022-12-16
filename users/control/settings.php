@@ -39,7 +39,7 @@ if (mysqli_num_rows($result) > 0) {
 
 // Update profile picture
 if (array_key_exists('chpp', $_POST)) {
-    $seed = $_POST["seed"];
+    $seed = preg_replace('/[^A-Za-z0-9\-]/', '', $_POST["seed"]);
     $sprite = $_POST["slctsprite"];
     if ($sprite == "human") {
         $sprite = $_POST["selectsph"];
