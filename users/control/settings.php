@@ -320,7 +320,22 @@ if (array_key_exists('other', $_POST)) {
         <div id="dropdownsettings">
             <h1 id="settingsh1">Settings</h1>
             <div id="dropdownsettingschild">
-
+                <details id="account">
+                    <summary id="accountsummary">Account</summary>
+                    <?php if (isset($accountscript)){echo $accountscript;}?>
+                    <div class="detailscontent">
+                        <div class="flex">
+                            <div class="tabs-left">
+                                <button class="tablinksacc active" onclick="changetabacc('username')" id="btndark">Username</button>
+                                <button class="tablinksacc" onclick="changetabacc('password')" id="btnlight">Password</button>
+                                <button class="tablinksacc" onclick="changetabacc('delete')" id="btnsnight">Delete account</button>
+                            </div>
+                            <div class="tabacc">1</div>
+                            <div class="tabacc">2</div>
+                            <div class="tabacc">3</div>
+                        </div>
+                    </div>
+                </details>
             </div>
         </div>
         <div id="zusammenfassung">

@@ -112,6 +112,25 @@ function changetheme(theme) {
     document.getElementById('vorschauparent').style.border = border;
     document.getElementById('themeinput').value = themename;
 }
+function changetabacc(value) {
+    document.querySelectorAll('.tabacc').forEach(function(el) {
+        el.style.display = 'none';
+    });
+    tablinksacc = document.getElementsByClassName("tablinksacc");
+    for (i = 0; i < tablinksacc.length; i++) {
+        tablinksacc[i].className = tablinksacc[i].className.replace(" active", "");
+    }
+    if (value === "username"){
+        document.getElementsByClassName('tabacc')[0].style.display = "block";
+        document.getElementsByClassName('tablinksacc')[0].classList.add("active");
+    } else if (value === "password") {
+        document.getElementsByClassName('tabacc')[1].style.display = "block";
+        document.getElementsByClassName('tablinksacc')[1].classList.add("active");
+    } else if (value === "delete") {
+        document.getElementsByClassName('tabacc')[2].style.display = "block";
+        document.getElementsByClassName('tablinksacc')[2].classList.add("active");
+    }
+}
 function newseed() {
     let seed = document.getElementById("seed").value;
     seedslice = seed.slice(0, 4);
