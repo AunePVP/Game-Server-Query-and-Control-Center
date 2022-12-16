@@ -117,7 +117,7 @@ switch ($type) {
                 $mods[$value] = $modcontent;
             }
         }
-        $officialmaps = array("Aberration", "CrystalIsles", "Gen2", "Gen", "LostIsland", "Ragnarok", "ScorchedEarth", "TheCenter", "TheIsland", "Valguero", "Viking_P", "Valhalla", "TheVolcano");
+        $officialmaps = array("Aberration", "CrystalIsles", "Gen2", "Gen", "LostIsland", "Ragnarok", "ScorchedEarth", "TheCenter", "TheIsland", "Valguero", "Fjordur", "Valhalla", "TheVolcano");
         if (in_array($map, $officialmaps)) {
             $maplink = "html/img/map/$map.webp";
         } else {
