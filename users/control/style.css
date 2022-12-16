@@ -533,6 +533,7 @@ summary{
 }
 #dragdropform {
     display: flex;
+    padding-bottom: 5px;
 }
 #dragdropform .ddparent {
     width: 50%;

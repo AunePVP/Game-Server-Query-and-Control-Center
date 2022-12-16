@@ -707,6 +707,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                     }
                                 </script>
                                 <div id="dragdropform">
+                                    <?php if($username=="admin"):?>
                                     <div class="ddparent left">
                                         <p>Users</p>
                                         <div id="dragform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
@@ -719,6 +720,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                             ?>
                                         </div>
                                     </div>
+                                    <?php endif;?>
                                     <div class="ddparent right">
                                         <p>Users with permission, to control this server.</p>
                                         <div id="dropform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
@@ -730,11 +732,13 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                         </div>
                                     </div>
                                 </div>
+                                <?php if($username=="admin"):?>
                                 <button id="updatecontrolperm" onclick='getusernames()'>Update</button>
                                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID&page=settings"; ?>" style="display:none">
                                     <input id="responsepermitted" name="responsepermitted">
                                     <button id="updatepermission" type="submit" name="updatepermission"></button>
                                 </form>
+                                <?php endif;?>
                                 <!-- Delete this server-->
                                 <button type='button' id="deletebtn" onclick="confirmdelete()">Delete this server</button>
                             </div>
