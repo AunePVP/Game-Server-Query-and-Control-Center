@@ -155,7 +155,7 @@ if (array_key_exists('other', $_POST)) {
     <script>
     </script>
 </head>
-<body onload="<?php if ($username=="admin"){echo"startTime()";}else{echo"selectstyle()";}?>">
+<body onload="<?php if ($username=="admin"){echo"startTime();";}else{echo"selectstyle();";}?>changetabacc('username')">
 <nav>
     <div id="sidebar">
         <button onclick="window.location.href='server.php';">Overview</button>
@@ -330,9 +330,9 @@ if (array_key_exists('other', $_POST)) {
                                 <button class="tablinksacc" onclick="changetabacc('password')" id="btnlight">Password</button>
                                 <button class="tablinksacc" onclick="changetabacc('delete')" id="btnsnight">Delete account</button>
                             </div>
-                            <div class="tabacc">1</div>
-                            <div class="tabacc">2</div>
-                            <div class="tabacc">3</div>
+                            <div class="tabacc">Coming Soon!</div>
+                            <div class="tabacc">Coming Soon!</div>
+                            <div class="tabacc">Coming Soon!</div>
                         </div>
                     </div>
                 </details>
