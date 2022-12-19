@@ -50,7 +50,7 @@ if ($type == "arkse") {
         ?>
     </div>
     <!-- DETAILS -->
-    <div class="II <?php if($type=="csgo"){echo'csgo';}elseif($type=="minecraft"&&$qport == 0) {echo "flex";}?>">
+    <div class="II <?php if($type=="csgo"){echo'csgo';}elseif($type=="minecraft") {echo "flex";}?>">
         <?php
         if ($type == "arkse") {
             echo "<div class='flex'><span style='font-weight: 500;'>System:</span><div class='system'></div><br></div>";

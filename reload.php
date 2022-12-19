@@ -91,13 +91,13 @@ switch ($type) {
         break;
     case "minecraft":
         $response['raw']['MOTD'] = $motd;
-        $response['raw']['Players'] = $playerlist;
+        $response['raw']['Players'] = $playerlist ?? 0;
         break;
 }
 switch ($type) {
     case "arkse":
         include ('html/type/arkse/modlist.php');
-        $response['raw']['Players'] = $playerlist;
+        $response['raw']['Players'] = $playerlist ?? 0;
         $response['raw']['InGameDay'] = $ingameday;
         $response['raw']['ClusterID'] = $clusterid;
         $response['raw']['Battleye'] = $battleye;
@@ -112,6 +112,7 @@ switch ($type) {
                 if (!empty($convertedmod)) {
                     $response['raw']['Mods'][$count]['ModName'] = $convertedmod;
                 } else {
+                    $response['inmodlist'] = "not in list";
                     // If mod is not in modlist, get the mod from the steamcommunity website and store the mod in the modlist file
                     $convertedmod = substr(get_title("https://steamcommunity.com/sharedfiles/filedetails/?id=$mod"), 16);
                     $response['raw']['Mods'][$count]['ModName'] = $convertedmod;
@@ -125,7 +126,7 @@ switch ($type) {
         $response['raw']['MapLink'] = $maplink;
         break;
     case "csgo":
-        $response['raw']['Players'] = $playerlist;
+        $response['raw']['Players'] = $playerlist ?? 0;
         $response['raw']['MapLink'] = $maplink;
         if (isset($serverstatus->rules)) {
             $response['raw']['HasRules'] = 1;
@@ -133,7 +134,7 @@ switch ($type) {
         }
         break;
     case "vrising":
-        $response['raw']['Players'] = $playerlist;
+        $response['raw']['Players'] = $playerlist ?? 0;
         $response['raw']['Description'] = $description;
         $response['raw']['Bloodbound'] = $bloodbound;
         $response['raw']['CastleHeartDamageMode'] = $bloodbound;
@@ -150,7 +151,7 @@ switch ($type) {
         } else {
             $maplink = "html/img/map/rustgenerate.webp";
         }
-        $response['raw']['Players'] = $playerlist;
+        $response['raw']['Players'] = $playerlist ?? 0;
         $response['raw']['Seed'] = $seed;
         $response['raw']['WorldSize'] = $worldsize;
         $response['raw']['RustUptime'] = $rustuptime;
