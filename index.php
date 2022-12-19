@@ -118,7 +118,7 @@ if ($username == "admin") {
         }
         ?>
         <p class="countdown"><?php echo $language[$lang][13]?> <span id="countdown"></span>s.</p>
-        <div><button class="countdownbtn" type="button" onclick="callLoadData()">Refresh Servers</button></div>
+        <div style="padding-bottom: 15px;"><button class="countdownbtn" type="button" onclick="callLoadData()">Refresh Servers</button></div>
         <script>
             function callLoadData() {
                 if (typeof downloadTimer !== 'undefined') {
