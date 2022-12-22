@@ -96,7 +96,7 @@ switch ($type) {
 }
 switch ($type) {
     case "arkse":
-        include ('html/type/arkse/modlist.php');
+        require ('html/type/arkse/modlist.php');
         $response['raw']['Players'] = $playerlist ?? 0;
         $response['raw']['InGameDay'] = $ingameday;
         $response['raw']['ClusterID'] = $clusterid;
