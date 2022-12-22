@@ -10,7 +10,6 @@ if ($qport == 0) {
         $queryresult = $Query->Query();
         $queryresult = json_encode($queryresult);
     } catch (MinecraftPingException $e) {
-        echo $e->getMessage();
     } finally {
         if ($Query) {
             $Query->Close();
