@@ -51,7 +51,7 @@ switch ($type) {
         $connectlink = "steam://connect/$ip:$gport";
         // Get the map.
         $map = $serverstatus->info->Map ?? '';
-        // If the server is offline, the variable will be empty. That' how I check if the server is online.
+        // If the server is offline, the variable will be empty. That's how I check if the server is online.
         $status = $serverstatus->info->Protocol ?? false;
         if (!empty($status)) {
             $status = 1;
