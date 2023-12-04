@@ -339,7 +339,7 @@ if (array_key_exists('other', $_POST)) {
             </div>
         </div>
         <div id="zusammenfassung">
-            <div id="ppicture"><?php echo "<img id='ppictureimg' src='https://avatars.dicebear.com/api/$sprite/$seed.svg'>"?></div>
+            <div id="ppicture"><?php echo "<img id='ppictureimg' src='https://api.dicebear.com/7.x/$sprite/svg?seed=$seed'>"?></div>
             <div id="customizecontent">
                 <details id="customizedetails">
                     <summary id="customizesummary">Customize</summary>
@@ -349,9 +349,10 @@ if (array_key_exists('other', $_POST)) {
                                 <option disabled selected <?php if(!isset($sprite)){echo "selected ";}?> style="display:none">select a sprite</option>
                                 <option <?php if($sprite=="adventurer"){echo "selected ";}?>value="adventurer">Adventurer</option>
                                 <option <?php if($sprite=="adventurer-neutral"){echo "selected ";}?>value="adventurer-neutral">Adventurer-Neutral</option>
-                                <option <?php if($sprite=="male" || $sprite=="female"){echo "selected ";}?>value="human">Human</option>
+                                <option <?php if($sprite=="notionists"){echo "selected ";}?>value="notionists">Notonionist</option>
+                                <option <?php if($sprite=="avataaars"){echo "selected ";}?>value="avataaars">Human</option>
                                 <option <?php if($sprite=="bottts"){echo "selected ";}?>value="bottts">Bottts</option>
-                                <option <?php if($sprite=="gridy"){echo "selected ";}?>value="gridy">Gridy</option>
+                                <option <?php if($sprite=="croodles"){echo "selected ";}?>value="croodles">Croodles</option>
                                 <option <?php if($sprite=="identicon"){echo "selected ";}?>value="identicon">Identicon</option>
                                 <option <?php if($sprite=="pixel-art"){echo "selected ";}?>value="pixel-art">Pixel Art</option>
                                 <option <?php if($sprite=="pixel-art-neutral"){echo "selected ";}?>value="pixel-art-neutral">Pixel Art Neutral</option>

@@ -156,13 +156,14 @@ function selectstyle() {
         sprite = "adventurer";
     } else if (type === "adventurer-neutral") {
         sprite = "adventurer-neutral";
+    } else if (type === "notionists") {
+        sprite = "notionists";
     } else if (type === "human") {
-        document.getElementById("selectsph").style.display = "block";
-        sprite = document.getElementById("selectsph").value;
+        sprite = "avataaars";
     } else if (type === "bottts") {
         sprite = "bottts";
-    } else if (type === "gridy") {
-        sprite = "gridy";
+    } else if (type === "croodles") {
+        sprite = "croodles";
     } else if (type === "identicon") {
         sprite = "identicon";
     } else if (type === "pixel-art") {
@@ -172,6 +173,6 @@ function selectstyle() {
     }
     if (type !== "human") {document.getElementById("selectsph").style.display = "none";}
     let seed = document.getElementById("seed").value;
-    let link = "https://avatars.dicebear.com/api/";
-    document.getElementById("ppictureimg").src = link + sprite + "/" + seed + ".svg";
+    let link = "https://api.dicebear.com/7.x/";
+    document.getElementById("ppictureimg").src = link + sprite + "/svg?seed=" + seed;
 }
