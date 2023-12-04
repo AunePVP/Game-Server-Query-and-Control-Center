@@ -109,9 +109,13 @@ function LoadData(id) {
                         tbody.innerHTML += rulename+rulevalue;
                     }
                 }
-            }  else if (type === "valheim") {
+            } else if (type === "valheim") {
                 serverid.getElementsByClassName("maxplayers")[0].innerHTML = "&nbsp;"+data.MaxPlayers;
                 serverid.getElementsByClassName("queryport")[0].innerHTML = "&nbsp;"+data.QueryPort;
+
+            } else if (type === "dayz") {
+                serverid.getElementsByClassName("map")[0].src = data.raw.MapLink;
+                serverid.getElementsByClassName("tags")[0].innerHTML = data.raw.Tags;
 
             }
 
@@ -127,7 +131,7 @@ function LoadData(id) {
                 }
             }
             // Display System, Password, Map
-            if (type === "arkse" || type === "rust" || type === "vrising" || type === "csgo" || type === "valheim") {
+            if (type === "arkse" || type === "rust" || type === "vrising" || type === "csgo" || type === "valheim" || type === "dayz") {
                 serverid.getElementsByClassName("system")[0].innerHTML = "&nbsp;"+data.raw.OS;
                 if (type !== "valheim") {serverid.getElementsByClassName("password")[0].innerHTML = "&nbsp;"+data.raw.Password;}
                 serverid.getElementsByClassName("mapname")[0].innerHTML = "&nbsp;"+data.raw.Map;

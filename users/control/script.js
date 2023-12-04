@@ -23,6 +23,9 @@ function selecttype() {
     } else if (type === "rust") {
         text = "If you don't want to use rcon, use 0 as rcon port.";
         document.getElementById("input-qport").required = true;
+    } else if (type === "dayz") {
+        text = "If you don't want to use rcon, use 0 as rcon port.";
+        document.getElementById("input-qport").required = true;
     }
     document.getElementById("notes").innerHTML = text;
 }

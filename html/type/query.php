@@ -30,6 +30,7 @@ switch ($type) {
     case "protocol-valve":
     case "rust":
     case "arkse":
+    case "dayz":
         // Get the operating system and convert it to full name
         if (function_exists("convertos")) {
             $Os = $serverstatus->info->Os ?? '';
@@ -266,6 +267,20 @@ switch ($type) {
         $GameTags = $serverstatus->info->GameTags;
         $GameTags =  str_replace(",", ", ", $GameTags);
         $maplink = "html/img/map/$map.webp";
+        break;
+    case "dayz":
+        // Check if server has a password
+        $password = $serverstatus->rules->ServerPassword_b ?? '';
+        if ($password == "True" || $password == "true") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
+        // Get the game tags
+        $GameTags = $serverstatus->info->GameTags;
+        $GameTags =  preg_replace("/,/", ", ", $GameTags);
+        $officialmaps = array("chernarusplus", "chernarus");
+        if (in_array($map, $officialmaps)) {
+            $maplink = "html/img/map/chernarusplus.webp";
+        } else {
+            $maplink = "html/img/map/modmap.webp";
+        }
         break;
     case "rust":
         $playernames = $serverstatus->players;

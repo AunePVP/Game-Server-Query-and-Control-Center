@@ -47,6 +47,10 @@ if ($type == "arkse") {
             echo '<div class="flex"><span style="font-weight: 500;">Map:</span><div class="mapname"></div></div>';
             echo '<div class="flex"><span style="font-weight: 500;">Uptime:</span><div class="rustuptime"></div></div>';
         }
+        elseif ($type == "dayz") {
+            echo '<img class="map">';
+            echo '<div class="flex" style="max-width: 234px;"><span style="font-weight: 500;">Map:</span><div class="mapname"></div></div>';
+        }
         ?>
     </div>
     <!-- DETAILS -->
@@ -95,10 +99,17 @@ if ($type == "arkse") {
             echo "<div style='max-height:166px;overflow-y:scroll;'><div style='max-width:300px'><span style='font-weight: 500;'>Tags:</span><div class='tags'></div></div>";
             echo "<span style='font-weight: 500;'>Description:</span><div class='description'></div><br>";
             echo "</div>";
+        } elseif ($type == "dayz") {
+            echo "<div class='flex'><span style='font-weight: 500;'>System:</span><div class='system'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>".$language[$lang][12].":</span><div class='password'></div><br></div>";
+            echo "<div class='flex'><span style='font-weight: 500;'>Version:</span><div class='sversion'></div><br></div>";
+            echo "<div style='max-height:166px;overflow-y:scroll;'><div style='max-width:300px'><span style='font-weight: 500;'>Tags:</span><div class='tags'></div></div>";
+            echo "</div>";
+
         }
         ?>
     </div>
-    <div class="movediv<?php if ($type == "csgo" && isset($csgorules)){echo " csmovedivhide";} elseif ($type == "minecraft"){echo " mcmovedivhide";} elseif ($type == "valheim"){echo " valheim";}?>"></div>
+    <div class="movediv<?php if ($type == "csgo" && isset($csgorules)){echo " csmovedivhide";} elseif ($type == "minecraft"){echo " mcmovedivhide";} elseif ($type == "valheim"){echo " valheim";}elseif ($type == "dayz"){echo " dayz";}?>"></div>
     <!-- DIV III (Not used yet) -->
     <div class="III"></div>
     <div class="IV" style="display:<?php echo $display['IV']?>">

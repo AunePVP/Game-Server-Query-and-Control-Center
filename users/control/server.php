@@ -198,6 +198,7 @@ if (array_key_exists('AddServer', $_POST)) {
         case "vrising":
         case "protocol-valve":
         case "rust":
+        case "dayz":
         case "arkse":
             $Query = new SourceQuery();
             try {
@@ -507,6 +508,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                             case "protocol-valve":
                             case "arkse":
                             case "vrising":
+                            case "dayz":
                             case "rust":
                                 include '../../query/sourcequery.php';
                                 break;
@@ -667,6 +669,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                     case "vrising":
                                     case "protocol-valve":
                                     case "rust":
+                                    case "dayz":
                                     case "arkse":
                                         echo '<span style="font-weight: 500;">System:</span>'.$Os.'<br>';
                                         break;
@@ -767,10 +770,12 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                     <option disabled selected value style="display:none">select a game</option>
                                     <option value="arkse">ARK Survival Evolved</option>
                                     <option value="csgo">Counter-Strike: Global Offensive</option>
+                                    <option value="dayz">DayZ</option>
                                     <option value="minecraft">Minecraft</option>
+                                    <option value="rust">Rust</option>
                                     <option value="valheim">Valheim</option>
                                     <option value="vrising">Vrising</option>
-                                    <option value="rust">Rust</option>
+
                                 </select>
                             </label>
                             <div class="input">

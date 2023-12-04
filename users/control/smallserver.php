@@ -44,6 +44,7 @@ if (mysqli_num_rows($result) > 0) {
             case "valheim":
             case "protocol-valve":
             case "arkse":
+            case "dayz":
             case "vrising":
             case "rust":
                 include '../../query/sourcequery.php';

@@ -54,6 +54,7 @@ switch ($type) {
     case "protocol-valve":
     case "arkse":
     case "vrising":
+    case "dayz":
     case "rust":
         include 'query/sourcequery.php';
         break;
@@ -84,6 +85,7 @@ switch ($type) {
     case "arkse":
     case "vrising":
     case "rust":
+    case "dayz":
         //if ($password == "true") {$password = "True";} elseif ($password == "false") {$password = "False";}
         $response['raw']['OS'] = $Os;
         $response['raw']['Password'] = $password;
@@ -139,6 +141,10 @@ switch ($type) {
         $response['raw']['Bloodbound'] = $bloodbound;
         $response['raw']['CastleHeartDamageMode'] = $bloodbound;
         $response['raw']['InGameDay'] = $ingameday;
+        $response['raw']['Tags'] = $GameTags;
+        $response['raw']['MapLink'] = $maplink;
+        break;
+    case "dayz":
         $response['raw']['Tags'] = $GameTags;
         $response['raw']['MapLink'] = $maplink;
         break;

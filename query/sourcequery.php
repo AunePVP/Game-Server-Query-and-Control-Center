@@ -12,7 +12,10 @@ try
             $queryresult["players"] = $Query->GetPlayers();
             $queryresult["rules"] = $Query->GetRules();
             break;
-            // Why do I isolate csfo from the other servers? Because CSGO doesn't always respond to a A2S_RULES query.
+        case "dayz":
+            $queryresult["players"] = $Query->GetPlayers();
+
+            break;
         case "csgo":
             $lastplayerline = json_decode(tailCustom("query/cron/$ServerID.json", 1));
             // I check with the cronjob if the server accepts A2S_Rules Requests.
