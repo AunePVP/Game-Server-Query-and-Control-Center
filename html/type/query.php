@@ -1,330 +1,162 @@
 <?php
+/*
+ * Turn the raw query result ($serverstatus) into display variables.
+ * Expects: $type, $ip, $gport, $qport, $name, $serverstatus, $language, $lang.
+ * This file is included once per server (also inside loops), so every
+ * variable it sets is reset first.
+ */
 use AunePVP\jsonconversion;
 use Spirit55555\Minecraft\MinecraftColors;
-if (isset($controlpanel)) {
-    $controlpanellink = "../../";
-} else {
-    $controlpanellink = "";
-}
+
+unset($title, $motd, $Os, $version, $map, $mapname, $maplink, $connectlink, $password, $playerlist,
+    $ingameday, $clusterid, $battleye, $pvp, $hasmods, $mods, $csgorule, $description, $bloodbound,
+    $castleheartdamagemode, $GameTags, $seed, $worldsize, $rustuptime, $rustwebsite, $rustfps, $rustdesc);
+$yes = $language[$lang][14];
+$no = $language[$lang][15];
+$info = $serverstatus->info ?? null;
+$rules = $serverstatus->rules ?? null;
+
 //#// GLOBAL //#//
 // Get the game logo
 $img = "html/img/logo/$type.webp";
-// Get last players for banner
-$lastplayerlines = tailCustom($controlpanellink."query/cron/$ServerID.json", 7);
-$playerlineexit = array();
-$count = 0;
-$uptime = 0;
-foreach(preg_split("/((\r?\n)|(\r\n?))/", (string)$lastplayerlines) as $playerline){
-    $playerlinedecode = json_decode($playerline);
-    $lastplayers[$count] = (int)($playerlinedecode->players ?? 0);
-    $count = $count + 1;
-    $uptime = $playerlinedecode->uptime ?? $uptime;
+$countplayers = 0;
+$maxplayers = 0;
+$status = 0;
+if (is_source_type($type)) {
+    // Get the operating system and convert it to full name
+    $Os = convertos($info->Os ?? '');
+    $countplayers = $info->Players ?? 0;
+    $maxplayers = $info->MaxPlayers ?? 0;
+    $version = $info->Version ?? '';
+    // If the server is offline, it won't respond. Therefore, in this case, we use the cached title from the database
+    $title = ($info->HostName ?? '') ?: $name;
+    $connectlink = "steam://connect/$ip:$gport";
+    $map = $info->Map ?? '';
+    // If the server is offline, the protocol is empty. That's how I check if the server is online.
+    $status = empty($info->Protocol) ? 0 : 1;
+    // Password: A2S_INFO reports it for every Source game, some games also set a rule
+    $password = (gsq_truthy($info->Password ?? false) || gsq_truthy($rules->ServerPassword_b ?? false)) ? $yes : $no;
+    $playerlist = source_playerlist($serverstatus->players ?? []);
 }
-$uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
-
-// Switch to find out game type
-unset($title);
-switch ($type) {
-    case "csgo":
-    case "valheim":
-    case "vrising":
-    case "protocol-valve":
-    case "rust":
-    case "arkse":
-    case "dayz":
-        // Get the operating system and convert it to full name
-        if (function_exists("convertos")) {
-            $Os = $serverstatus->info->Os ?? '';
-            $Os = convertos($Os);
-        }
-        // Get Players. Note Ark will use another method to get the players
-        $countplayers = $serverstatus->info->Players ?? '0';
-        // Get Maxplayers
-        $maxplayers = $serverstatus->info->MaxPlayers ?? '0';
-        // Get server version
-        $version = $serverstatus->info->Version ?? '';
-        // Get the server name
-        $title = $serverstatus->info->HostName ?? '';
-        // If the server is offline, it won't respond. Therefore, in this case, we must use the cached title from the database
-        if (empty($title)) {
-            $title = $name;
-        }
-        // Create the connect link
-        $connectlink = "steam://connect/$ip:$gport";
-        // Get the map.
-        $map = $serverstatus->info->Map ?? '';
-        // If the server is offline, the variable will be empty. That's how I check if the server is online.
-        $status = $serverstatus->info->Protocol ?? false;
-        if (!empty($status)) {
-            $status = 1;
-        } else {
-            $status = 0;
-        }
-        break;
-}
-
-
 
 //#// GAME SPECIFIC //#//
-
 switch ($type) {
     case "arkse":
-        // Get the real player number
-        $countplayers = 0;
-        if (isset($serverstatus->players)) {
-            foreach ($serverstatus->players as $player) {
-                if(!strlen($player->Name))
-                    continue;
-                $countplayers = $countplayers + 1;
-            }
-        }
-        $playernames = $serverstatus->players ?? [];
-        $count = 0;
-        foreach ($playernames as $player) {
-            if(!strlen($player->Name))
-                continue;
-            $playerlist[$count]['Name'] = $player->Name;
-            $rawtime = $player->Time;
-            $playerlist[$count]['Time'] = sprintf('%02dh:%02dm:%02ds', ($rawtime/ 3600),($rawtime/ 60 % 60), $rawtime% 60);
-            $count++;
-        }
-        $count = 0;
-        // Get the current game-day
-        $ingameday = $serverstatus->rules->DayTime_s ?? '';
-        // Get the cluster id
-        $clusterid = $serverstatus->rules->ClusterId_s ?? 'Not cluster';
-        // Check if server has a password
-        $password = $serverstatus->rules->ServerPassword_b ?? '';
-        if ($password == "True" || $password == "true") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
-        // Check if battleye is enabled
-        $battleye = $serverstatus->rules->SERVERUSESBATTLEYE_b ?? '';
-        if ($battleye) {$battleye=$language[$lang][14];}else {$battleye=$language[$lang][15];}
-        // Check if pve is enabled
-        $pve = $serverstatus->rules->SESSIONISPVE_i ?? '';
-        if($pve){$pvp=$language[$lang][15];}else{$pvp=$language[$lang][14];}
-        // CHeck if server has mods
-        $hasmods = $serverstatus->rules->HASACTIVEMODS_i ?? '';
+        // ARK reports wrong player numbers in A2S_INFO, so count the named players
+        $countplayers = count($playerlist);
+        $ingameday = $rules->DayTime_s ?? '';
+        $clusterid = $rules->ClusterId_s ?? 'Not cluster';
+        $battleye = gsq_truthy($rules->SERVERUSESBATTLEYE_b ?? false) ? $yes : $no;
+        $pvp = gsq_truthy($rules->SESSIONISPVE_i ?? false) ? $no : $yes;
         // If the server has mods get the mod id's and store them in an array
+        $hasmods = $rules->HASACTIVEMODS_i ?? '';
+        $mods = [];
         if ($hasmods) {
-            $keys = (array) $serverstatus->rules;
-            $matched = preg_grep('/MOD\d+_s/', array_keys($keys));
-            foreach ($matched as $modkey) {
-                $modcontent = $serverstatus->rules->{$modkey};
-                if (!isset($value)) {
-                    $value = 0;
-                } else {
-                    $value = $value + 1;
-                }
-                $modcontent = strstr($modcontent, ':', true);
-                $mods[$value] = $modcontent;
+            foreach (preg_grep('/MOD\d+_s/', array_keys((array)$rules)) as $modkey) {
+                $mods[] = strstr($rules->{$modkey}, ':', true);
             }
         }
         $officialmaps = array("Aberration", "CrystalIsles", "Gen2", "Gen", "LostIsland", "Ragnarok", "ScorchedEarth", "TheCenter", "TheIsland", "Valguero", "Fjordur", "Valhalla", "TheVolcano");
-        if (in_array($map, $officialmaps)) {
-            $maplink = "html/img/map/$map.webp";
-        } else {
-            $maplink = "html/img/map/modmap.webp";
-        }
+        $maplink = in_array($map, $officialmaps, true) ? "html/img/map/$map.webp" : "html/img/map/modmap.webp";
         break;
     case "minecraft":
-        // Create connect link
         $connectlink = $ip . ":" . $gport;
-        // Check which protocol has been used
+        $img = "https://api.mcsrvstat.us/icon/" . rawurlencode($ip);
         if ($qport == 0) {
-            // Get players
-            $countplayers = $serverstatus->players->online ?? '0';
-            // Get Max Players
-            $maxplayers = $serverstatus->players->max ?? '0';
-            // Get the game logo
-            $img = "https://api.mcsrvstat.us/icon/".$ip;
-            // Get the server version
+            // Server list ping
+            $countplayers = $serverstatus->players->online ?? 0;
+            $maxplayers = $serverstatus->players->max ?? 0;
             $version = $serverstatus->version->name ?? '0';
-            // If the server is offline, the variable will be empty. That' how I check if the server is online.
-            $status = $serverstatus->players->max ?? false;
-            if (!empty($status)) {
-                $status = 1;
-            } else {
-                $status = 0;
-            }
+            $status = empty($serverstatus->players->max) ? 0 : 1;
             # Get MOTD / Server Name
-            if (is_string($serverstatus->description)) {
-                $title = html_entity_decode(MinecraftColors::clean($serverstatus->description), ENT_QUOTES, 'UTF-8');
-                $motd = MinecraftColors::convertToHTML($serverstatus->description);
-            } elseif (is_array($serverstatus->description->extra ?? false)) {
-                foreach ($serverstatus->description->extra as $extra) {
-                    $title = $title ?? '';
+            $descriptionraw = $serverstatus->description ?? '';
+            if (is_string($descriptionraw)) {
+                $title = html_entity_decode(MinecraftColors::clean($descriptionraw), ENT_QUOTES, 'UTF-8');
+                $motd = MinecraftColors::convertToHTML($descriptionraw);
+            } elseif (is_array($descriptionraw->extra ?? false)) {
+                $title = '';
+                $motd = '';
+                foreach ($descriptionraw->extra as $extra) {
                     $title .= $extra->text ?? '';
-                    $color = $extra->color;
-                    $motd = $motd ?? '';
-                    $motd .= (new jsonconversion)->convertcolor($color);
-                    $motd .= $extra->text;
+                    $motd .= (new jsonconversion)->convertcolor($extra->color ?? '');
+                    $motd .= $extra->text ?? '';
                 }
                 $motd = MinecraftColors::convertToHTML($motd);
-            } elseif (isset($serverstatus->description->text)) {
-                $title = $serverstatus->description->text;
-                $motd = "<span style='color: #FFFFFF'>".htmlspecialchars((string)$title, ENT_QUOTES, 'UTF-8')."</span>";
+            } elseif (isset($descriptionraw->text)) {
+                $title = $descriptionraw->text;
+                $motd = "<span style='color: #FFFFFF'>" . h($title) . "</span>";
             }
         } else {
-            # Get MOTD / Server Name
-            $titleraw = $serverstatus->info->HostName ?? '';
-            $titlestr = (str_replace("?", "&", $titleraw));
+            // Query protocol
+            $titlestr = str_replace("?", "&", $info->HostName ?? '');
             $title = html_entity_decode(MinecraftColors::clean($titlestr), ENT_QUOTES, 'UTF-8');
             $motd = MinecraftColors::convertToHTML($titlestr);
-            // Get server Version
-            $version = $serverstatus->info->Version ?? '0';
-            $countplayers = $serverstatus->info->Players ?? '0';
-            $maxplayers = $serverstatus->info->MaxPlayers ?? '0';
-
-            $img = "https://api.mcsrvstat.us/icon/" . $ip;
-            // If the server is offline, the variable will be empty. That' how I check if the server is online.
-            $status = $serverstatus->info->MaxPlayers ?? false;
-            if (!empty($status)) {
-                $status = 1;
-            } else {
-                $status = 0;
-            }
-            // Get List of Players
-            $count = 0;
-            if (function_exists("minecraftcache")) {
-                if (!empty($serverstatus->players)) {
-                    foreach ($serverstatus->players as $player) {
-                        $playerlist[$count]['Name'] = $player;
-                        $playerlist[$count]['Skin'] = "https://crafatar.com/avatars/". minecraftcache($player);
-                        $count++;
-                    }
+            $version = $info->Version ?? '0';
+            $countplayers = $info->Players ?? 0;
+            $maxplayers = $info->MaxPlayers ?? 0;
+            $status = empty($info->MaxPlayers) ? 0 : 1;
+            // Get list of players (the UUID cache only exists on the public page)
+            $playerlist = [];
+            if (function_exists("minecraftcache") && !empty($serverstatus->players)) {
+                foreach ($serverstatus->players as $player) {
+                    $playerlist[] = ['Name' => $player, 'Skin' => "https://crafatar.com/avatars/" . minecraftcache($player)];
                 }
             }
         }
-        // Check if title was set if not use cached title from db
+        // If the server is offline, use the cached title from the database
         if (empty($title)) {
             $title = $name;
         }
         if (empty($motd)) {
-            $motd = htmlspecialchars((string)$title, ENT_QUOTES, 'UTF-8');
+            $motd = h($title);
         }
         break;
     case "csgo":
-        $playernames = $serverstatus->players ?? [];
-        $count = 0;
-        foreach ($playernames as $player) {
-            if(!strlen($player->Name))
-                continue;
-            $playerlist[$count]['Name'] = $player->Name;
-            $rawtime = $player->Time;
-            $playerlist[$count]['Time'] = sprintf('%02dh:%02dm:%02ds', ($rawtime/ 3600),($rawtime/ 60 % 60), $rawtime% 60);
-            $count++;
-        }
-        $count = 0;
-        $password = $serverstatus->rules->ServerPassword_b ?? '';
-        if (empty($password)) {$password=$language[$lang][14];}else{$password=$language[$lang][15];}
-        if (isset($serverstatus->rules)) {
+        if ($rules) {
+            $csgorule = [];
             $count = 0;
-            foreach ($serverstatus->rules as $rulename => $rule) {
+            foreach ($rules as $rulename => $rule) {
                 $count++;
-                $rulename = ucwords(str_replace("_"," ", $rulename));
-                $csgorule[$count][1] = $rulename;
-                $csgorule[$count][2] = $rule;
-                if (empty($csgorule[$count][2])) {$csgorule[$count][2] = "0";}
+                $csgorule[$count][1] = ucwords(str_replace("_", " ", $rulename));
+                $csgorule[$count][2] = empty($rule) ? "0" : $rule;
             }
         }
         $officialmaps = array("ar_baggage", "ar_dizzy", "ar_lunacy", "ar_monastery", "ar_shoots", "cs_agency", "cs_assault", "cs_climb", "cs_italy", "cs_militia", "cs_office", "de_ancient", "de_bank", "de_cache", "de_canals", "de_cbble", "de_crete", "de_dust2", "de_hive", "de_inferno", "de_iris", "de_lake", "de_mirage", "de_nuke", "de_overpass", "de_safehouse", "de_shortdust", "de_shortnuke", "de_stmarc", "de_sugarcane", "de_train", "de_vertigo", "dz_blacksite", "dz_ember", "dz_sirocco", "dz_vineyard", "ze_Bathroom_v2_5");
-        if (in_array($map, $officialmaps)) {
+        if (in_array($map, $officialmaps, true)) {
             $maplink = "html/img/map/$map.webp";
             $mapname = convertcsgomapname($map) ?? $map;
         } else {
-            $substr = substr($map, 0, 3);
-            if (preg_match('/[a-zA-Z]{2}\_{1}/m', $substr)) {
-                $map = substr($map, 3);
-            }
-            $mapname = ucwords(str_replace("_"," ", $map));
+            $shortmap = preg_match('/^[a-zA-Z]{2}_/', $map) ? substr($map, 3) : $map;
+            $mapname = ucwords(str_replace("_", " ", $shortmap));
             $maplink = "html/img/map/csgo_modmap.webp";
         }
         break;
     case "vrising":
-        $playernames = $serverstatus->players ?? [];
-        $count = 0;
-        foreach ($playernames as $player) {
-            if(!strlen($player->Name))
-                continue;
-            $playerlist[$count]['Name'] = $player->Name;
-            $rawtime = $player->Time;
-            $playerlist[$count]['Time'] = sprintf('%02dh:%02dm:%02ds', ($rawtime/ 3600),($rawtime/ 60 % 60), $rawtime% 60);
-            $count++;
-        }
-        $count = 0;
-        // Check if server has a password
-        $password = $serverstatus->info->Password ?? '';
-        if ($password == "True") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
-        // Get the server description
-        $description = $serverstatus->rules->desc0 ?? '';
-        // Check if bloodhound is on or off and set the matching value (On|Off)
-        $bloodbound = $serverstatus->rules->{'blood-bound-enabled'} ?? false;
-        if ($bloodbound == "True") {$bloodbound = $language[$lang][14];} else {$bloodbound = $language[$lang][15];}
-        // Check if Catle heart damage is enabled
-        $castleheartdamagemode = $serverstatus->rules->{'castle-heart-damage-mode'} ?? '';
-        // Get the ingame day
-        $ingameday = $serverstatus->rules->{'days-running'} ?? '';
-        // Get the game tags
-        $GameTags = $serverstatus->info->GameTags ?? '';
-        $GameTags =  str_replace(",", ", ", $GameTags);
-        $maplink = "html/img/map/$map.webp";
+        $description = $rules->desc0 ?? '';
+        $bloodbound = gsq_truthy($rules->{'blood-bound-enabled'} ?? false) ? $yes : $no;
+        $castleheartdamagemode = $rules->{'castle-heart-damage-mode'} ?? '';
+        $ingameday = $rules->{'days-running'} ?? '';
+        $GameTags = str_replace(",", ", ", $info->GameTags ?? '');
+        $maplink = "html/img/map/" . rawurlencode($map) . ".webp";
         break;
     case "dayz":
-        // Check if server has a password
-        $password = $serverstatus->rules->ServerPassword_b ?? '';
-        if ($password == "True" || $password == "true") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
-        // Get the game tags
-        $GameTags = $serverstatus->info->GameTags ?? '';
-        $GameTags =  preg_replace("/,/", ", ", $GameTags);
-        $officialmaps = array("chernarusplus", "chernarus");
-        if (in_array($map, $officialmaps)) {
-            $maplink = "html/img/map/chernarusplus.webp";
-        } else {
-            $maplink = "html/img/map/modmap.webp";
-        }
+        $GameTags = str_replace(",", ", ", $info->GameTags ?? '');
+        $maplink = in_array($map, ["chernarusplus", "chernarus"], true) ? "html/img/map/chernarusplus.webp" : "html/img/map/modmap.webp";
         break;
     case "rust":
-        $playernames = $serverstatus->players ?? [];
-        $count = 0;
-        foreach ($playernames as $player) {
-            if(!strlen($player->Name))
-                continue;
-            $playerlist[$count]['Name'] = $player->Name;
-            $rawtime = $player->Time;
-            $playerlist[$count]['Time'] = sprintf('%02dh:%02dm:%02ds', ($rawtime/ 3600),($rawtime/ 60 % 60), $rawtime% 60);
-            $count++;
+        $seed = $rules->{'world.seed'} ?? '';
+        $worldsize = $rules->{'world.size'} ?? '';
+        $rustuptime = $rules->uptime ?? '';
+        $rustwebsite = $rules->url ?? '';
+        $pvp = (($rules->pve ?? '') == "False") ? $yes : $no;
+        $rustfps = $rules->fps ?? '';
+        // Get the description (split into description_00, description_01, ...)
+        $rustdesc = [];
+        foreach (preg_grep('/description_\d+/', array_keys((array)$rules)) as $descriptionkey) {
+            if (strlen($rules->{$descriptionkey})) {
+                $rustdesc[] = $rules->{$descriptionkey};
+            }
         }
-        $count = 0;
-        // Get the seed and world size
-        $seed = $serverstatus->rules->{'world.seed'} ?? '';
-        $worldsize = $serverstatus->rules->{'world.size'} ?? '';
-        // Check if the server has a password
-        $password = $serverstatus->info->Password ?? '';
-        if ($password == "True") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
-        // Get the uptime of the server
-        $rustuptime = $serverstatus->rules->uptime ?? '';
-        // Get the url of the server
-        $rustwebsite = $serverstatus->rules->url ?? '';
-        // Check if the Rustserver has PVP or PVE enabled
-        if (($serverstatus->rules->pve ?? '') == "False") {
-            $pvp = $language[$lang][14];
-        } else {
-            $pvp = $language[$lang][15];
-        }
-        // Get the fps of the server
-        $rustfps = $serverstatus->rules->fps ?? '';
-        // Get the description and store it in an array
-        $keys = (array) $serverstatus->rules;
-        $matched = preg_grep('/description_\d+/', array_keys($keys));
-        $value = 0;
-        foreach ($matched as $descriptionkey) {
-            if(!strlen($serverstatus->rules->{$descriptionkey}))
-                continue;
-            $value++;
-            $rustdescription = $serverstatus->rules->{$descriptionkey};
-            $rustdesc[$value] = $rustdescription;
-        }
-        // Get the game tags
-        $GameTags = $serverstatus->info->GameTags ?? '';
-        $GameTags =  preg_replace("/,/", ", ", $GameTags);
+        $GameTags = str_replace(",", ", ", $info->GameTags ?? '');
+        break;
 }

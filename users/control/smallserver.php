@@ -14,35 +14,13 @@ if (is_admin($username)) {
 }
 if ($serverrows) {
     foreach ($serverrows as $row) {
-        $queryresult = null;
-        $ServerID = $row["ID"];
+        $ServerID = (int)$row["ID"];
         $ip = $row["IP"];
         $type = $row["type"];
         $qport = $row["QueryPort"];
         $gport = $row["GamePort"];
-        $rport = $row["RconPort"];
         $name = $row["Name"];
-        switch ($type) {
-            case "csgo":
-            case "valheim":
-            case "protocol-valve":
-            case "arkse":
-            case "dayz":
-            case "vrising":
-            case "rust":
-                include '../../query/sourcequery.php';
-                break;
-            case "minecraft":
-                include '../../query/minecraftquery.php';
-                break;
-        }
-        $serverstatus = json_decode($queryresult ?? false);
-        include '../../html/type/query.php';
-        // Correct image link if necessary
-        $imgcheck = $rest = substr($img, 0 ,5);
-        if ($imgcheck == "html/") {
-            $img = "../../$img";
-        }
+        include '../../query/runquery.php';
         // Set color red, if server is offline and green, if server is online.
         if ($status){
             $status = "online";

@@ -11,15 +11,7 @@ use Spirit55555\Minecraft\MinecraftColors;
 chdir(__DIR__);
 require __DIR__ . '/../html/config.php';
 require_once __DIR__ . '/../html/lib.php';
-require __DIR__ . '/../html/type/minecraft/jsonconversion.php';
-require __DIR__ . '/../html/type/minecraft/minecraftcolor.php';
-require __DIR__ . '/SourceQuery/bootstrap.php';
-require __DIR__ . '/minecraft/src/MinecraftPing.php';
-require __DIR__ . '/minecraft/src/MinecraftPingException.php';
-require __DIR__ . '/minecraft/src/MinecraftQuery.php';
-require __DIR__ . '/minecraft/src/MinecraftQueryException.php';
-const SQ_TIMEOUT = 1;
-const SQ_ENGINE = SourceQuery::SOURCE;
+require_once __DIR__ . '/libraries.php';
 const HISTORY_MAX_LINES = 1100;
 // Set timezone and get current time
 date_default_timezone_set('Europe/Berlin');

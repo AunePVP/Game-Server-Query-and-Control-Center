@@ -1,13 +1,7 @@
 <?php
 require_once '../../html/config.php';
 require_once '../../html/lib.php';
-require '../../query/SourceQuery/bootstrap.php';
-require '../../query/minecraft/src/MinecraftPing.php';
-require '../../query/minecraft/src/MinecraftPingException.php';
-require '../../query/minecraft/src/MinecraftQuery.php';
-require '../../query/minecraft/src/MinecraftQueryException.php';
-require '../../html/type/minecraft/jsonconversion.php';
-require '../../html/type/minecraft/minecraftcolor.php';
+require_once '../../query/libraries.php';
 $controlpanel = true;
 date_default_timezone_set('Europe/Berlin');
 $timezone = date_default_timezone_get();
@@ -17,8 +11,6 @@ use xPaw\MinecraftPingException;
 use xPaw\MinecraftQuery;
 use xPaw\MinecraftQueryException;
 use xPaw\SourceQuery\SourceQuery;
-const SQ_TIMEOUT = 1;
-const SQ_ENGINE = SourceQuery::SOURCE;
 gsq_session_start();
 if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You have to log in first";
@@ -158,50 +150,38 @@ if (array_key_exists('AddServer', $_POST)) {
     $addqport = (int)$addqport;
     $addrport = (int)$addrport;
     $noresponse = "ERROR! Server doesn't respond to query. Please try adding the server again.";
-    switch ($addtype) {
-        case "csgo":
-        case "valheim":
-        case "vrising":
-        case "protocol-valve":
-        case "rust":
-        case "dayz":
-        case "arkse":
-            $Query = new SourceQuery();
+    if (is_source_type($addtype)) {
+        $Query = new SourceQuery();
+        try {
+            $Query->Connect($addip, $addqport, SQ_TIMEOUT, SQ_ENGINE);
+            $Query->GetInfo();
+        } catch (Exception $e) {
+            // If error occured, send back to add server
+            addserver_error($noresponse);
+        } finally {
+            $Query->Disconnect();
+        }
+    } elseif ($addtype === "minecraft") {
+        if ($addqport == 0) {
+            // Query protocol is not enabled: use server list ping
+            $Query = null;
             try {
-                $Query->Connect($addip, $addqport, SQ_TIMEOUT, SQ_ENGINE);
-                $queryresult["info"] = $Query->GetInfo();
-            } // If error occured, send back to add server
-            catch (Exception $e) {
+                $Query = new MinecraftPing($addip, $addgport);
+                $Query->Query();
+            } catch (MinecraftPingException $e) {
                 addserver_error($noresponse);
-            } // Disconnect from Server
-            finally {
-                $Query->Disconnect();
+            } finally {
+                $Query?->Close();
             }
-            break;
-        case "minecraft":# Minecraft query
-            if ($addqport == 0) { // If queryprotocol is not an option
-                $Query = null;
-                try {
-                    $Query = new MinecraftPing($addip, $addgport);
-                    $queryresult = $Query->Query();
-                } // If error occured, send back to add server
-                catch (MinecraftPingException $e) {
-                    addserver_error($noresponse);
-                } // Disconnect from Server
-                finally {
-                    $Query?->Close();
-                }
-            } else { // If queryprotocol is an option
-                $Query = new MinecraftQuery();
-                try {
-                    $Query->Connect($addip, $addqport);
-                    $queryresult["info"] = ($Query->GetInfo());
-                } // Check if an error occurred
-                catch (MinecraftQueryException $e) {
-                    addserver_error($noresponse);
-                }
+        } else {
+            $Query = new MinecraftQuery();
+            try {
+                $Query->Connect($addip, $addqport);
+                $Query->GetInfo();
+            } catch (MinecraftQueryException $e) {
+                addserver_error($noresponse);
             }
-            break;
+        }
     }
     // Set Server ID: reuse an existing entry, otherwise take the next free ID
     $existingserver = db_row("SELECT ID FROM serverconfig WHERE IP = ? AND type = ? AND QueryPort = ? AND GamePort = ? AND RconPort = ?", [$addip, $addtype, $addqport, $addgport, $addrport]);
@@ -421,35 +401,14 @@ if (array_key_exists('control', $_POST) && $hascontrolconfig && $allowcontrol) {
                 $serverrows = db_query("SELECT * FROM serverconfig WHERE ID = ?", [$ServerID]);
                 if ($serverrows) {
                     foreach ($serverrows as $row) {
-                        $queryresult = null;
-                        $ServerID = $row["ID"];
+                        $ServerID = (int)$row["ID"];
                         $ip = $row["IP"];
                         $type = $row["type"];
                         $qport = $row["QueryPort"];
                         $gport = $row["GamePort"];
                         $rport = $row["RconPort"];
                         $name = $row["Name"];
-                        switch ($type) {
-                            case "csgo":
-                            case "valheim":
-                            case "protocol-valve":
-                            case "arkse":
-                            case "vrising":
-                            case "dayz":
-                            case "rust":
-                                include '../../query/sourcequery.php';
-                                break;
-                            case "minecraft":
-                                include '../../query/minecraftquery.php';
-                                break;
-                        }
-                        $serverstatus = json_decode($queryresult ?? false);
-                        include '../../html/type/query.php';
-                        // Correct image link if necessary
-                        $imgcheck = $rest = substr($img, 0, 5);
-                        if ($imgcheck == "html/") {
-                            $img = "../../$img";
-                        }
+                        include '../../query/runquery.php';
                     }
                 } else {
                     echo "0 results";
@@ -590,18 +549,8 @@ if (array_key_exists('control', $_POST) && $hascontrolconfig && $allowcontrol) {
                             </table>
                             <div>
                                 <?php
-                                switch ($type) {
-                                    case "csgo":
-                                    case "valheim":
-                                    case "vrising":
-                                    case "protocol-valve":
-                                    case "rust":
-                                    case "dayz":
-                                    case "arkse":
-                                        echo '<span style="font-weight: 500;">System:</span>'.h($Os ?? '').'<br>';
-                                        break;
-                                    case "minecraft":
-                                        break;
+                                if (is_source_type($type)) {
+                                    echo '<span style="font-weight: 500;">System:</span>'.h($Os ?? '').'<br>';
                                 }
                                 // Select users who can control this server
                                 $users = array_column(db_query("SELECT username FROM users"), 'username');

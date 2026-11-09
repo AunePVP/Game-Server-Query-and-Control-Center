@@ -1,25 +1,6 @@
 <?php
-include './html/langconf.php';
-// Set image, convert mods...
-if ($type == "arkse") {
-    $display['IV'] = "block";
-    $modlink = '<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=';
-} elseif ($type == "minecraft") {
-    $display['IV'] = "block";
-} elseif ($type == "csgo") {
-    $display['IV'] = "block";
-} elseif ($type == "valheim") {
-    $display['IV'] = "none";
-} elseif ($type == "vrising") {
-    $maplink = "html/img/map/$map.webp";
-    $display['IV'] = "block";
-}elseif ($type == "rust") {
-    $display['IV'] = "block";
-} elseif ($type == "fivem") {
-    $display['IV'] = "none";
-} else {
-    $display['IV'] = "none";
-}
+// Box IV shows the player list (or Minecraft player heads)
+$display['IV'] = in_array($type, ["arkse", "minecraft", "csgo", "vrising", "rust"], true) ? "block" : "none";
 ?>
 <style>
 </style>
@@ -75,14 +56,11 @@ if ($type == "arkse") {
             echo "<div class='flex'><span style='font-weight: 500;'>System:</span><div class='system'></div><br></div>";
             echo "<div class='flex'><span style='font-weight: 500;'>Version:</span><div class='sversion'></div><br></div>";
             echo "<div class='flex'><span style='font-weight: 500;'>".$language[$lang][12].":</span><div class='password'></div><br></div>";
-            $lastplayerline = json_decode(tailCustom("query/cron/$ServerID.json", 1));
-            $csgorules = $lastplayerline->csgorules ?? "0";
-            if (isset($csgorules)) {
-                echo "<span style='font-weight: 500;'>Server Settings:<br></span>";
-                echo "<div style='height: 100%; width: 100%;'>";
-                echo "<table><thead><tr style='border-bottom: solid;border-width: 2px;'><th>Name</th><th style='text-align: right'>Value</th></tr></thead><tbody>";
-                echo "</tbody></table></div>";
-            }
+            // The rules table is filled by reload.js (only if the server answers A2S_RULES)
+            echo "<span style='font-weight: 500;'>Server Settings:<br></span>";
+            echo "<div style='height: 100%; width: 100%;'>";
+            echo "<table><thead><tr style='border-bottom: solid;border-width: 2px;'><th>Name</th><th style='text-align: right'>Value</th></tr></thead><tbody>";
+            echo "</tbody></table></div>";
         } elseif ($type == "vrising") {
             echo "<div class='flex'><span style='font-weight: 500;'>System:</span><div class='system'></div><br></div>";
             echo "<div class='flex'><span style='font-weight: 500;'>".$language[$lang][12].":</span><div class='password'></div><br></div>";
@@ -109,7 +87,7 @@ if ($type == "arkse") {
         }
         ?>
     </div>
-    <div class="movediv<?php if ($type == "csgo" && isset($csgorules)){echo " csmovedivhide";} elseif ($type == "minecraft"){echo " mcmovedivhide";} elseif ($type == "valheim"){echo " valheim";}elseif ($type == "dayz"){echo " dayz";}?>"></div>
+    <div class="movediv<?php if ($type == "csgo"){echo " csmovedivhide";} elseif ($type == "minecraft"){echo " mcmovedivhide";} elseif ($type == "valheim"){echo " valheim";}elseif ($type == "dayz"){echo " dayz";}?>"></div>
     <!-- DIV III (Not used yet) -->
     <div class="III"></div>
     <div class="IV" style="display:<?php echo $display['IV']?>">
@@ -135,17 +113,9 @@ if ($type == "arkse") {
                 <div class="flex width50">
                     <img src="html/img/uptime.svg" alt="uptime svgv">
                     <?php
-                    $lastplayerlines = tailCustom("query/cron/$ServerID.json", 7);
-                    $playerlineexit = array();
-                    $count = 0;
-                    $lastplayers = array_fill(0, 7, 0);
-                    $uptime = 0;
-                    foreach(preg_split("/((\r?\n)|(\r\n?))/", (string)$lastplayerlines) as $playerline){
-                        $playerlinedecode = json_decode($playerline);
-                        $lastplayers[$count] = (int)($playerlinedecode->players ?? 0);
-                        $count = $count + 1;
-                        $uptime = $playerlinedecode->uptime ?? $uptime;
-                    }
+                    $history = read_history((int)$ServerID);
+                    $lastplayers = $history['players'];
+                    $uptime = $history['uptime'];
                     $uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
                     ?>
                     <p><?php echo $uptimebanner ?></p>

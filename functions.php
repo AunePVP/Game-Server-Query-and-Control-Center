@@ -41,12 +41,3 @@ function get_title($url){
     }
     return '';
 }
-
-function convertcsgomapname($mapname)
-{
-    static $maplist = null;
-    if ($maplist === null) {
-        include __DIR__ . '/html/type/csgo/maplist.php';
-    }
-    return $maplist['CsgoMapName'][$mapname] ?? null;
-}

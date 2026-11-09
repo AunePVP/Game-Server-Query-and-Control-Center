@@ -51,6 +51,74 @@ function convertos($Os)
 }
 
 /* ------------------------------------------------------------------ */
+/* Game servers                                                        */
+/* ------------------------------------------------------------------ */
+
+/** Games that are queried with the Source query protocol (A2S). */
+function is_source_type($type): bool
+{
+    return in_array($type, GSQ_SOURCE_TYPES, true);
+}
+
+/** Interpret the many ways game servers report booleans: true, 1, "1", "true", "True". */
+function gsq_truthy($value): bool
+{
+    if (is_string($value)) {
+        return in_array(strtolower(trim($value)), ['1', 'true', 'yes', 'on'], true);
+    }
+    return (bool)$value;
+}
+
+/** Translate an official CS:GO map file name (de_dust2) into its display name. */
+function convertcsgomapname($mapname)
+{
+    static $maplist = null;
+    if ($maplist === null) {
+        include __DIR__ . '/type/csgo/maplist.php';
+    }
+    return $maplist['CsgoMapName'][$mapname] ?? null;
+}
+
+/** Build the player list (name + formatted play time) from an A2S_PLAYER result. */
+function source_playerlist($players): array
+{
+    $list = [];
+    foreach ($players ?: [] as $player) {
+        $player = (object)$player;
+        if (!strlen((string)($player->Name ?? ''))) {
+            continue;
+        }
+        $rawtime = (int)($player->Time ?? 0);
+        $list[] = [
+            'Name' => $player->Name,
+            'Time' => sprintf('%02dh:%02dm:%02ds', intdiv($rawtime, 3600), intdiv($rawtime, 60) % 60, $rawtime % 60),
+        ];
+    }
+    return $list;
+}
+
+/**
+ * Read the last $lines entries of a server's history file (query/cron/<id>.json).
+ * Returns the player numbers (oldest first, padded with 0) and the latest uptime.
+ */
+function read_history(int $serverId, int $lines = 7): array
+{
+    $players = array_fill(0, $lines, 0);
+    $uptime = 0;
+    $raw = tailCustom(dirname(__DIR__) . "/query/cron/$serverId.json", $lines);
+    $count = 0;
+    foreach (preg_split("/\r\n|\r|\n/", (string)$raw) as $line) {
+        $entry = json_decode($line);
+        if (!$entry || $count >= $lines) {
+            continue;
+        }
+        $players[$count++] = (int)($entry->players ?? 0);
+        $uptime = $entry->uptime ?? $uptime;
+    }
+    return ['players' => $players, 'uptime' => $uptime];
+}
+
+/* ------------------------------------------------------------------ */
 /* Sessions & CSRF                                                     */
 /* ------------------------------------------------------------------ */
 

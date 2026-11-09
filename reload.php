@@ -3,17 +3,8 @@ $Timer = MicroTime(true);
 // Get all files
 require_once 'html/config.php';
 require_once 'functions.php';
-require 'query/SourceQuery/bootstrap.php';
-require 'query/minecraft/src/MinecraftPing.php';
-require 'query/minecraft/src/MinecraftPingException.php';
-require 'query/minecraft/src/MinecraftQuery.php';
-require 'query/minecraft/src/MinecraftQueryException.php';
-require 'html/type/minecraft/jsonconversion.php';
-require 'html/type/minecraft/minecraftcolor.php';
+require_once 'query/libraries.php';
 require 'html/tailcustom.php';
-use xPaw\SourceQuery\SourceQuery;
-const SQ_TIMEOUT = 1;
-const SQ_ENGINE = SourceQuery::SOURCE;
 $ServerID = (int)($_GET['id'] ?? 0);
 // start session
 gsq_session_start();
@@ -35,23 +26,7 @@ $type = $row['type'];
 $qport = $row['QueryPort'];
 $gport = $row['GamePort'];
 $name = $row['Name'];
-$queryresult = null;
-switch ($type) {
-    case "csgo":
-    case "valheim":
-    case "protocol-valve":
-    case "arkse":
-    case "vrising":
-    case "dayz":
-    case "rust":
-        include 'query/sourcequery.php';
-        break;
-    case "minecraft":
-        include 'query/minecraftquery.php';
-        break;
-}
-$serverstatus = json_decode($queryresult ?? 'null');
-include 'html/type/query.php';
+include 'query/runquery.php';
 // Clean up query result.
 $response['Username'] = $username;
 $response['ID'] = $ServerID;
@@ -66,29 +41,18 @@ $response['raw']['Type'] = $type;
 $response['raw']['Logo'] = $img;
 $response['raw']['Version'] = $version;
 $response['raw']['ConnectLink'] = $connectlink;
-switch ($type) {
-    case "csgo":
-    case "valheim":
-    case "protocol-valve":
-    case "arkse":
-    case "vrising":
-    case "rust":
-    case "dayz":
-        //if ($password == "true") {$password = "True";} elseif ($password == "false") {$password = "False";}
-        $response['raw']['OS'] = $Os;
-        $response['raw']['Password'] = $password;
-        $response['raw']['Map'] = $map;
-        break;
-    case "minecraft":
-        $response['raw']['MOTD'] = $motd;
-        $response['raw']['Players'] = $playerlist ?? 0;
-        break;
+$response['raw']['Players'] = $playerlist ?? 0;
+if (is_source_type($type)) {
+    $response['raw']['OS'] = $Os;
+    $response['raw']['Password'] = $password;
+    $response['raw']['Map'] = $mapname ?? $map;
+} elseif ($type === "minecraft") {
+    $response['raw']['MOTD'] = $motd;
 }
 switch ($type) {
     case "arkse":
         $modlistfile = __DIR__ . '/html/type/arkse/modlist.json';
         $modlist = json_cache_read($modlistfile);
-        $response['raw']['Players'] = $playerlist ?? 0;
         $response['raw']['InGameDay'] = $ingameday;
         $response['raw']['ClusterID'] = $clusterid;
         $response['raw']['Battleye'] = $battleye;
@@ -119,7 +83,6 @@ switch ($type) {
         $response['raw']['MapLink'] = $maplink;
         break;
     case "csgo":
-        $response['raw']['Players'] = $playerlist ?? 0;
         $response['raw']['MapLink'] = $maplink;
         if (isset($serverstatus->rules)) {
             $response['raw']['HasRules'] = 1;
@@ -127,7 +90,6 @@ switch ($type) {
         }
         break;
     case "vrising":
-        $response['raw']['Players'] = $playerlist ?? 0;
         $response['raw']['Description'] = $description;
         $response['raw']['Bloodbound'] = $bloodbound;
         $response['raw']['CastleHeartDamageMode'] = $castleheartdamagemode;
@@ -148,7 +110,6 @@ switch ($type) {
         } else {
             $maplink = "html/img/map/rustgenerate.webp";
         }
-        $response['raw']['Players'] = $playerlist ?? 0;
         $response['raw']['Seed'] = $seed;
         $response['raw']['WorldSize'] = $worldsize;
         $response['raw']['RustUptime'] = $rustuptime;
