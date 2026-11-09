@@ -1,27 +1,27 @@
 <?php
 require_once 'html/config.php';
-if (file_exists("query/cron/cache/minecraft.php")) {
-    include 'query/cron/cache/minecraft.php';
-}
 require "html/tailcustom.php";
 require "functions.php";
 if (!isset($install)) {
-    header("Location: html/install.php");
+    redirect("html/install.php");
 }
-session_start();
+gsq_session_start();
+$username = current_user();
+// Read (and clear) login errors and create the CSRF token before the session is closed
+$error = $_SESSION['error'] ?? [];
+unset($_SESSION['error']);
+$csrf = csrf_field();
 session_write_close();
-$username = $_SESSION['username'] ?? "public";
-$conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-$sql = "SELECT server, sprite, seed FROM users WHERE username='$username'";
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $serverjson = $row['server'];
-        $sprite = $row['sprite'];
-        $seed = $row['seed'];
-    }
+$sprite = 'bottts';
+$seed = $username;
+$serverjson = [];
+$row = db_row("SELECT server, sprite, seed FROM users WHERE username = ?", [$username]);
+if ($row) {
+    $serverjson = json_decode($row['server'], true) ?: [];
+    $sprite = $row['sprite'] ?? $sprite;
+    $seed = $row['seed'] ?? $seed;
 }
-if ($username == "admin") {
+if (is_admin($username)) {
     $seed = "d";
     $sprite = "bottts";
 }
@@ -39,19 +39,21 @@ if ($username == "admin") {
         <div class="centerdiv">
             <div class="padding15">
                 <form method="post" action="users/login.php" style="margin:0">
+                    <?php echo $csrf ?>
                     <label for="username">Username:</label><input id="username" class="input" name="username" type="text" minlength="4" maxlength="15" placeholder="xxxxx" autocomplete="off" required="required">
                     <label for="password">Password:</label><input id="password" class="input" name="password" type="password" minlength="8" placeholder="xxxxxxxxxxxx" autocomplete="off" required="required">
                     <div style="display:flex;justify-content: flex-end;-webkit-align-items: center;align-items: center;">
                         <?php
-                        session_start();
-                        if (!empty($_SESSION['error'])) {
-                            $error = $_SESSION['error'];
-                        }
                         if (isset($_GET['login'])) {
                             echo "<style>#login-popup{display:flex};</style>";
                         }
-                        if (isset($error['specialuser'])){echo $error['specialuser'];}elseif (isset($error['nomatch'])){echo $error['nomatch'];}else {echo "<a class='button white-hover' href='users/register.php'>Register</a>";}
-                        unset($_SESSION['error']);
+                        if (isset($error['specialuser'])) {
+                            echo h($error['specialuser']);
+                        } elseif (isset($error['nomatch'])) {
+                            echo h($error['nomatch']);
+                        } elseif (!empty($register)) {
+                            echo "<a class='button white-hover' href='users/register.php'>Register</a>";
+                        }
                         ?>
                         <input class="button" type="submit" name="login" value="Submit">
                     </div>
@@ -82,36 +84,26 @@ if ($username == "admin") {
             </tbody>
         </table>
         <?php
-        $sql = "SELECT server FROM users WHERE username='$username'";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                $serverjson = json_decode($row["server"]);
-            }
-        } else {
+        $serverids = array_values(array_filter(array_map('intval', $serverjson)));
+        $sidscript = [];
+        $typearr = [];
+        if (!$row) {
             echo "Query failed! Talk to your server administrator.";
         }
-        $idimp = implode(',', $serverjson);
-        // Get server information from database
-        $sql = "SELECT ID, type FROM serverconfig WHERE ID IN ({$idimp})";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_assoc($result)) {
-                $ID = $row['ID'];
-                $typearr[$ID] = $row['type'];
-
+        if ($serverids) {
+            // Get server information from database
+            $placeholders = implode(',', array_fill(0, count($serverids), '?'));
+            foreach (db_query("SELECT ID, type FROM serverconfig WHERE ID IN ($placeholders)", $serverids) as $srv) {
+                $typearr[(int)$srv['ID']] = $srv['type'];
             }
         }
-        if (isset($serverjson)) {
-            foreach ($serverjson as $ServerID) {
-                if (!$ServerID) {
-                    continue;
-                }
-                $type = $typearr[$ServerID];
-                $sidscript[] = $ServerID;
-                require 'server.php';
+        foreach ($serverids as $ServerID) {
+            if (!isset($typearr[$ServerID])) {
+                continue;
             }
-            $conn->close();
+            $type = $typearr[$ServerID];
+            $sidscript[] = $ServerID;
+            require 'server.php';
         }
         if ($username == "public") {
             echo "<div class='white-inftext'>" . $language[$lang][9] . "</div>";
@@ -125,7 +117,7 @@ if ($username == "admin") {
                     clearInterval(downloadTimer);
                 }
                 countdown(30);
-                let serverid = JSON.parse('<?php echo json_encode($sidscript);?>');
+                let serverid = <?php echo json_encode($sidscript);?>;
                 for (const value in serverid) {
                     let modlink = `${serverid[value]}`;
                     LoadData(modlink);

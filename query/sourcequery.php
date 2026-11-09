@@ -17,7 +17,7 @@ try
 
             break;
         case "csgo":
-            $lastplayerline = json_decode(tailCustom("query/cron/$ServerID.json", 1));
+            $lastplayerline = json_decode((string)tailCustom(__DIR__ . "/cron/$ServerID.json", 1));
             // I check with the cronjob if the server accepts A2S_Rules Requests.
             $csgorules = $lastplayerline->csgorules ?? "0";
             $queryresult["players"] = $Query->GetPlayers();

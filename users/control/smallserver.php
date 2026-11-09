@@ -1,37 +1,20 @@
 <?php
-/*<!-- _------------_Database Connection_------------_ -->*/
-$conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-/*<!-- _------------_Set SQL Command_------------_ -->*/
-if ($username == "admin") {
+/*<!-- _------------_Get the servers of this account_------------_ -->*/
+if (is_admin($username)) {
     // If user is admin, get all servers
-    $sql = "SELECT * FROM serverconfig";
+    $serverrows = db_query("SELECT * FROM serverconfig");
 } else {
-    // If user is not admin, get the premitted servers and set the sql command
-    $sql = "SELECT server FROM users WHERE username='$username'";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $serverjson = json_decode($row["server"]);
-            foreach ($serverjson as $ServerID) {
-                if (isset($serverids)) {
-                    $serverids .= ", ";
-                    $serverids .= $ServerID;
-                }
-                else $serverids = $ServerID;
-            }
-        }
-    } else {
-        echo "Query failed! Talk to your server administrator.";
+    // If user is not admin, get only the permitted servers
+    $serverids = user_server_ids($username);
+    $serverrows = [];
+    if ($serverids) {
+        $placeholders = implode(',', array_fill(0, count($serverids), '?'));
+        $serverrows = db_query("SELECT * FROM serverconfig WHERE ID IN ($placeholders)", $serverids);
     }
-    $sql = "SELECT * FROM serverconfig WHERE ID IN ($serverids)";
 }
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        unset($queryresult);
+if ($serverrows) {
+    foreach ($serverrows as $row) {
+        $queryresult = null;
         $ServerID = $row["ID"];
         $ip = $row["IP"];
         $type = $row["type"];
@@ -65,8 +48,7 @@ if (mysqli_num_rows($result) > 0) {
             $status = "online";
         } else {
             $status = "offline";}
-        echo "<div class='serversnippet flex' ".'onclick="'."location.href='server.php?id=$ServerID';".'"'."><div class='status $status'></div><div class='content'><div class='name'>$title</div><div class='logo flex'><img src='$img' width='85px' height='85px'></div><div class='player'>$countplayers/$maxplayers</div></div></div>";
+        echo "<div class='serversnippet flex' ".'onclick="'."location.href='server.php?id=".(int)$ServerID."';".'"'."><div class='status $status'></div><div class='content'><div class='name'>".h($title)."</div><div class='logo flex'><img src='".h($img)."' width='85px' height='85px'></div><div class='player'>".h($countplayers)."/".h($maxplayers)."</div></div></div>";
     }
 }
-mysqli_close($conn);
 ?>

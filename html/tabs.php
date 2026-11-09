@@ -138,12 +138,13 @@ if ($type == "arkse") {
                     $lastplayerlines = tailCustom("query/cron/$ServerID.json", 7);
                     $playerlineexit = array();
                     $count = 0;
-                    unset($lastplayers);
-                    foreach(preg_split("/((\r?\n)|(\r\n?))/", $lastplayerlines) as $playerline){
+                    $lastplayers = array_fill(0, 7, 0);
+                    $uptime = 0;
+                    foreach(preg_split("/((\r?\n)|(\r\n?))/", (string)$lastplayerlines) as $playerline){
                         $playerlinedecode = json_decode($playerline);
-                        $lastplayers[$count] = $playerlinedecode->players;
+                        $lastplayers[$count] = (int)($playerlinedecode->players ?? 0);
                         $count = $count + 1;
-                        $uptime = $playerlinedecode->uptime;
+                        $uptime = $playerlinedecode->uptime ?? $uptime;
                     }
                     $uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
                     ?>
@@ -158,7 +159,7 @@ if ($type == "arkse") {
             <div class="canvasparent">
                 <canvas id="Chart<?php echo $ServerID ?>" class="vchart" width="190" height="120"></canvas>
             </div>
-            <script>Chart.defaults.color = 'white';let xLabels<?php echo $ServerID ?> = ['60','50','40','30','20','10','now'];let xValues<?php echo $ServerID ?> = <?php echo "[$lastplayers[0], $lastplayers[1], $lastplayers[2], $lastplayers[3], $lastplayers[4], $lastplayers[5], $lastplayers[6]];"; ?>new Chart("Chart<?php echo $ServerID ?>", {type: "line", data: {labels: xLabels<?php echo $ServerID ?>, datasets: [{label: "Players", data: xValues<?php echo $ServerID ?>, backgroundColor: "white", borderColor: "red", color: "white", borderWidth: 2, pointBorderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.4, pointBorderColor: "white",}]}, options: {scales: {x: {grid: {display:false}, ticks: {display: true}}, y: {<?php if ($lastplayers[0] < 200) {echo "beginAtZero: true, ";}?>grid:{display:true, color: 'rgb(70,70,70)',},}}, responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false,}}}});</script>
+            <script>Chart.defaults.color = 'white';let xLabels<?php echo $ServerID ?> = ['60','50','40','30','20','10','now'];let xValues<?php echo $ServerID ?> = <?php echo json_encode(array_slice(array_values($lastplayers), 0, 7)) . ";"; ?>new Chart("Chart<?php echo $ServerID ?>", {type: "line", data: {labels: xLabels<?php echo $ServerID ?>, datasets: [{label: "Players", data: xValues<?php echo $ServerID ?>, backgroundColor: "white", borderColor: "red", color: "white", borderWidth: 2, pointBorderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.4, pointBorderColor: "white",}]}, options: {scales: {x: {grid: {display:false}, ticks: {display: true}}, y: {<?php if ($lastplayers[0] < 200) {echo "beginAtZero: true, ";}?>grid:{display:true, color: 'rgb(70,70,70)',},}}, responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false,}}}});</script>
         </div>
     </div>
 </div>

@@ -1,84 +1,104 @@
 <?php
-$configfile = 'config.php';
-require_once $configfile;
-if (isset($install) && !$install) {
-    header("Location: ../");
+require_once __DIR__ . '/lib.php';
+if (is_file(GSQ_CONFIG_FILE)) {
+    require_once GSQ_CONFIG_FILE;
 }
-function test_input($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
-$displaysubmit = "none";
-// Get post and check if connection to mysql db is successful
-if (array_key_exists('validate', $_POST)) {
-    $DB_SERVERI = test_input($_POST["input-ip"]);
-    $DB_USERNAMEI = test_input($_POST["input-username"]);
-    $DB_PASSWORDI = test_input($_POST["input-password"]);
-    $DB_NAMEI = test_input($_POST["input-dbname"]);
-    $DB_SERVER = $DB_SERVERI;
-    $DB_USERNAME = $DB_USERNAMEI;
-    $DB_PASSWORD = $DB_PASSWORDI;
-    $DB_NAME = $DB_NAMEI;
-    $sqlvalidatemessage = "Connection successful!";
-    $displaysubmit = "block";
+gsq_session_start();
+
+/*
+ * Installation steps:
+ *  1. "db"    – config.php has not been written by the installer yet ($install is not set)
+ *  2. "admin" – the database is configured, but no admin user exists yet
+ *  done       – both steps are finished: the installer is locked
+ */
+$step = isset($install) ? 'admin' : 'db';
+if ($step === 'admin') {
     try {
-        $conn = mysqli_connect($DB_SERVERI, $DB_USERNAMEI, $DB_PASSWORDI, $DB_NAMEI);
-        mysqli_close($conn);
-    } catch(mysqli_sql_exception $e) {
-        $sqlvalidatemessage = "Connection failed!";
-        $displaysubmit = "none";
+        $adminExists = (bool)db_row("SELECT id FROM users WHERE username = ?", [GSQ_ADMIN_USER]);
+    } catch (mysqli_sql_exception $e) {
+        http_response_code(500);
+        exit('Database error. Please check html/config.php.');
+    }
+    if ($adminExists) {
+        redirect('../');
     }
 }
-// Write the data into the config file and create the server table
-if (array_key_exists('submit', $_POST)) {
-    $DB_SERVERI = test_input($_POST["input-ip"]);
-    $DB_USERNAMEI = test_input($_POST["input-username"]);
-    $DB_PASSWORDI = test_input($_POST["input-password"]);
-    $DB_NAMEI = test_input($_POST["input-dbname"]);
-    $DB_SERVER = $DB_SERVERI;
-    $DB_USERNAME = $DB_USERNAMEI;
-    $DB_PASSWORD = $DB_PASSWORDI;
-    $DB_NAME = $DB_NAMEI;
-    // Create table
-    $conn = mysqli_connect($DB_SERVERI, $DB_USERNAMEI, $DB_PASSWORDI, $DB_NAMEI);
-    $sql = "CREATE TABLE `serverconfig` (
-    `ID` int NOT NULL,
-    `IP` varchar(60) NOT NULL,
-    `type` text NOT NULL,
-    `QueryPort` int NOT NULL,
-    `GamePort` int NOT NULL,
-    `RconPort` int NOT NULL,
-    `Name` text NOT NULL,
-    `controlserver` JSON NOT NULL
-    )";
-    if (!mysqli_query($conn, $sql)) {
-        echo "Error creating table: " . mysqli_error($conn);
+csrf_verify();
+
+$displaysubmit = "none";
+if ($step === 'db') {
+    if (array_key_exists('validate', $_POST) || array_key_exists('submit', $_POST)) {
+        $DB_SERVER = test_input($_POST["input-ip"] ?? '');
+        $DB_USERNAME = test_input($_POST["input-username"] ?? '');
+        $DB_PASSWORD = (string)($_POST["input-password"] ?? '');
+        $DB_NAME = test_input($_POST["input-dbname"] ?? '');
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        try {
+            $conn = new mysqli($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+            $sqlvalidatemessage = "Connection successful!";
+            $displaysubmit = "block";
+        } catch (mysqli_sql_exception $e) {
+            $conn = null;
+            $sqlvalidatemessage = "Connection failed!";
+        }
+        // Write the data into the config file and create the tables
+        if ($conn && array_key_exists('submit', $_POST)) {
+            $conn->query("CREATE TABLE IF NOT EXISTS `serverconfig` (
+            `ID` int NOT NULL,
+            `IP` varchar(60) NOT NULL,
+            `type` text NOT NULL,
+            `QueryPort` int NOT NULL,
+            `GamePort` int NOT NULL,
+            `RconPort` int NOT NULL,
+            `Name` text NOT NULL,
+            `controlserver` JSON NOT NULL
+            )");
+            $conn->query("CREATE TABLE IF NOT EXISTS `users` (
+            `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `username` varchar(100) NOT NULL UNIQUE,
+            `password` varchar(100) NOT NULL,
+            `server` JSON NOT NULL,
+            `sprite` varchar(25) NOT NULL,
+            `seed` varchar(100) NOT NULL
+            )");
+            $conn->close();
+            if (!write_config([
+                'install' => 0,
+                'DB_SERVER' => $DB_SERVER,
+                'DB_USERNAME' => $DB_USERNAME,
+                'DB_PASSWORD' => $DB_PASSWORD,
+                'DB_NAME' => $DB_NAME,
+                'register' => true,
+            ])) {
+                exit("Unable to write html/config.php!");
+            }
+            $step = 'admin';
+        } elseif ($conn) {
+            $conn->close();
+        }
     }
-    mysqli_close($conn);
-    // Write data into config file
-    $myfile = fopen($configfile, "w") or die("Unable to open file!");
-    $write = "<?php" . "\n" .
-        'include ("langconf.php");' . "\n" .
-        '$install = 0;' . "\n" .
-        '$steamwebapi_key = "";' . "\n" .
-        '$rustmapsapi_key = "";' . "\n" .
-        '$DB_SERVER = "' . $DB_SERVERI . '";' . "\n" .
-        '$DB_USERNAME = "' . $DB_USERNAMEI . '";' . "\n" .
-        '$DB_PASSWORD = "' . $DB_PASSWORDI . '";' . "\n" .
-        '$DB_NAME = "' . $DB_NAMEI . '";' . "\n" .
-        '$css_template = "summer-night";' . "\n" .
-        '$steamapi = "https://api.steampowered.com/";' . "\n" .
-        '$register = TRUE;' . "\n" .
-        "?>";
-    fwrite($myfile, $write);
-    fclose($myfile);
-    $register = TRUE;
-
 }
-
+$errors = array();
+$created = false;
+if ($step === 'admin' && isset($_POST['reg_user'])) {
+    // The admin user name is fixed. Never trust the (read-only) form field.
+    $password_1 = (string)($_POST['password_1'] ?? '');
+    $password_2 = (string)($_POST['password_2'] ?? '');
+    if (strlen($password_1) < 8) {
+        $errors[] = "Please use at least 8 characters for the password";
+    }
+    if ($password_1 !== $password_2) {
+        $errors[] = "The two passwords do not match";
+    }
+    if (count($errors) == 0) {
+        ensure_schema();
+        db_query("INSERT INTO users (username, password, server, sprite, seed) VALUES (?, ?, '[0]', 'bottts', ?)", [GSQ_ADMIN_USER, gsq_password_hash($password_1), GSQ_ADMIN_USER]);
+        session_regenerate_id(true);
+        $_SESSION['username'] = GSQ_ADMIN_USER;
+        unset($_SESSION['csrf_token']);
+        $created = true;
+    }
+}
 ?>
 <style>
     .adddbdiv {
@@ -129,83 +149,46 @@ if (array_key_exists('submit', $_POST)) {
         cursor: pointer;
         margin-left: 5px;
     }
-    }
 </style>
 <div class="adddbdiv">
     <div class="padding25">
-        <?php if (!isset($register)):?>
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" style="margin:0">
+        <?php if ($step === 'db'):?>
+        <form method="post" action="<?php echo h($_SERVER["PHP_SELF"]);?>" style="margin:0">
+            <?php echo csrf_field() ?>
             <p class="cAx">Database</p>
-            <div class="input"><label for="input-ip">IP:</label><input id="input-ip" class="inputstyle" name="input-ip" type="text" minlength="3" maxlength="40" required="required" placeholder="xxx.xxx.xxx.xx" autocomplete="off" <?php if (isset($DB_SERVER)){echo "value=$DB_SERVER";}?>></div>
-            <div class="input"><label for="input-username">Username:</label><input id="input-username" class="inputstyle" name="input-username" type="text" minlength="2" maxlength="15" placeholder="xxxxx" autocomplete="off" <?php if (isset($DB_USERNAME)){echo "value=$DB_USERNAME";}?>></div>
-            <div class="input"><label for="input-password">Password:</label><input id="input-password" class="inputstyle" name="input-password" type="password" minlength="3" placeholder="xxxxxxxxxxxx" autocomplete="off" <?php if (isset($DB_PASSWORD)){echo "value=$DB_PASSWORD";}?>></div>
-            <div class="input"><label for="input-dbname">DB Name:</label><input id="input-dbname" class="inputstyle" name="input-dbname" type="text" minlength="3" placeholder="xxxxxxx" autocomplete="off" <?php if (isset($DB_NAME)){echo "value=$DB_NAME";}?>></div>
-            <div style="display:flex;justify-content: flex-end;-webkit-align-items: center;align-items: center;;">
-                <?php if (isset($sqlvalidatemessage)) {echo $sqlvalidatemessage;}?>
+            <div class="input"><label for="input-ip">IP:</label><input id="input-ip" class="inputstyle" name="input-ip" type="text" minlength="3" maxlength="40" required="required" placeholder="xxx.xxx.xxx.xx" autocomplete="off" value="<?php echo h($DB_SERVER ?? '')?>"></div>
+            <div class="input"><label for="input-username">Username:</label><input id="input-username" class="inputstyle" name="input-username" type="text" minlength="2" maxlength="15" placeholder="xxxxx" autocomplete="off" value="<?php echo h($DB_USERNAME ?? '')?>"></div>
+            <div class="input"><label for="input-password">Password:</label><input id="input-password" class="inputstyle" name="input-password" type="password" minlength="3" placeholder="xxxxxxxxxxxx" autocomplete="off" value="<?php echo h($DB_PASSWORD ?? '')?>"></div>
+            <div class="input"><label for="input-dbname">DB Name:</label><input id="input-dbname" class="inputstyle" name="input-dbname" type="text" minlength="3" placeholder="xxxxxxx" autocomplete="off" value="<?php echo h($DB_NAME ?? '')?>"></div>
+            <div style="display:flex;justify-content: flex-end;-webkit-align-items: center;align-items: center;">
+                <?php if (isset($sqlvalidatemessage)) {echo h($sqlvalidatemessage);}?>
                 <input class="button" type="submit" name="validate" value="Test connection">
                 <input class="button" type="submit" name="submit" value="Submit" style="display: <?php echo $displaysubmit?>">
             </div>
-            <?php
-            elseif (isset($register)):
-                $username = "";
-                $errors = array();
-                $_SESSION['success'] = "";
-                $db = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-                if (isset($_POST['reg_user'])) {
-                    $username = mysqli_real_escape_string($db, $_POST['username']);
-                    $password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
-                    $password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
-                    if (empty($username)) {
-                        $errors[] = "Username is required";
-                    }
-                    if (empty($password_1)) {
-                        $errors[] = "Password is required";
-                    }
-                    if ($password_1 != $password_2) {
-                        $errors[] = "The two passwords do not match";
-                        // Checking if the passwords match
-                    }
-                    // If the form is error free, then register the user
-                    if (count($errors) == 0) {
-                        // Password encryption to increase data security
-                        $password = hash('sha256', $password_1);
-                        // Inserting data into table
-                        $query = "INSERT INTO users (username, password, server) VALUES('$username', '$password', '{\"0\":0}')";
-                        mysqli_query($db, $query);
-                        // Storing username of the logged-in user,
-                        // in the session variable
-                        $_SESSION['username'] = $username;
-                        // Welcome message
-                        $_SESSION['success'] = "You have logged in";
-                        // Page on which the user will be
-                        // redirected after logging in
-                        unset($_SESSION['backURI']);
-                        //header("location:".$backURL);
-                        echo "You created the user ".$username."!";
-                        echo "<script>setTimeout(function(){window.location.href = '../users/control/server.php';}, 1000)</script>";
-                    }
-                }
-                ?>
-                <div style="margin: auto;">
-                    <p class="cAx">Create Admin User</p>
-                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" style="margin:0">
-                        <div class="input">
-                            <label for="username">Username:</label><input type="text" class="inputstyle" readonly="readonly" name="username" id="username" value="admin">
-                        </div>
-                        <div class="input">
-                            <label for="password_1">Password:</label><input type="password" id="password_1" class="inputstyle" name="password_1">
-                        </div>
-                        <div class="input">
-                            <label for="password_2">Confirm password:</label><input type="password" id="password_2" class="inputstyle" name="password_2">
-                        </div>
-                        <div style="display: flex;justify-content: flex-end;">
-                            <button type="submit" class="button" name="reg_user">Register</button>
-                        </div>
-                    </form>
-                </div>
-            <?php
-                $str1 = file_get_contents('https://muehlhaeusler.online/version');
-                endif;
-            ?>
+        </form>
+        <?php elseif ($created):?>
+            <p>You created the user <?php echo h(GSQ_ADMIN_USER)?>!</p>
+            <script>setTimeout(function(){window.location.href = '../users/control/server.php';}, 1000)</script>
+        <?php else:?>
+            <div style="margin: auto;">
+                <p class="cAx">Create Admin User</p>
+                <?php foreach ($errors as $err) {echo '<p>' . h($err) . '</p>';}?>
+                <form method="post" action="<?php echo h($_SERVER["PHP_SELF"]);?>" style="margin:0">
+                    <?php echo csrf_field() ?>
+                    <div class="input">
+                        <label for="username">Username:</label><input type="text" class="inputstyle" readonly="readonly" name="username" id="username" value="<?php echo h(GSQ_ADMIN_USER)?>">
+                    </div>
+                    <div class="input">
+                        <label for="password_1">Password:</label><input type="password" id="password_1" class="inputstyle" name="password_1" minlength="8" required="required">
+                    </div>
+                    <div class="input">
+                        <label for="password_2">Confirm password:</label><input type="password" id="password_2" class="inputstyle" name="password_2" minlength="8" required="required">
+                    </div>
+                    <div style="display: flex;justify-content: flex-end;">
+                        <button type="submit" class="button" name="reg_user">Register</button>
+                    </div>
+                </form>
+            </div>
+        <?php endif;?>
     </div>
 </div>

@@ -3,6 +3,7 @@ use xPaw\MinecraftPing;
 use xPaw\MinecraftPingException;
 use xPaw\MinecraftQuery;
 use xPaw\MinecraftQueryException;
+$Query = null;
 if ($qport == 0) {
     try {
         $Query = new MinecraftPing($ip, $gport);

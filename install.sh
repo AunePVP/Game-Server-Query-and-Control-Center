@@ -39,23 +39,29 @@ mysqlucheck="$(sudo mysql -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE use
 dbname=$(whiptail --inputbox --title "Create Database" "Please enter a name for your database" 10 100 3>&1 1>&2 2>&3)
 exitstatus=$?
 [[ "$exitstatus" = 1 ]] && exit 0;
+if ! [[ "$dbname" =~ ^[A-Za-z0-9_]+$ ]]; then
+  echo "The database name may only contain letters, digits and underscores."
+  exit 1
+fi
 mysqlpasswd=$(whiptail --passwordbox --title "Create Database" "Set a new password" 10 100 3>&1 1>&2 2>&3)
 exitstatus=$?
 [[ "$exitstatus" = 1 ]] && exit 0;
+# Escape single quotes for the SQL string literal
+mysqlpasswd_sql=${mysqlpasswd//\'/\'\'}
 sudo mysql -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
 if ! [ "$mysqlucheck" = 1 ]; then
-  sudo mysql -e "CREATE USER ${user}@localhost IDENTIFIED BY '${mysqlpasswd}';"
+  sudo mysql -e "CREATE USER ${user}@localhost IDENTIFIED BY '${mysqlpasswd_sql}';"
 fi
 sudo mysql -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${user}'@'localhost';"
 sudo mysql -e "FLUSH PRIVILEGES;"
-sudo mysql -e "USE ${dbname}; CREATE TABLE users (id INT auto_increment PRIMARY KEY AUTO_INCREMENT, username VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL, server JSON NOT NULL, sprite VARCHAR(25) NOT NULL, seed VARCHAR(100) NOT NULL);"
+sudo mysql -e "USE ${dbname}; CREATE TABLE users (id INT auto_increment PRIMARY KEY AUTO_INCREMENT, username VARCHAR(100) NOT NULL UNIQUE, password VARCHAR(100) NOT NULL, server JSON NOT NULL, sprite VARCHAR(25) NOT NULL, seed VARCHAR(100) NOT NULL);"
 
 echo "<?php" > html/config.php
 echo "\$DB_SERVER = 'localhost';" >> html/config.php
 echo "\$DB_USERNAME = '${user}';" >> html/config.php
 echo "\$DB_NAME = '${dbname}';" >> html/config.php
 sudo chown ${user}:${wsuname} query/cron/cache/version.php
-sudo chown ${wsuname}:${user} user/control/events.txt
+sudo chown ${wsuname}:${user} users/control/events.txt
 sudo chown ${wsuname}:${user} html/config.php
 sudo chmod 640 html/config.php
 sudo apt install php-mbstring -y

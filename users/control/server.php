@@ -1,5 +1,6 @@
 <?php
 require_once '../../html/config.php';
+require_once '../../html/lib.php';
 require '../../query/SourceQuery/bootstrap.php';
 require '../../query/minecraft/src/MinecraftPing.php';
 require '../../query/minecraft/src/MinecraftPingException.php';
@@ -16,182 +17,147 @@ use xPaw\MinecraftPingException;
 use xPaw\MinecraftQuery;
 use xPaw\MinecraftQueryException;
 use xPaw\SourceQuery\SourceQuery;
-if (!empty($_GET['id'])) {
-    $ServerID = (int)$_GET['id'];
-}
 const SQ_TIMEOUT = 1;
 const SQ_ENGINE = SourceQuery::SOURCE;
-session_start();
+gsq_session_start();
 if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You have to log in first";
-    header('location: ../../?login=true');
-    exit;
-}
-function convertos($Os)
-{
-    $Opers = array(
-        'l' => 'Linux',
-        'w' => 'Windows',
-        'm' => 'Mac'
-    );
-    return $Opers[$Os];
-}
-include "../../html/tailcustom.php";
-if (isset($ServerID)) {
-    if (file_exists('../../html/server/'.$ServerID.'.php')) {
-        include '../../html/server/'.$ServerID.'.php';
-        $logdisabled = FALSE;
-    } else {
-        $logdisabled = TRUE;
-    }
+    redirect('../../?login=true');
 }
 $username = $_SESSION['username'];
-if ($username == "admin") {
+$isadmin = is_admin($username);
+$pageid = (string)($_GET['id'] ?? '');
+$addserverpage = ($pageid === 'addserver');
+$ServerID = ($pageid !== '' && !$addserverpage) ? (int)$pageid : 0;
+include "../../html/tailcustom.php";
+if ($isadmin) {
     $title = "Admin panel";
 } else {
     $title = "Control panel";
 }
 $Server_selected = 'class="selected"';
+$emarkdown = false;
+$markdown = '';
 
 ///  Redirect, if server is not in account  ///
-if (!empty($_GET['id']) && $_GET['id'] != "addserver") {
-    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    if ($username != "admin") {
-        // If user is not admin, get the premitted servers and set the sql command
-        $sql = "SELECT server FROM users WHERE username='$username'";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                $serverjson = json_decode($row["server"], TRUE);
-                if (!in_array($ServerID, $serverjson)) {
-                    header('location: server.php');
-                }
-            }
+if ($ServerID && !$isadmin && !in_array($ServerID, user_server_ids($username), true)) {
+    redirect('server.php');
+}
+
+///  Who is allowed to control this server?  ///
+$allowcontrol = false;
+$controlserverjson = [];
+if ($ServerID) {
+    $row = db_row("SELECT controlserver FROM serverconfig WHERE ID = ?", [$ServerID]);
+    if ($row) {
+        $controlserverjson = json_decode($row["controlserver"], true);
+        if (!is_array($controlserverjson)) {
+            $controlserverjson = [];
         }
+        $allowcontrol = in_array($username, $controlserverjson, true);
     }
 }
-if (!empty($_GET['raw'])):
-    if (!$logdisabled) {
+
+///  Server control configuration (html/server/<id>.php)  ///
+$controlconfig = '../../html/server/' . $ServerID . '.php';
+$hascontrolconfig = $ServerID && file_exists($controlconfig);
+if ($hascontrolconfig) {
+    include $controlconfig;
+}
+$logdisabled = !$hascontrolconfig;
+
+///  Raw log output for the live console  ///
+if (!empty($_GET['raw'])) {
+    session_write_close();
+    $logoutput = '';
+    if (!$logdisabled && $allowcontrol) {
         if ($logtype == "path") {
-            unset($logoutput);
-            //$logoutput = file_get_contents($logpath) or die("Unable to open file!");
             $logoutput = tailCustom($logpath, 150);
-        } elseif ($logtype == "scp"){
-            $connection = ssh2_connect($sip, $sport, array('hostkey'=>'ssh-rsa'));
+        } elseif ($logtype == "scp") {
+            $connection = ssh2_connect($sip, $sport, array('hostkey' => 'ssh-rsa'));
             ssh2_auth_pubkey_file($connection, $susername, $keypathpub, $keypath);
             $stream = ssh2_exec($connection, $scpcommand);
             stream_set_blocking($stream, true);
             $logoutput = stream_get_contents(ssh2_fetch_stream($stream, SSH2_STREAM_STDIO));
-        } elseif ($logtype == "rsync"){
+        } elseif ($logtype == "rsync") {
             exec($rsynccommand);
             $logoutput = tailCustom($rsynclogpath, 150);
         }
     } else {
         $logoutput = "There was an error retrieving the logs from the server!";
     }
-    echo str_replace('#015', '', $logoutput);
-else:
-//--// Add server //--//
-function test_input($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
+    // The log is inserted as HTML on the client, so escape it here
+    echo h(str_replace('#015', '', (string)$logoutput));
+    exit;
 }
-// Delete Server
-function deleteserver($id, $arrayresult) {
-    global $DB_SERVER;
-    global $DB_USERNAME;
-    global $DB_PASSWORD;
-    global $DB_NAME;
-    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-    $sql = "UPDATE users SET server='$arrayresult' WHERE id=$id";
-    if (!$conn->query($sql) === TRUE) {
-        echo "Error updating record: " . $conn->error;
-    }
-    $conn->close();
+
+// Every state-changing request needs a valid CSRF token
+csrf_verify();
+
+// Store users, who can control the server (admin only)
+if (array_key_exists('updatepermission', $_POST) && $ServerID) {
+    require_admin();
+    $requested = array_filter(array_map('trim', explode(",", (string)($_POST["responsepermitted"] ?? ''))));
+    $existing = array_column(db_query("SELECT username FROM users"), 'username');
+    $permittedusers = array_values(array_intersect($requested, $existing));
+    db_query("UPDATE serverconfig SET controlserver = ? WHERE ID = ?", [json_encode($permittedusers), $ServerID]);
+    $controlserverjson = $permittedusers;
+    $allowcontrol = in_array($username, $controlserverjson, true);
 }
-// Store users, database, who can control the server
-if (array_key_exists('updatepermission', $_POST)) {
-    $permittedusers = $_POST["responsepermitted"];
-    $permittedusers = json_encode(explode(",",$permittedusers));
-    // Uplaod new json to database
-    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-    $sql = "UPDATE serverconfig SET controlserver='$permittedusers' WHERE ID=$ServerID";
-    mysqli_query($conn, $sql);
-    mysqli_close($conn);
+// Delete server (admin only)
+if (array_key_exists('delete', $_POST) && $ServerID) {
+    require_admin();
+    $cronfile = "../../query/cron/" . $ServerID . ".json";
+    if (file_exists($cronfile)) {
+        unlink($cronfile);
+    }
+    db_query("DELETE FROM serverconfig WHERE ID = ?", [$ServerID]);
+    foreach (db_query("SELECT id, server FROM users") as $user) {
+        $ids = json_decode($user["server"], true) ?: [];
+        store_user_server_ids((int)$user["id"], array_diff(array_map('intval', $ids), [$ServerID]));
+    }
+    redirect('server.php');
 }
-$conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-$sql = "SELECT controlserver FROM serverconfig WHERE ID='$ServerID'";
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $controlserverjson = json_decode($row["controlserver"], TRUE);
-        if (in_array($username, $controlserverjson)) {
-            $allowcontrol = TRUE;
-        }
+// Remove server from own account
+if (array_key_exists('removeserverfromaccount', $_POST) && $ServerID) {
+    $user = db_row("SELECT id, server FROM users WHERE username = ?", [$username]);
+    if ($user) {
+        $ids = json_decode($user["server"], true) ?: [];
+        store_user_server_ids((int)$user["id"], array_diff(array_map('intval', $ids), [$ServerID]));
     }
-}
-$conn->close();
-if (array_key_exists('delete', $_POST)) {
-    $deleteid = (int)$_GET['id'];
-    $deletearray = '['.$deleteid.']';
-    if (file_exists("../../query/cron/".$deleteid.".json")){
-        unlink("../../query/cron/".$deleteid.".json");
-    }
-    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    $sql = "DELETE FROM serverconfig WHERE id=$deleteid";
-    if (!$conn->query($sql) === TRUE) {
-        echo "Error deleting record: " . $conn->error;
-    }
-    $sql = "SELECT id, server FROM users";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        while($row = mysqli_fetch_assoc($result)) {
-            unset($arrayresultdec, $arrayresult, $array);
-            $array = json_decode($row["server"], TRUE);
-            $deletearraydec = json_decode($deletearray, TRUE);
-            $array = array_diff($array, $deletearraydec);
-            foreach ($array as $key){$arrayresult[] = $key;}
-            $arrayresultdec = json_encode($arrayresult ?? [0]);
-            deleteserver($row["id"], $arrayresultdec);
-        }
-    }
-    $conn->close();
-}
-if (array_key_exists('removeserverfromaccount', $_POST)) {
-    $deletearray = '['.$ServerID.']';
-    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-    $sql = "SELECT id, server FROM users WHERE username='$username'";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        while($row = mysqli_fetch_assoc($result)) {
-            unset($arrayresultdec, $arrayresult, $array);
-            $array = json_decode($row["server"], TRUE);
-            $deletearraydec = json_decode($deletearray, TRUE);
-            $array = array_diff($array, $deletearraydec);
-            foreach ($array as $key){$arrayresult[] = $key;}
-            $arrayresultdec = json_encode($arrayresult ?? [0]);
-            deleteserver($row["id"], $arrayresultdec);
-        }
-    }
-    $conn->close();
+    redirect('server.php');
 }
 //-----------------\\
 // Form Add Server \\
 //-----------------\\
+function addserver_error(string $message): void
+{
+    echo "<script>alert(" . json_encode($message) . ");window.location.href = 'server.php?id=addserver';</script>";
+    exit();
+}
+function valid_port($port, bool $allowZero): bool
+{
+    return ctype_digit($port) && (int)$port <= 65535 && ($allowZero || (int)$port > 0);
+}
 if (array_key_exists('AddServer', $_POST)) {
-    $addtype = test_input($_POST["type"]);
-    $addip = test_input($_POST["ip"]);
-    $addgport = test_input($_POST["gport"]);
-    $addqport = test_input($_POST["qport"]) ?? "0";
-    $addrport = test_input($_POST["rport"]) ?? "0";
+    $addtype = test_input($_POST["type"] ?? '');
+    $addip = test_input($_POST["ip"] ?? '');
+    $addgport = test_input($_POST["gport"] ?? '');
+    $addqport = test_input($_POST["qport"] ?? '') ?: "0";
+    $addrport = test_input($_POST["rport"] ?? '') ?: "0";
+    if (!in_array($addtype, GSQ_SERVER_TYPES, true)) {
+        addserver_error('ERROR! Unknown game type.');
+    }
+    if (!preg_match('/^[A-Za-z0-9.\-:\[\]]{1,60}$/', $addip)) {
+        addserver_error('ERROR! Invalid IP address or domain.');
+    }
+    if (!valid_port($addgport, false) || !valid_port($addqport, true) || !valid_port($addrport, true)) {
+        addserver_error('ERROR! Invalid port.');
+    }
+    $addgport = (int)$addgport;
+    $addqport = (int)$addqport;
+    $addrport = (int)$addrport;
+    $noresponse = "ERROR! Server doesn't respond to query. Please try adding the server again.";
     switch ($addtype) {
         case "csgo":
         case "valheim":
@@ -206,119 +172,90 @@ if (array_key_exists('AddServer', $_POST)) {
                 $queryresult["info"] = $Query->GetInfo();
             } // If error occured, send back to add server
             catch (Exception $e) {
-                echo "<script>alert('ERROR! Server doesn\'t respond to query. Please try adding the server again.');window.location.href = window.location.href + '?id=addserver';</script>";
-                exit();
+                addserver_error($noresponse);
             } // Disconnect from Server
             finally {
                 $Query->Disconnect();
             }
             break;
         case "minecraft":# Minecraft query
-        if ($addqport == 0) { // If queryprotocol is not an option
-            try {
-                $Query = new MinecraftPing($addip, $addgport);
-                $queryresult = $Query->Query();
-            } // If error occured, send back to add server
-            catch (MinecraftPingException $e) {
-                echo "<script>alert('ERROR! Server doesn\'t respond to query. Please try adding the server again.');window.location.href = window.location.href + '?id=addserver';</script>";
-                exit();
-            } // Disconnect from Server
-            finally {
-                $Query->Close();
+            if ($addqport == 0) { // If queryprotocol is not an option
+                $Query = null;
+                try {
+                    $Query = new MinecraftPing($addip, $addgport);
+                    $queryresult = $Query->Query();
+                } // If error occured, send back to add server
+                catch (MinecraftPingException $e) {
+                    addserver_error($noresponse);
+                } // Disconnect from Server
+                finally {
+                    $Query?->Close();
+                }
+            } else { // If queryprotocol is an option
+                $Query = new MinecraftQuery();
+                try {
+                    $Query->Connect($addip, $addqport);
+                    $queryresult["info"] = ($Query->GetInfo());
+                } // Check if an error occurred
+                catch (MinecraftQueryException $e) {
+                    addserver_error($noresponse);
+                }
             }
-        } else { // If queryprotocol is an option
-            $Query = new MinecraftQuery();
-            try {
-                $Query->Connect($addip, $addqport);
-                $queryresult["info"] = ($Query->GetInfo());
-            } // Check if an error occurred
-            catch (MinecraftQueryException $e) {
-                echo "<script>alert('ERROR! Server doesn\'t respond to query. Please try adding the server again.');window.location.href = window.location.href + '?id=addserver';</script>";
-                exit();
-            }
-        }
-        break;
+            break;
     }
-    $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME); // Connect to db and upload server data
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    // Set Server ID
-    $sql = "SELECT ID FROM serverconfig WHERE IP='$addip' AND type='$addtype' AND QueryPort='$addqport' AND GamePort='$addgport' AND RconPort='$addrport'";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $addid = $row["ID"];
-            $alreadyindb = TRUE;
-        }
+    // Set Server ID: reuse an existing entry, otherwise take the next free ID
+    $existingserver = db_row("SELECT ID FROM serverconfig WHERE IP = ? AND type = ? AND QueryPort = ? AND GamePort = ? AND RconPort = ?", [$addip, $addtype, $addqport, $addgport, $addrport]);
+    if ($existingserver) {
+        $addid = (int)$existingserver["ID"];
+        $alreadyindb = true;
     } else {
-        $sql = "SELECT ID FROM serverconfig ORDER BY ID DESC LIMIT 1";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                $addid = $row["ID"] + 1;
-                $alreadyindb = False;
-            }
-        }
+        $last = db_row("SELECT ID FROM serverconfig ORDER BY ID DESC LIMIT 1");
+        $addid = $last ? (int)$last["ID"] + 1 : 1;
+        $alreadyindb = false;
     }
-    if (empty($addid)) { // Add server ID to user
-        $addid = 1;
-    }
-    $sql = "SELECT server FROM users WHERE username='$username'";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $serverjson = json_decode($row["server"], TRUE);
-            if (in_array($addid, $serverjson)){
-                echo "<script>alert('You alredy have access to this server!');window.location.reload();</script>";
-                exit;
-            }
-            if ($serverjson == [0]) {
-                $serverjson = [$addid];
-            } else {
-                $serverjson[] = $addid;
-            }
-            $serverjson = json_encode($serverjson);
+    // Add server ID to user
+    $user = db_row("SELECT id, server FROM users WHERE username = ?", [$username]);
+    if ($user) {
+        $ids = array_map('intval', json_decode($user["server"], true) ?: []);
+        if (in_array($addid, $ids, true)) {
+            echo "<script>alert('You already have access to this server!');window.location.href = 'server.php';</script>";
+            exit;
         }
-    }
-    if (!empty($serverjson)) { // Update users table
-        $sql = "UPDATE users SET server='$serverjson' WHERE username='$username'";
-        if (mysqli_query($conn, $sql)) {
-            echo "<script>console.log('Record updated successfully')</script>";
-        } else {
-            echo "Error updating record: " . mysqli_error($conn);
-        }
+        $ids[] = $addid;
+        store_user_server_ids((int)$user["id"], $ids);
     }
     if (!$alreadyindb) {
-        $sql = "INSERT INTO serverconfig (ID, IP, type, QueryPort, GamePort, RconPort, Name, controlserver) VALUES ('$addid', '$addip', '$addtype', '$addqport', '$addgport', '$addrport', '0', '[\"admin\"]')";// Add server data to serverconfig table
-        if (mysqli_query($conn, $sql)) {
-            echo "<script>console.log('Record updated successfully')</script>";
-        } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-        }
+        // Add server data to serverconfig table
+        db_query("INSERT INTO serverconfig (ID, IP, type, QueryPort, GamePort, RconPort, Name, controlserver) VALUES (?, ?, ?, ?, ?, ?, '0', ?)", [$addid, $addip, $addtype, $addqport, $addgport, $addrport, json_encode([GSQ_ADMIN_USER])]);
     }
-    $conn->close();
 }
-if (array_key_exists('control', $_POST)) { // Control Server
-    if (file_exists('../../html/server/' . $ServerID . '.php') && $allowcontrol):
-    $command = $_POST['control'];
-    switch ($command) {
-        case "start":$command = $sstart;$startdisabled=" disabled";break;
-        case "stop":$command = $sstop;$stopdisabled=" disabled";$restartdisabled=" disabled";break;
-        case "restart":$command = $srestart;$startdisabled=" disabled";break;
-        case "backup":$command = $sbackup;break;
-        case "update":$command = $supdate;break;
+// Control Server: only whitelisted actions, never the raw POST value
+$controlcommands = [
+    'start' => $sstart ?? null,
+    'stop' => $sstop ?? null,
+    'restart' => $srestart ?? null,
+    'backup' => $sbackup ?? null,
+    'update' => $supdate ?? null,
+];
+if (array_key_exists('control', $_POST) && $hascontrolconfig && $allowcontrol) {
+    $action = (string)$_POST['control'];
+    $command = $controlcommands[$action] ?? null;
+    if (!empty($command)) {
+        switch ($action) {
+            case "start":$startdisabled=" disabled";break;
+            case "stop":$stopdisabled=" disabled";$restartdisabled=" disabled";break;
+            case "restart":$startdisabled=" disabled";break;
+        }
+        $connection = ssh2_connect($sip, $sport, array('hostkey'=>'ssh-rsa'));
+        ssh2_auth_pubkey_file($connection, $susername, $keypathpub, $keypath);
+        $stream = ssh2_exec($connection, $command);
+        stream_set_blocking($stream, true);
+        $streamout = stream_get_contents(ssh2_fetch_stream($stream, SSH2_STREAM_STDIO));
+        $re = '/|\[K|\[ \.\.\.\. ] |\[\d\dm  OK  \[\dm\] | \[\d\dmOK\[\dm|\[\d\dmOK|\[|\dm|\d INFO \]/';
+        $streamout = preg_replace($re, '', $streamout);
+        $streamout = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $streamout);
+        file_put_contents('events.txt', $time . " Server " . $action . " " . $ServerID . "\n", FILE_APPEND | LOCK_EX);
     }
-    $connection = ssh2_connect($sip, $sport, array('hostkey'=>'ssh-rsa'));
-    ssh2_auth_pubkey_file($connection, $susername, $keypathpub, $keypath);
-    $stream = ssh2_exec($connection, $command);
-    stream_set_blocking($stream, true);
-    $streamout = stream_get_contents(ssh2_fetch_stream($stream, SSH2_STREAM_STDIO));
-    $re = '/|\[K|\[ \.\.\.\. ] |\[\d\dm  OK  \[\dm\] | \[\d\dmOK\[\dm|\[\d\dmOK|\[|\dm|\d INFO \]/';
-    $streamout = preg_replace($re, '', $streamout);
-    $streamout = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $streamout);
-    file_put_contents('events.txt', $time." ".$command." ".$ServerID. "\n", FILE_APPEND);
-    endif;
 }
 ?>
     <!doctype html>
@@ -331,7 +268,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="style.css">
         <script src="script.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
         <title><?php echo $title?></title>
     </head>
     <body>
@@ -340,6 +277,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
         <div id="confpopup">
             <div class="areyousure">Are you sure you want to delete this Server?</div>
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID"; ?>">
+                <?php echo csrf_field() ?>
                 <div style="padding: 10px 10px 0">
                     <p style="padding-bottom: 15px;overflow: auto;">This action <strong>cannot</strong> be undone. This will permanently delete the server and all historical data from the database.</p>
                     <p>Please type <strong>Delete-Server-<?php echo $ServerID?></strong> to confirm.</p>
@@ -401,27 +339,20 @@ if (array_key_exists('control', $_POST)) { // Control Server
                         </div>
                     </div>
                 </div>
-            <?php if ($username=='admin'):?>
+            <?php if ($isadmin):?>
                 <div class="extra inlineflex flex-wrap">
                     <div class="itemdiv users">
                         <div class="itemtitle">Users</div>
                         <div class="item" style="width: 190px">
                             <?php
                             // Get all Users from Database
-                            $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-                            if (!$conn) {
-                                die("Connection failed: " . mysqli_connect_error());
+                            $userrows = db_query("SELECT username FROM users");
+                            foreach ($userrows as $row) {
+                                echo "<p>".h($row["username"])."</p>";
                             }
-                            $sql = "SELECT username FROM users";
-                            $result = mysqli_query($conn, $sql);
-                            if (mysqli_num_rows($result) > 0) {
-                                while($row = mysqli_fetch_assoc($result)) {
-                                    echo "<p>".$row["username"]."</p>";
-                                }
-                            } else {
+                            if (!$userrows) {
                                 echo "0 results";
                             }
-                            mysqli_close($conn);
                             ?>
                         </div>
                     </div>
@@ -429,10 +360,10 @@ if (array_key_exists('control', $_POST)) { // Control Server
                         <div class="itemtitle">Events</div>
                         <div class="item events">
                             <?php
-                            $file = file("events.txt");
+                            $file = file("events.txt") ?: [];
                             $file = array_reverse($file);
                             foreach($file as $f){
-                                echo "<p>".$f."</p>";
+                                echo "<p>".h($f)."</p>";
                             }
                             ?>
                         </div>
@@ -448,15 +379,15 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                     )
                                 )
                             );
-                            $github = json_decode(file_get_contents('https://api.github.com/repos/AunePVP/Game-Server-Query-and-Control-Center/releases/latest', false, $context));
-                            $releasename = $github->name;
-                            $markdown = $github->body;
+                            $github = json_decode((string)@file_get_contents('https://api.github.com/repos/AunePVP/Game-Server-Query-and-Control-Center/releases/latest', false, $context));
+                            $releasename = (string)($github->name ?? '');
+                            $markdown = (string)($github->body ?? '');
                             $versionfile = fopen("../../version.txt", "r") or die("Unable to open file!");
                             $version = fgets($versionfile);
                             fclose($versionfile);
                             $version = preg_replace('/\s+/', '', $version);
                             $releasename = preg_replace('/\s+/', '', $releasename);
-                            if ($version == $releasename) {
+                            if ($releasename === '' || $version == $releasename) {
                                 echo "<div style='margin: auto;font-family: Helvetica Neue,sans-serif;font-size: 22px;}'>No new release found</div>";
                             } else {
                                 echo "<div id='markdown'></div>";
@@ -469,7 +400,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                         <div class="itemtitle">News</div>
                         <div class="item news"></div>
                     </div>
-                    <textarea id="markdownsource"><?php echo $markdown ?></textarea>
+                    <textarea id="markdownsource" style="display:none"><?php echo h($markdown) ?></textarea>
                     <?php if($emarkdown):?>
                         <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js" integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                         <script type="text/javascript">
@@ -487,14 +418,10 @@ if (array_key_exists('control', $_POST)) { // Control Server
             endif;
             if (!empty($_GET['id'])):
             if ($_GET['id'] != "addserver") {
-                $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-                if (!$conn) {
-                    die("Connection failed: " . mysqli_connect_error());
-                }
-                $sql = "SELECT * FROM serverconfig WHERE ID='$ServerID'";
-                $result = mysqli_query($conn, $sql);
-                if (mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_assoc($result)) {
+                $serverrows = db_query("SELECT * FROM serverconfig WHERE ID = ?", [$ServerID]);
+                if ($serverrows) {
+                    foreach ($serverrows as $row) {
+                        $queryresult = null;
                         $ServerID = $row["ID"];
                         $ip = $row["IP"];
                         $type = $row["type"];
@@ -527,7 +454,6 @@ if (array_key_exists('control', $_POST)) { // Control Server
                 } else {
                     echo "0 results";
                 }
-                $conn->close();
             }
             ?>
             <!-- _------------‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾------------_ -->
@@ -536,7 +462,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
             <?php
             if ($_GET['id'] != "addserver"): ?>
             <div id="Hostname">
-                <?php if (!empty($motd)) {echo $motd;} else {echo $title;}?>
+                <?php if (!empty($motd)) {echo $motd; /* HTML generated and escaped by MinecraftColors */} else {echo h($title ?? '');}?>
             </div>
             <div class="ctrlsett">
                 <a class="control" onclick="tab(this.id)" id="tab1">Control</a>
@@ -551,6 +477,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                 <div class="nocontrol">You can't control this server!</div>
                             <?php endif;?>
                             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID&page=control"; ?>">
+                                <?php echo csrf_field() ?>
                                 <div id="servercontrol">
                                     <?php
                                     if ($status && !isset($startdisabled)){
@@ -566,11 +493,11 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                     ?>
                                     <button class="button<?php echo $startdisabled ?? ''?>" type="submit" value="start" name="control"<?php echo $startdisabled ?? ''?>>Start</button>
                                     <button class="button<?php echo $stopdisabled ?? ''?>" type="submit" value="stop" name="control"<?php echo $stopdisabled ?? ''?>>Stop</button>
-                                    <button class="button<?php echo $restartdisabled ?? ''?>" type="submit" value="restart" name="control<?php echo $restartdisabled ?? ''?>">Restart</button>
+                                    <button class="button<?php echo $restartdisabled ?? ''?>" type="submit" value="restart" name="control"<?php echo $restartdisabled ?? ''?>>Restart</button>
                                     <button class="button<?php echo $backupdisabled ?? ''?>" type="submit" value="backup" name="control"<?php echo $backupdisabled ?? ''?>>Backup</button>
                                 </div>
                             </form>
-                            <div class="log"><?php echo $streamout ?? ""?></div>
+                            <div class="log"><?php echo h($streamout ?? "")?></div>
                             <div id="console">
                                 <div onclick="consolepopup()" style="cursor: pointer;">
                                     <svg id="2rt" width="100%" height="100%" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><path d="M1.7,1C1.313,1 1,1.313 1,1.7L1,7L3,7L3,3L7,3L7,1L1.7,1ZM3,13L1,13L1,18.3C1,18.687 1.313,19 1.7,19L7,19L7,17L3,17L3,13ZM17,17L13,17L13,19L18.3,19C18.687,19 19,18.687 19,18.3L19,13L17,13L17,17ZM19,1.7C19,1.313 18.687,1 18.3,1L13,1L13,3L17,3L17,7L19,7L19,1.7Z" style="fill:white;"/></svg>
@@ -641,7 +568,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                     <!-- _----------‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾----------_ -->
                     <!-- _----------_Server Settings_----------_ -->
                     <!-- _----------_________________----------_ -->
-                    <?php if($username=="admin"||$allowcontrol):?>
+                    <?php if($isadmin||$allowcontrol):?>
                         <div id="serverinf">
                             <table>
                                 <tr>
@@ -653,12 +580,12 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                     <th>Rcon Port</th>
                                 </tr>
                                 <tr>
-                                    <td class="tablehide"><?php echo $ServerID?></td>
-                                    <td class="tablehide"><?php echo $type?></td>
-                                    <td><?php echo $ip?></td>
-                                    <td><?php echo $gport?></td>
-                                    <td><?php echo $qport?></td>
-                                    <td><?php echo $rport?></td>
+                                    <td class="tablehide"><?php echo h($ServerID)?></td>
+                                    <td class="tablehide"><?php echo h($type)?></td>
+                                    <td><?php echo h($ip)?></td>
+                                    <td><?php echo h($gport)?></td>
+                                    <td><?php echo h($qport)?></td>
+                                    <td><?php echo h($rport)?></td>
                                 </tr>
                             </table>
                             <div>
@@ -671,21 +598,13 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                     case "rust":
                                     case "dayz":
                                     case "arkse":
-                                        echo '<span style="font-weight: 500;">System:</span>'.$Os.'<br>';
+                                        echo '<span style="font-weight: 500;">System:</span>'.h($Os ?? '').'<br>';
                                         break;
                                     case "minecraft":
                                         break;
                                 }
                                 // Select users who can control this server
-                                $conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-                                $sql = "SELECT username FROM users";
-                                $result = mysqli_query($conn, $sql);
-                                if (mysqli_num_rows($result) > 0) {
-                                    while($row = mysqli_fetch_assoc($result)) {
-                                        $users[] = $row["username"];
-                                    }
-                                }
-                                mysqli_close($conn);
+                                $users = array_column(db_query("SELECT username FROM users"), 'username');
                                 $notallowedyet = array_diff($users, $controlserverjson);
                                 ?>
                                 <script>
@@ -710,7 +629,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                     }
                                 </script>
                                 <div id="dragdropform">
-                                    <?php if($username=="admin"):?>
+                                    <?php if($isadmin):?>
                                     <div class="ddparent left">
                                         <p>Users</p>
                                         <div id="dragform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
@@ -718,7 +637,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                             foreach ($notallowedyet as $maybeallowed){
                                                 if ($maybeallowed=="public")
                                                     continue;
-                                                echo '<div draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="draggable" id="'.$maybeallowed.'">'.$maybeallowed.'</div>';
+                                                echo '<div draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="draggable" id="'.h($maybeallowed).'">'.h($maybeallowed).'</div>';
                                             }
                                             ?>
                                         </div>
@@ -729,25 +648,29 @@ if (array_key_exists('control', $_POST)) { // Control Server
                                         <div id="dropform" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                                             <?php
                                             foreach ($controlserverjson as $allowed){
-                                                echo '<div draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="draggable" id="'.$allowed.'">'.$allowed.'</div>';
+                                                echo '<div draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="draggable" id="'.h($allowed).'">'.h($allowed).'</div>';
                                             }
                                             ?>
                                         </div>
                                     </div>
                                 </div>
-                                <?php if($username=="admin"):?>
+                                <?php if($isadmin):?>
                                 <button id="updatecontrolperm" onclick='getusernames()'>Update</button>
                                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID&page=settings"; ?>" style="display:none">
+                                    <?php echo csrf_field() ?>
                                     <input id="responsepermitted" name="responsepermitted">
                                     <button id="updatepermission" type="submit" name="updatepermission"></button>
                                 </form>
                                 <?php endif;?>
-                                <!-- Delete this server-->
+                                <?php if($isadmin):?>
+                                <!-- Delete this server (admin only) -->
                                 <button type='button' id="deletebtn" onclick="confirmdelete()">Delete this server</button>
+                                <?php endif;?>
                             </div>
                         </div>
                     <?php else:?>
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ."?id=$ServerID"; ?>">
+                            <?php echo csrf_field() ?>
                             <button type='submit' id="deletebtn" name="removeserverfromaccount">Remove server from account</button>
                         </form>
                     <?php endif;?>
@@ -764,6 +687,7 @@ if (array_key_exists('control', $_POST)) { // Control Server
                     <div class="padding25">
                         <h2 style="margin: 0 0 10px;font-family: Helvetica,sans-serif;">Add a server</h2>
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                            <?php echo csrf_field() ?>
                             <div class="cAx">Game:</div>
                             <label>
                                 <select required="required" name="type" onchange="selecttype()" id="type">
@@ -803,20 +727,5 @@ if (array_key_exists('control', $_POST)) { // Control Server
         <?php endif;?>
         <?php endif;?>
     </main>
-    <textarea id="markdownsource"><?php echo $markdown ?></textarea>
-    <?php
-    if($emarkdown):
-    ?>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js" integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript">
-        let converter = new showdown.Converter(),
-            text      = document.getElementById('markdownsource').value,
-            html      = converter.makeHtml(text);
-        document.getElementById('markdown').innerHTML = html;
-    </script>
-<?php
-endif;
-?>
     </body>
 </html>
-<?php endif;?>

@@ -13,11 +13,12 @@ $img = "html/img/logo/$type.webp";
 $lastplayerlines = tailCustom($controlpanellink."query/cron/$ServerID.json", 7);
 $playerlineexit = array();
 $count = 0;
-foreach(preg_split("/((\r?\n)|(\r\n?))/", $lastplayerlines) as $playerline){
+$uptime = 0;
+foreach(preg_split("/((\r?\n)|(\r\n?))/", (string)$lastplayerlines) as $playerline){
     $playerlinedecode = json_decode($playerline);
-    $lastplayers[$count] = $playerlinedecode->players;
+    $lastplayers[$count] = (int)($playerlinedecode->players ?? 0);
     $count = $count + 1;
-    $uptime = $playerlinedecode->uptime;
+    $uptime = $playerlinedecode->uptime ?? $uptime;
 }
 $uptimebanner = str_replace(".", ",", round($uptime, 1))."%";
 
@@ -41,9 +42,9 @@ switch ($type) {
         // Get Maxplayers
         $maxplayers = $serverstatus->info->MaxPlayers ?? '0';
         // Get server version
-        $version = $serverstatus->info->Version;
+        $version = $serverstatus->info->Version ?? '';
         // Get the server name
-        $title = $serverstatus->info->HostName;
+        $title = $serverstatus->info->HostName ?? '';
         // If the server is offline, it won't respond. Therefore, in this case, we must use the cached title from the database
         if (empty($title)) {
             $title = $name;
@@ -77,7 +78,7 @@ switch ($type) {
                 $countplayers = $countplayers + 1;
             }
         }
-        $playernames = $serverstatus->players;
+        $playernames = $serverstatus->players ?? [];
         $count = 0;
         foreach ($playernames as $player) {
             if(!strlen($player->Name))
@@ -147,7 +148,7 @@ switch ($type) {
             }
             # Get MOTD / Server Name
             if (is_string($serverstatus->description)) {
-                $title = MinecraftColors::clean($serverstatus->description);
+                $title = html_entity_decode(MinecraftColors::clean($serverstatus->description), ENT_QUOTES, 'UTF-8');
                 $motd = MinecraftColors::convertToHTML($serverstatus->description);
             } elseif (is_array($serverstatus->description->extra ?? false)) {
                 foreach ($serverstatus->description->extra as $extra) {
@@ -161,13 +162,13 @@ switch ($type) {
                 $motd = MinecraftColors::convertToHTML($motd);
             } elseif (isset($serverstatus->description->text)) {
                 $title = $serverstatus->description->text;
-                $motd = "<span style='color: #FFFFFF'>".$title."</span>";
+                $motd = "<span style='color: #FFFFFF'>".htmlspecialchars((string)$title, ENT_QUOTES, 'UTF-8')."</span>";
             }
         } else {
             # Get MOTD / Server Name
             $titleraw = $serverstatus->info->HostName ?? '';
             $titlestr = (str_replace("?", "&", $titleraw));
-            $title = MinecraftColors::clean($titlestr);
+            $title = html_entity_decode(MinecraftColors::clean($titlestr), ENT_QUOTES, 'UTF-8');
             $motd = MinecraftColors::convertToHTML($titlestr);
             // Get server Version
             $version = $serverstatus->info->Version ?? '0';
@@ -199,11 +200,11 @@ switch ($type) {
             $title = $name;
         }
         if (empty($motd)) {
-            $motd = $title;
+            $motd = htmlspecialchars((string)$title, ENT_QUOTES, 'UTF-8');
         }
         break;
     case "csgo":
-        $playernames = $serverstatus->players;
+        $playernames = $serverstatus->players ?? [];
         $count = 0;
         foreach ($playernames as $player) {
             if(!strlen($player->Name))
@@ -240,7 +241,7 @@ switch ($type) {
         }
         break;
     case "vrising":
-        $playernames = $serverstatus->players;
+        $playernames = $serverstatus->players ?? [];
         $count = 0;
         foreach ($playernames as $player) {
             if(!strlen($player->Name))
@@ -264,7 +265,7 @@ switch ($type) {
         // Get the ingame day
         $ingameday = $serverstatus->rules->{'days-running'} ?? '';
         // Get the game tags
-        $GameTags = $serverstatus->info->GameTags;
+        $GameTags = $serverstatus->info->GameTags ?? '';
         $GameTags =  str_replace(",", ", ", $GameTags);
         $maplink = "html/img/map/$map.webp";
         break;
@@ -273,7 +274,7 @@ switch ($type) {
         $password = $serverstatus->rules->ServerPassword_b ?? '';
         if ($password == "True" || $password == "true") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
         // Get the game tags
-        $GameTags = $serverstatus->info->GameTags;
+        $GameTags = $serverstatus->info->GameTags ?? '';
         $GameTags =  preg_replace("/,/", ", ", $GameTags);
         $officialmaps = array("chernarusplus", "chernarus");
         if (in_array($map, $officialmaps)) {
@@ -283,7 +284,7 @@ switch ($type) {
         }
         break;
     case "rust":
-        $playernames = $serverstatus->players;
+        $playernames = $serverstatus->players ?? [];
         $count = 0;
         foreach ($playernames as $player) {
             if(!strlen($player->Name))
@@ -295,23 +296,23 @@ switch ($type) {
         }
         $count = 0;
         // Get the seed and world size
-        $seed = $serverstatus->rules->{'world.seed'};
-        $worldsize = $serverstatus->rules->{'world.size'};
+        $seed = $serverstatus->rules->{'world.seed'} ?? '';
+        $worldsize = $serverstatus->rules->{'world.size'} ?? '';
         // Check if the server has a password
         $password = $serverstatus->info->Password ?? '';
         if ($password == "True") {$password = $language[$lang][14];} else {$password = $language[$lang][15];}
         // Get the uptime of the server
-        $rustuptime = $serverstatus->rules->uptime;
+        $rustuptime = $serverstatus->rules->uptime ?? '';
         // Get the url of the server
-        $rustwebsite = $serverstatus->rules->url;
+        $rustwebsite = $serverstatus->rules->url ?? '';
         // Check if the Rustserver has PVP or PVE enabled
-        if ($serverstatus->rules->pve == "False") {
+        if (($serverstatus->rules->pve ?? '') == "False") {
             $pvp = $language[$lang][14];
         } else {
             $pvp = $language[$lang][15];
         }
         // Get the fps of the server
-        $rustfps = $serverstatus->rules->fps;
+        $rustfps = $serverstatus->rules->fps ?? '';
         // Get the description and store it in an array
         $keys = (array) $serverstatus->rules;
         $matched = preg_grep('/description_\d+/', array_keys($keys));
@@ -324,6 +325,6 @@ switch ($type) {
             $rustdesc[$value] = $rustdescription;
         }
         // Get the game tags
-        $GameTags = $serverstatus->info->GameTags;
+        $GameTags = $serverstatus->info->GameTags ?? '';
         $GameTags =  preg_replace("/,/", ", ", $GameTags);
 }

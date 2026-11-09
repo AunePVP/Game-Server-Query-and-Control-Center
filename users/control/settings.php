@@ -1,85 +1,63 @@
 <?php
 $configfile = '../../html/config.php';
 require_once $configfile;
-session_start();
+require_once '../../html/lib.php';
+gsq_session_start();
 if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You have to log in first";
-    header('location: ../../?login=true');
-    exit;
+    redirect('../../?login=true');
 }
 $username = $_SESSION['username'];
-if ($username == "admin") {
+$isadmin = is_admin($username);
+if ($isadmin) {
     $title = "Settings | Admin panel";
 } else {
     $title = "Settings | Control panel";
 }
 $Settings_selected = 'class="selected"';
+// Every state-changing request needs a valid CSRF token
+csrf_verify();
 // Get the current version
-$versionfile = fopen("../../version.txt", "r") or die("Unable to open file!");
-$version = fgets($versionfile);
-fclose($versionfile);
-// Connect to database
-$conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-$sql = "SELECT * FROM serverconfig";
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    $servercount = 0;
-    while ($row = mysqli_fetch_assoc($result)) {
-        $servercount++;
-    }
-}
-$sql = "SELECT * FROM users";
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    $usercount = 0;
-    while ($row = mysqli_fetch_assoc($result)) {
-        $usercount++;
-    }
-}
+$version = trim((string)@file_get_contents("../../version.txt"));
+// Count servers and users
+$servercount = (int)(db_row("SELECT COUNT(*) AS c FROM serverconfig")['c'] ?? 0);
+$usercount = (int)(db_row("SELECT COUNT(*) AS c FROM users")['c'] ?? 0);
 
 // Update profile picture
 if (array_key_exists('chpp', $_POST)) {
-    $seed = preg_replace('/[^A-Za-z0-9\-]/', '', $_POST["seed"]);
-    $sprite = $_POST["slctsprite"];
+    $seed = preg_replace('/[^A-Za-z0-9\-]/', '', (string)($_POST["seed"] ?? ''));
+    $sprite = (string)($_POST["slctsprite"] ?? '');
     if ($sprite == "human") {
-        $sprite = $_POST["selectsph"];
+        $sprite = (string)($_POST["selectsph"] ?? '');
     }
-    $sql = "UPDATE users SET sprite='$sprite', seed='$seed' WHERE username='$username'";
-    mysqli_query($conn, $sql);
+    if (in_array($sprite, GSQ_SPRITES, true)) {
+        db_query("UPDATE users SET sprite = ?, seed = ? WHERE username = ?", [$sprite, $seed, $username]);
+    }
 }
 
-$sql = "SELECT server, sprite, seed FROM users WHERE username='$username'";
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $serverjson = $row['server'];
-        $sprite = $row['sprite'];
-        $seed = $row['seed'];
-    }
+$row = db_row("SELECT server, sprite, seed FROM users WHERE username = ?", [$username]);
+$serverjson = $row['server'] ?? '[0]';
+$sprite = $row['sprite'] ?? 'bottts';
+$seed = $row['seed'] ?? $username;
+if (!$isadmin) {
+    $servercount = count(user_server_ids($username));
 }
-if ($username != "admin") {
-    $serverjson = json_decode($serverjson);
-    if ($serverjson[0] == 0) {
-        $servercount = 0;
-    } else {
-        $servercount = count($serverjson);
+
+// Admin-only settings below: they write html/config.php
+$adminactions = ['validate', 'submit', 'submittheme', 'apikey', 'other'];
+foreach ($adminactions as $adminaction) {
+    if (array_key_exists($adminaction, $_POST)) {
+        require_admin();
     }
-}
-function test_input($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
 }
 // Test Database Connection
 $displaysubmit = "none";
 $displaytestconn = "block";
 if (array_key_exists('validate', $_POST)) {
-    $DB_SERVERI = test_input($_POST["input-ip"]);
-    $DB_USERNAMEI = test_input($_POST["input-username"]);
-    $DB_PASSWORDI = test_input($_POST["input-password"]);
-    $DB_NAMEI = test_input($_POST["input-dbname"]);
+    $DB_SERVERI = test_input($_POST["input-ip"] ?? '');
+    $DB_USERNAMEI = test_input($_POST["input-username"] ?? '');
+    $DB_PASSWORDI = (string)($_POST["input-password"] ?? '');
+    $DB_NAMEI = test_input($_POST["input-dbname"] ?? '');
     $DB_SERVER = $DB_SERVERI;
     $DB_USERNAME = $DB_USERNAMEI;
     $DB_PASSWORD = $DB_PASSWORDI;
@@ -88,8 +66,8 @@ if (array_key_exists('validate', $_POST)) {
     $displaysubmit = "block";
     $displaytestconn = "none";
     try {
-        $conn = mysqli_connect($DB_SERVERI, $DB_USERNAMEI, $DB_PASSWORDI, $DB_NAMEI);
-        mysqli_close($conn);
+        $testconn = new mysqli($DB_SERVERI, $DB_USERNAMEI, $DB_PASSWORDI, $DB_NAMEI);
+        $testconn->close();
     } catch(mysqli_sql_exception $e) {
         $sqlvalidatemessage = "Connection failed!";
         $displaysubmit = "none";
@@ -99,46 +77,39 @@ if (array_key_exists('validate', $_POST)) {
 }
 // Edit Database Configuration
 if (array_key_exists('submit', $_POST)) {
-    $DB_SERVER = test_input($_POST["input-ip"]);
-    $DB_USERNAME = test_input($_POST["input-username"]);
-    $DB_PASSWORD = test_input($_POST["input-password"]);
-    $DB_NAME = test_input($_POST["input-dbname"]);
-    $configcontent=file_get_contents($configfile);
-    $configcontent = preg_replace('/\$DB_SERVER = \"(.*?)\";/', '$DB_SERVER = "'.$DB_SERVER.'";', $configcontent);
-    $configcontent = preg_replace('/\$DB_USERNAME = \"(.*?)\";/', '$DB_USERNAME = "'.$DB_USERNAME.'";', $configcontent);
-    $configcontent = preg_replace('/\$DB_PASSWORD = \"(.*?)\";/', '$DB_PASSWORD = "'.$DB_PASSWORD.'";', $configcontent);
-    $configcontent = preg_replace('/\$DB_NAME = \"(.*?)\";/', '$DB_NAME = "'.$DB_NAME.'";', $configcontent);
-    file_put_contents($configfile, $configcontent);
+    $DB_SERVER = test_input($_POST["input-ip"] ?? '');
+    $DB_USERNAME = test_input($_POST["input-username"] ?? '');
+    $DB_PASSWORD = (string)($_POST["input-password"] ?? '');
+    $DB_NAME = test_input($_POST["input-dbname"] ?? '');
+    write_config();
     $dbscript = "<script>$(document).ready( function () {"."$('#dbsummary').click();});</script>";
 }
 // Choose a theme
 if (array_key_exists('submittheme', $_POST)) {
-    $css_template = $_POST["themeinput"];
-    $notification['theme'] = "<p>Theme updated<p>";
+    $newtheme = (string)($_POST["themeinput"] ?? '');
+    if (in_array($newtheme, available_themes(), true)) {
+        $css_template = $newtheme;
+        write_config();
+        $notification['theme'] = "<p>Theme updated<p>";
+    } else {
+        $notification['theme'] = "<p>Unknown theme<p>";
+    }
     $themescript = "<script>$(document).ready( function () {"."$('#themesummary').click();});</script>";
-    $configcontent=file_get_contents($configfile);
-    $configcontent = preg_replace('/\$css_template = \"(.*?)\";/', '$css_template = "'.$css_template.'";', $configcontent);
-    file_put_contents($configfile, $configcontent);
 }
 // Edit API Keys
 if (array_key_exists('apikey', $_POST)) {
-    $steamwebapi_key = $_POST["steam-api"];
-    $rustmapsapi_key = $_POST["rustmaps-api"];
+    $steamwebapi_key = preg_replace('/[^A-Za-z0-9\-]/', '', (string)($_POST["steam-api"] ?? ''));
+    $rustmapsapi_key = preg_replace('/[^A-Za-z0-9\-]/', '', (string)($_POST["rustmaps-api"] ?? ''));
+    write_config();
     $notification['apikey'] = "<p>API Keys updated<p>";
-    $configcontent=file_get_contents($configfile);
     $apikeyscript = "<script>$(document).ready( function () {"."$('#apikeysummary').click();});</script>";
-    $configcontent = preg_replace('/\$steamwebapi_key = \"(.*?)\";/', '$steamwebapi_key = "'.$steamwebapi_key.'";', $configcontent);
-    $configcontent = preg_replace('/\$rustmapsapi_key = \"(.*?)\";/', '$rustmapsapi_key = "'.$rustmapsapi_key.'";', $configcontent);
-    file_put_contents($configfile, $configcontent);
 }
 // Edit other settings
 if (array_key_exists('other', $_POST)) {
-    $register = $_POST["registration"];
+    $register = (($_POST["registration"] ?? '') === "TRUE");
+    write_config();
     $notification['other'] = "<p>Settings updated<p>";
-    $configcontent=file_get_contents($configfile);
     $otherscript = "<script>$(document).ready( function () {"."$('#othersummary').click();});</script>";
-    $configcontent = preg_replace('/\$register = (.*?);/', '$register = '.$register.';', $configcontent);
-    file_put_contents($configfile, $configcontent);
 }
 ?>
 <!doctype html>
@@ -150,12 +121,12 @@ if (array_key_exists('other', $_POST)) {
     <meta name="theme-color" content="#151f34" media="(prefers-color-scheme: dark)">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
     <title><?php echo $title?></title>
     <script>
     </script>
 </head>
-<body onload="<?php if ($username=="admin"){echo"startTime();";}else{echo"selectstyle();";}?>changetabacc('username')">
+<body onload="<?php if ($isadmin){echo"startTime();";}else{echo"selectstyle();";}?>changetabacc('username')">
 <nav>
     <div id="sidebar">
         <button onclick="window.location.href='server.php';">Overview</button>
@@ -174,7 +145,7 @@ if (array_key_exists('other', $_POST)) {
     <?php include 'overlaynav.php' ?>
     <div id="einstellungen">
         <!-- Admin Section-->
-        <?php if ($username == "admin"):?>
+        <?php if ($isadmin):?>
         <div id="dropdownsettings">
             <h1 id="settingsh1">Settings</h1>
             <div id="dropdownsettingschild">
@@ -183,30 +154,31 @@ if (array_key_exists('other', $_POST)) {
                     <?php if (isset($dbscript)){echo $dbscript;}?>
                     <div class="detailscontent">
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                            <?php echo csrf_field() ?>
                             <div class="flex">
                                 <div class="left">
                                     <div class="input">
                                         <label for="input-ip">IP:</label>
-                                        <input id="input-ip" class="input" name="input-ip" type="text" minlength="3" maxlength="40" required="required" placeholder="xxx.xxx.xxx.xx" autocomplete="off" <?php if (isset($DB_SERVER)){echo "value=$DB_SERVER";}?>>
+                                        <input id="input-ip" class="input" name="input-ip" type="text" minlength="3" maxlength="40" required="required" placeholder="xxx.xxx.xxx.xx" autocomplete="off" value="<?php echo h($DB_SERVER ?? '')?>">
                                     </div>
                                     <div class="input">
                                         <label for="input-dbname">DB Name:</label>
-                                        <input id="input-dbname" class="input" name="input-dbname" type="text" minlength="3" placeholder="xxxxxxx" autocomplete="off" <?php if (isset($DB_NAME)){echo "value=$DB_NAME";}?>>
+                                        <input id="input-dbname" class="input" name="input-dbname" type="text" minlength="3" placeholder="xxxxxxx" autocomplete="off" value="<?php echo h($DB_NAME ?? '')?>">
                                     </div>
                                 </div>
                                 <div class="right">
                                     <div class="input">
                                         <label for="input-username">Username:</label>
-                                        <input id="input-username" class="input" name="input-username" type="text" minlength="2" maxlength="15" placeholder="xxxxx" autocomplete="off" <?php if (isset($DB_USERNAME)){echo "value=$DB_USERNAME";}?>>
+                                        <input id="input-username" class="input" name="input-username" type="text" minlength="2" maxlength="15" placeholder="xxxxx" autocomplete="off" value="<?php echo h($DB_USERNAME ?? '')?>">
                                     </div>
                                     <div class="input">
                                         <label for="input-password">Password:</label>
-                                        <input id="input-password" class="input" name="input-password" type="password" minlength="3" placeholder="xxxxxxxxxxxx" autocomplete="off" <?php if (isset($DB_PASSWORD)){echo "value=$DB_PASSWORD";}?>>
+                                        <input id="input-password" class="input" name="input-password" type="password" minlength="3" placeholder="xxxxxxxxxxxx" autocomplete="off" value="<?php echo h($DB_PASSWORD ?? '')?>">
                                     </div>
                                 </div>
                             </div>
                             <div class="flex" style="justify-content: flex-end;margin-right: 3px;line-height: 34px;">
-                                <?php if (isset($sqlvalidatemessage)) {echo $sqlvalidatemessage;}?>
+                                <?php if (isset($sqlvalidatemessage)) {echo h($sqlvalidatemessage);}?>
                                 <input class="addsrv" type="submit" name="validate" value="Test Connection" style="display: <?php echo $displaytestconn ?>">
                                 <input class="addsrv" type="submit" name="submit" value="Submit" style="display: <?php echo $displaysubmit ?>">
                             </div>
@@ -247,6 +219,7 @@ if (array_key_exists('other', $_POST)) {
                         </div>
                         <?php if (isset($themescript)){echo $themescript;}?>
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" style="margin-top: 5px;">
+                            <?php echo csrf_field() ?>
                             <input type="text" id="themeinput" name="themeinput" style="display: none">
                             <div style="display: flex;justify-content: flex-end;line-height: 34px;">
                                 <?php
@@ -262,17 +235,18 @@ if (array_key_exists('other', $_POST)) {
                     <?php if (isset($apikeyscript)){echo $apikeyscript;}?>
                     <div class="detailscontent">
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                            <?php echo csrf_field() ?>
                             <div class="flex">
                                 <div class="left">
                                     <div class="input">
                                         <label for="input-ip" style="display: flex">Steam Web API Key<a target="_blank" href="https://docs.iguaserver.de/settings#steam-web-api-key" title="Find out more about the Steam Web API Key" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 2px 0 0 5px;cursor: pointer;"></a></label>
-                                        <input id="input-ip" class="input" name="steam-api" type="text" minlength="32" maxlength="32" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" <?php if (isset($steamwebapi_key)){echo "value=$steamwebapi_key";}?>>
+                                        <input id="input-ip" class="input" name="steam-api" type="text" minlength="32" maxlength="32" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" value="<?php echo h($steamwebapi_key ?? '')?>">
                                     </div>
                                 </div>
                                 <div class="right">
                                     <div class="input">
                                         <label for="input-ip" style="display: flex">RustMaps.com API Key<a target="_blank" href="https://docs.iguaserver.de/settings#rustmaps.com-api-key" title="Find out more about the RustMaps.com API Key" style="height: 0;"><img src="../../html/img/questionmark.svg" height="19px" alt="" style="margin: 2px 0 0 5px;cursor: pointer;"></a></label>
-                                        <input id="input-ip" class="input" name="rustmaps-api" type="text" minlength="25" maxlength="45" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off" <?php if (isset($rustmapsapi_key)){echo "value=$rustmapsapi_key";}?>>
+                                        <input id="input-ip" class="input" name="rustmaps-api" type="text" minlength="25" maxlength="45" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off" value="<?php echo h($rustmapsapi_key ?? '')?>">
                                     </div>
                                 </div>
                             </div>
@@ -288,6 +262,7 @@ if (array_key_exists('other', $_POST)) {
                     <?php if (isset($otherscript)){echo $otherscript;}?>
                     <div class="detailscontent">
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                            <?php echo csrf_field() ?>
                             <div class="flex">
                                 <label for="selectregistration">Registration:</label>
                                 <select required="required" name="registration" id="selectregistration">
@@ -308,13 +283,13 @@ if (array_key_exists('other', $_POST)) {
         <!-- Information about system | right-->
             <div id="zusammenfassung">
                 <div id="clock"></div>
-                <div class="info"><div class="attribute">Version</div><div style="word-break: keep-all;"><?php echo $version?></div></div>
+                <div class="info"><div class="attribute">Version</div><div style="word-break: keep-all;"><?php echo h($version)?></div></div>
                 <div class="info"><div class="attribute">Game Server</div><div style="word-break: keep-all;"><?php echo $servercount?></div></div>
                 <div class="info"><div class="attribute">Users</div><div style="word-break: keep-all;"><?php echo $usercount?></div></div>
                 <br>
-                <div class="info"><div class="attribute" title="Web Server User">WS User</div><div style="word-break: keep-all;"><?php echo exec('whoami'); ?></div></div>
+                <div class="info"><div class="attribute" title="Web Server User">WS User</div><div style="word-break: keep-all;"><?php echo h(function_exists('posix_geteuid') ? (posix_getpwuid(posix_geteuid())['name'] ?? '') : get_current_user()); ?></div></div>
                 <div class="info"><div class="attribute">PHP Version</div><div style="word-break: keep-all;"><?php echo phpversion(); ?></div></div>
-                <div class="info"><div class="attribute">Web Server</div><div style="word-break: keep-all;"><?php echo $_SERVER["SERVER_SOFTWARE"] ?></div></div>
+                <div class="info"><div class="attribute">Web Server</div><div style="word-break: keep-all;"><?php echo h($_SERVER["SERVER_SOFTWARE"] ?? '') ?></div></div>
             </div>
         <?php else:?>
         <div id="dropdownsettings">
@@ -339,12 +314,13 @@ if (array_key_exists('other', $_POST)) {
             </div>
         </div>
         <div id="zusammenfassung">
-            <div id="ppicture"><?php echo "<img id='ppictureimg' src='https://api.dicebear.com/7.x/$sprite/svg?seed=$seed'>"?></div>
+            <div id="ppicture"><?php echo "<img id='ppictureimg' src='https://api.dicebear.com/7.x/".rawurlencode($sprite)."/svg?seed=".rawurlencode($seed)."'>"?></div>
             <div id="customizecontent">
                 <details id="customizedetails">
                     <summary id="customizesummary">Customize</summary>
                     <div class="detailscontent">
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                            <?php echo csrf_field() ?>
                             <select required="required" id="style" class="sstyle" name="slctsprite" onchange="selectstyle()">
                                 <option disabled selected <?php if(!isset($sprite)){echo "selected ";}?> style="display:none">select a sprite</option>
                                 <option <?php if($sprite=="adventurer"){echo "selected ";}?>value="adventurer">Adventurer</option>
@@ -361,7 +337,7 @@ if (array_key_exists('other', $_POST)) {
                                 <option <?php if($sprite=="male"){echo "selected ";}?>value="male">Male</option>
                                 <option <?php if($sprite=="female"){echo "selected ";}?>value="female">Female</option>
                             </select>
-                            <input type="text" id="seed" name="seed" onkeyup="selectstyle()" value="<?php echo $seed?>">
+                            <input type="text" id="seed" name="seed" onkeyup="selectstyle()" value="<?php echo h($seed)?>">
 
                             <div style="display:flex">
                                 <div class="mk6" style="justify-content: flex-start;">
@@ -378,7 +354,7 @@ if (array_key_exists('other', $_POST)) {
                     </div>
                 </details>
             </div>
-            <div class="info"><div class="attribute">Name</div><div style="word-break: keep-all;"><?php echo $username?></div></div>
+            <div class="info"><div class="attribute">Name</div><div style="word-break: keep-all;"><?php echo h($username)?></div></div>
             <div class="info"><div class="attribute">Game Server</div><div style="word-break: keep-all;"><?php echo $servercount?></div></div>
             <div class="info"><div class="attribute">Users</div><div style="word-break: keep-all;"><?php echo $usercount?></div></div>
         </div>
@@ -389,7 +365,7 @@ if (array_key_exists('other', $_POST)) {
 <script src="script.js"></script>
 <script>
     function currentTheme() {
-        let currenttheme = "<?php echo $css_template?>";
+        let currenttheme = <?php echo json_encode($css_template)?>;
         if (currenttheme === "dark") {
             document.getElementById("btndark").click();
         } else if (currenttheme === "light") {

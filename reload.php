@@ -11,43 +11,31 @@ require 'query/minecraft/src/MinecraftQueryException.php';
 require 'html/type/minecraft/jsonconversion.php';
 require 'html/type/minecraft/minecraftcolor.php';
 require 'html/tailcustom.php';
-include 'query/cron/cache/minecraft.php';
 use xPaw\SourceQuery\SourceQuery;
 const SQ_TIMEOUT = 1;
 const SQ_ENGINE = SourceQuery::SOURCE;
-$ServerID = (int)$_GET['id'];
+$ServerID = (int)($_GET['id'] ?? 0);
 // start session
-session_start();
-$username = $_SESSION['username'] ?? 'public';
+gsq_session_start();
+$username = current_user();
 session_write_close();
-// Get the allowed servers
-$conn = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-$sql = "SELECT server FROM users WHERE username='$username'";
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    while($row = mysqli_fetch_assoc($result)) {
-        $id = $row["server"];
-    }
-}
-$id = json_decode($id);
-if (!in_array($ServerID, $id)) {
+// Only servers in the account of the current user (or the public account) may be queried
+if (!$ServerID || !in_array($ServerID, user_server_ids($username), true)) {
     http_response_code(401);
-    var_dump(http_response_code());
     exit;
 }
 // Get server information from database
-$sql = "SELECT IP, type, Queryport, GamePort, Name FROM serverconfig WHERE ID='$ServerID'";
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    while($row = mysqli_fetch_assoc($result)) {
-        $ip = $row['IP'];
-        $type = $row['type'];
-        $qport = $row['Queryport'];
-        $gport = $row['GamePort'];
-        $name = $row['Name'];
-    }
+$row = db_row("SELECT IP, type, QueryPort, GamePort, Name FROM serverconfig WHERE ID = ?", [$ServerID]);
+if (!$row) {
+    http_response_code(404);
+    exit;
 }
-mysqli_close($conn);
+$ip = $row['IP'];
+$type = $row['type'];
+$qport = $row['QueryPort'];
+$gport = $row['GamePort'];
+$name = $row['Name'];
+$queryresult = null;
 switch ($type) {
     case "csgo":
     case "valheim":
@@ -62,7 +50,7 @@ switch ($type) {
         include 'query/minecraftquery.php';
         break;
 }
-$serverstatus = json_decode($queryresult);
+$serverstatus = json_decode($queryresult ?? 'null');
 include 'html/type/query.php';
 // Clean up query result.
 $response['Username'] = $username;
@@ -98,7 +86,8 @@ switch ($type) {
 }
 switch ($type) {
     case "arkse":
-        require ('html/type/arkse/modlist.php');
+        $modlistfile = __DIR__ . '/html/type/arkse/modlist.json';
+        $modlist = json_cache_read($modlistfile);
         $response['raw']['Players'] = $playerlist ?? 0;
         $response['raw']['InGameDay'] = $ingameday;
         $response['raw']['ClusterID'] = $clusterid;
@@ -106,22 +95,24 @@ switch ($type) {
         $response['raw']['PVP'] = $pvp;
         $response['raw']['HasMods'] = $hasmods;
         if ($hasmods) {
+            $count = 0;
             foreach ($mods as $mod) {
-                if (!isset($count)){$count=0;}
+                // Mod IDs come from the game server: only accept numeric IDs
+                if (!ctype_digit((string)$mod)) {
+                    continue;
+                }
                 $response['raw']['Mods'][$count]['ModID'] = $mod;
                 $response['raw']['Mods'][$count]['ModLink'] = 'https://steamcommunity.com/sharedfiles/filedetails/?id='.$mod;
-                $convertedmod = $modlist['ArkModName'][$mod];
-                if (!empty($convertedmod)) {
-                    $response['raw']['Mods'][$count]['ModName'] = $convertedmod;
-                } else {
+                $convertedmod = $modlist[$mod] ?? '';
+                if ($convertedmod === '') {
                     $response['inmodlist'] = "not in list";
-                    // If mod is not in modlist, get the mod from the steamcommunity website and store the mod in the modlist file
+                    // If mod is not in modlist, get the mod from the steamcommunity website and store it in the (JSON) modlist
                     $convertedmod = substr(get_title("https://steamcommunity.com/sharedfiles/filedetails/?id=$mod"), 16);
-                    $response['raw']['Mods'][$count]['ModName'] = $convertedmod;
-                    $convertedmod = str_replace("'", "\'", $convertedmod);
-                    $convertedmod = '$modlist[\'ArkModName\']'."[$mod] = '$convertedmod';";
-                    file_put_contents("html/type/arkse/modlist.php", $convertedmod . "\n", FILE_APPEND);
+                    if ($convertedmod !== '') {
+                        json_cache_set($modlistfile, (string)$mod, $convertedmod);
+                    }
                 }
+                $response['raw']['Mods'][$count]['ModName'] = $convertedmod;
                 $count++;
             }
         }
@@ -139,7 +130,7 @@ switch ($type) {
         $response['raw']['Players'] = $playerlist ?? 0;
         $response['raw']['Description'] = $description;
         $response['raw']['Bloodbound'] = $bloodbound;
-        $response['raw']['CastleHeartDamageMode'] = $bloodbound;
+        $response['raw']['CastleHeartDamageMode'] = $castleheartdamagemode;
         $response['raw']['InGameDay'] = $ingameday;
         $response['raw']['Tags'] = $GameTags;
         $response['raw']['MapLink'] = $maplink;
@@ -149,8 +140,8 @@ switch ($type) {
         $response['raw']['MapLink'] = $maplink;
         break;
     case "rust":
-        $mapurl = "https://rustmaps.com/map/".$worldsize."_".$seed."?embed=img_i_l";
-        $metas = get_meta_tags($mapurl);
+        $mapurl = "https://rustmaps.com/map/".rawurlencode((string)$worldsize)."_".rawurlencode((string)$seed)."?embed=img_i_l";
+        $metas = @get_meta_tags($mapurl) ?: [];
         if (isset($metas['twitter:image'])) {
             $metas = ($metas['twitter:image']);
             $maplink = str_replace('FullLabeledMap.png', 'Thumbnail.png', $metas);
@@ -165,10 +156,11 @@ switch ($type) {
         $response['raw']['Website'] = $rustwebsite;
         $response['raw']['PVP'] = $pvp;
         $response['raw']['FPS'] = $rustfps;
-        $rustdesc = str_replace("\\n", "<br>",$rustdesc);
-        $response['raw']['Description'] = $rustdesc;
+        // Line breaks ("\n") are converted on the client after escaping
+        $response['raw']['Description'] = $rustdesc ?? [];
         $response['raw']['Tags'] = $GameTags;
         break;
 }
 $response['QueryTime'] = Number_Format(MicroTime(true) - $Timer, 4, '.', '');
+header('Content-Type: application/json; charset=utf-8');
 echo json_encode($response);
